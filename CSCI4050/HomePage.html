@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: right;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  color: white;
+}
+
+.topnav a.split {
+    float: left;
+    color: white;
+}
+
+.topnav input[type=text]{
+    float: left;
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+}
+
+div.scrollmenu {
+  background-color: gray;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+div.scrollmenu a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+div.scrollmenu a:hover {
+  background-color: rgb(155, 149, 149);
+}
+.button {
+  background-color: red;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button:hover{
+  background-color: black;
+}
+
+hr {
+    height: 1px;
+    margin-left: 15px;
+    margin-right: 15px;
+    background-color: white;
+    border-color: #333;
+}
+
+.inline-block {
+   display: inline-block;
+}
+
+.movie-container{
+    display: grid;
+    align-content: center;
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div class="topnav">
+    <a class="active; split" href="#home">Home</a>
+    <input type="text" placeholder="Search Movie...">
+    <a href="#signIn">
+        <img src="profileicon2.png" alt="profile" width="16px" height="16px" style="padding-right: 10px;" >
+        Sign In or Join Now
+    </a>
+    <a href="#Showtimes">Showtimes</a>
+    <a href="#nowPlaying">Now Playing</a>
+</div>
+<div class="topnav">
+    <hr>
+    <a class="active; split" href="#location">
+        Find a Theater Near You</a>
+    <a href="#promo">Promotions</a>
+</div>
+
+
+<!-- Movies currently available to watch -->
+<div class="inline-block, scrollmenu" style="padding-left: 25px; padding-top: 20px;"> 
+    <h1 style="color: white; padding-left: 12px;">NOW PLAYING</h1>
+
+    <div class="inline-block">
+        <a href="oppenheimerTrailer.html"> 
+            <img src="oppenheirmerMoviePoster.jpeg" alt="oppenheirmer" width="300px" height="450px">
+        </a>
+        <h4 style="padding-left: 100px;">Oppenheimer</h4>
+        <p style="padding-left: 50px;">Director: Christopher Nolan<br>Runtime: 3 HRS | R<br>Category: Biographical Thriller</p>
+        <div style="padding-left: 50px;"><button class="button">GET TICKETS NOW</button></div>
+    </div>
+
+    <div class="inline-block">
+      <a href="#barbie">
+          <img src="barbieMovePoster1.webp" alt="barbie" width="300px" height="450px">
+      </a>
+      <div style="padding-left: 50px;"><button class="button">GET TICKETS NOW</button></div>
+    </div>
+
+    <div class="inline-block">
+      <a href="#granTurismo">
+          <img src="Gran-Turismo2MoviePoster.jpeg" alt="granTurismo" width="300px" height="450px">
+      </a>
+      <div style="padding-left: 50px;"><button class="button">GET TICKETS NOW</button></div>
+    </div>
+
+    <div class="inline-block">
+      <a href="#BlueBeatle">
+          <img src="bluebeatlemovieposter.jpg" alt="BlueBeatle" width="300px" height="450px">
+      </a>
+      <div style="padding-left: 50px;"><button class="button">GET TICKETS NOW</button></div>
+    </div>
+
+    <div class="inline-block">
+      <a href="#TMNT">
+          <img src="TMNTMoviePoster.jpeg" alt="TMNT" width="300px" height="450px">
+      </a>
+      <div style="padding-left: 50px;"><button class="button">GET TICKETS NOW</button></div>
+    </div>
+
+    <div class="inline-block">
+      <a href="#TalkToMe">
+          <img src="talktomeMoviePoster.jpeg" alt="TalkToMe" width="300px" height="450px">
+      </a>
+      <div style="padding-left: 50px;"><button class="button">GET TICKETS NOW</button></div>
+    </div>
+
+    <div class="inline-block">
+      <a href="#TheLittleMermaid">
+          <img src="theLittleMermaidMoviePoster.jpeg" alt="TheLittleMermaid" width="300px" height="450px">
+      </a>
+      <div style="padding-left: 50px;"><button class="button">GET TICKETS NOW</button></div>
+    </div>
+</div>
+
+<!-- Movies coming soon -->
+<div class="scrollmenu" style="padding-left: 25px; padding-top: 20px;"> 
+    <h1 style="color: white; padding-left: 12px;">COMING SOON</h1>
+        <a href="#TheHungerGames"> 
+            <img src="THGMoviePoster.jpeg" alt="TheHungerGames" width="300px" height="450px">
+        </a> 
+    <a href="#Wonka">
+        <img src="wonkaMoviePoster.webp" alt="Wonka" width="300px" height="450px">
+    </a>
+    <a href="#TheMarvels">
+        <img src="themarvelsMoviePoster.jpeg" alt="TheMarvels" width="300px" height="450px">
+    </a>
+    <a href="#SawX">
+        <img src="sawxMoviePoster.jpg" alt="SawX" width="300px" height="450px">
+    </a>
+</div>
+
+<script>
+
+</script>
+
+</body>
+</html>
