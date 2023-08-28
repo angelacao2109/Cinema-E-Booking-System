@@ -1,143 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-
-.topnav a {
-  float: right;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.topnav a.active {
-  color: white;
-}
-
-.topnav a.split {
-    float: left;
-    color: white;
-}
-
-.topnav input[type=text]{
-    float: left;
-    padding: 6px;
-    border: none;
-    margin-top: 8px;
-    margin-right: 16px;
-    font-size: 17px;
-}
-
-div.scrollmenu {
-  background-color: gray;
-  overflow: auto;
-  white-space: nowrap;
-}
-
-div.scrollmenu a {
-  display: inline-block;
-  color: white;
-  text-align: center;
-  padding: 14px;
-  text-decoration: none;
-}
-
-div.scrollmenu a:hover {
-  background-color: rgb(155, 149, 149);
-}
-.movie-container{
-    display: grid;
-    align-content: center;
-}
-
-.button {
-  background-color: red;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
-.inline-block {
-   display: inline-block;
-}
-
-</style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TESTING</title>
+  <link rel="stylesheet" type="text/css" href="test.css">
 </head>
 <body>
-
-<div class="topnav">
-    <a class="active; split" href="#home">Home</a>
-    <input type="text" placeholder="Search Movie...">
-    <a href="#signIn">
-        <img src="profileicon2.png" alt="profile" width="16px" height="16px" style="padding-right: 10px;" >
-        Sign In or Join Now
-    </a>
-    <a href="#Showtimes">Showtimes</a>
-    <a href="#nowPlaying">Now Playing</a>
-</div>
-
-<div class="inline-block, scrollmenu">
-    <h1>NOW PLAYING</h1>
-
-    <div class="movie-container, inline-block">
-    <a href="#Oppenheirmer"> 
-        <img src="oppenheirmerMoviePoster.jpeg" alt="oppenheirmer" width="300" height="450">
-    </a>
-    <br>
-    <button class="center, button">GET TICKETS NOW</button>
+  <!--Nagivation Menu-->
+  <div class="topnav">
+    <a href="#home">Home</a>
+    <div class="search">
+      <form action="#">
+        <input type="text"
+          placeholder="Search Movies"
+          name="search">
+      </form>
     </div>
+    <a href="#signin" class="split">Log In or Sign Up</a>
+    <a href="#contact" class="split">Showtimes</a>
+    <a href="#about" class="split">Help</a>
+    <div class="split"><div class="dropdown">
+      <button class="dropbtn">Log In or Sign Up 
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <a href="#">Log In</a>
+        <a href="#">Sign Up</a>
+      </div></div>
+    </div> 
+  </div>
+  </body>
+  </html>
+  
+  
 
-    <div class="container, inline-block">
-    <a href="#Oppenheirmer"> 
-        <img src="oppenheirmerMoviePoster.jpeg" alt="oppenheirmer" width="300" height="450"></a>
-        <div style="padding-left: 50px;"><button class="button" >GET TICKETS NOW</button></div>
-    </div>
-</div>
-
-<div class="inline-block, scrollmenu">
-    <h1>COMING SOON</SOurce></h1>
-
-    <div class="movie-container, inline-block">
-    <a href="#Oppenheirmer"> 
-        <img src="oppenheirmerMoviePoster.jpeg" alt="oppenheirmer" width="300" height="450">
-    </a>
-    <div style="padding-left: 50px;"><button class="center, button">GET TICKETS NOW</button></div>
-    </div>
-
-    <div class="container, inline-block">
-    <a href="#Oppenheirmer"> 
-        <img src="oppenheirmerMoviePoster.jpeg" alt="oppenheirmer" width="300" height="450"></a>
-        <div style="padding-left: 50px;"><button class="button" >GET TICKETS NOW</button></div>
-    </div>
-</div>
-
-
-
-<script>
-
-</script>
-
-</body>
-</html>
+ 
