@@ -1,0 +1,24 @@
+.searchbar {
+    margin: 0 20px; /* Add some margin to space out the search bar */
+}
+.searchInputs {
+    display: flex;        /* This will line up its children horizontally by default */
+    align-items: center;  /* This will vertically center the children elements */
+}
+
+/* Style for the input if needed */
+input {
+    flex: 1;             /* This will allow the input to take up any available space */
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px 0 0 4px;  /* Round the left side only */
+}
+
+.searchIcon {
+    display: flex;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-left: none;         /* Removes the left border to make it blend with the input */
+    border-radius: 0 4px 4px 0;  /* Round the right side only */
+}
