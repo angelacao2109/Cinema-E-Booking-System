@@ -1,0 +1,20 @@
+services:
+  database:
+    image: mysql:latest
+    restart: always
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - back-net
+    env_file:
+      - .env
+
+volumes:
+  my-db:
+networks:
+  front-net: {}
+  back-net: {}
