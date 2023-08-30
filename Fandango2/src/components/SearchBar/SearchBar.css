@@ -22,3 +22,25 @@ input {
     border-left: none;         /* Removes the left border to make it blend with the input */
     border-radius: 0 4px 4px 0;  /* Round the right side only */
 }
+
+.dataResult {
+    /* ... other styles ... */
+    max-height: 300px;
+    overflow-y: auto; /* Allows scrolling if there are many search results */
+}
+
+.movieResult {
+    display: flex;     /* Aligns the image and movie details horizontally */
+    margin-bottom: 10px;
+}
+
+.movieThumbnail {
+    width: 50px;       /* Adjust as needed */
+    height: 75px;      /* Adjust as needed */
+    margin-right: 10px;
+    object-fit: cover; /* Ensures the image fits well in the given dimensions */
+}
+
+.movieDetails {
+    flex: 1;           /* Takes up the remaining space after the image */
+}
