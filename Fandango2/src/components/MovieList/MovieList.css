@@ -1,9 +1,40 @@
 .movie-list {
-    padding: 20px;
-  }
-  
-  .movie-item {
-    margin: 10px 0;
-    /* other styling */
-  }
-  
+  padding: 20px;
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.movie-item {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 10px;
+  transition: 0.3s;
+}
+
+.movie-item:hover {
+  transform: scale(1.05);
+}
+
+.movie-poster {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.showtime-btn {
+  margin-right: 10px;
+  background-color: #007BFF;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.showtime-btn:hover {
+  background-color: #0056b3;
+}

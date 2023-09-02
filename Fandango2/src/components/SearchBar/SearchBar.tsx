@@ -13,7 +13,7 @@ type Movie = {
     thumbnail: string;
     thumbnail_width: number;
     thumbnail_height: number;
-    rating?: number;  // I added the optional rating field since you seem to be using it in your logic.
+    rating?: number;  
 };
 
 type SearchBarProps = {

@@ -14,9 +14,12 @@
     "@mui/icons-material": "^5.14.7",
     "@mui/material": "^5.14.7",
     "@mui/styled-engine-sc": "^5.14.7",
+    "axios": "^1.5.0",
     "bootstrap": "^5.2.3",
+    "movie-trailer": "^3.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-player": "^2.12.0",
     "reactjs-popup": "^2.0.5",
     "styled-components": "^5.3.11"
   },
