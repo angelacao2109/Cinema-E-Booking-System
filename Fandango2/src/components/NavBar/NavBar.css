@@ -111,19 +111,19 @@ body {
 
 /* ... your existing CSS ... */
 
-.rememberSection {
-    display: flex;
-    align-items: center;
-    gap: 5px; /* Space between checkbox and label */
-}
-
 .signInFooter {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 15px 0; /* Margin to separate this section from the fields above and the sign in button below */
+    margin: 15px 0;
 }
 
+.rememberSection {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 15px;
+}
 .forgotPassword {
     color: #007BFF;
     transition: color 0.3s ease;

@@ -4,6 +4,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
+
 type NavBarProps = {
     movieData: any[];
 };
@@ -11,6 +12,7 @@ type NavBarProps = {
 function NavBar({ movieData }: NavBarProps) {
     const [rememberMe, setRememberMe] = useState(false);
     const [registerForPromotions, setRegisterForPromotions] = useState(false); 
+  
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRememberMe(event.target.checked);
@@ -20,54 +22,90 @@ function NavBar({ movieData }: NavBarProps) {
         setRegisterForPromotions(event.target.checked);
     }
 
-    const ForgotPasswordForm = () => (
-        <div className="modalContent">
-            <h2>Forgot Password</h2>
-            <p>Please enter your email, and we will send you a link to reset your password.</p>
-            <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const email = formData.get('email') as string;
+    const ResetPasswordForm = () => {
+        const [email, setEmail] = useState('');
+        
+        const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            fetch('/api/request-password-reset', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Reset link sent successfully.');
+                } else {
+                    console.log('Error sending reset link.');
+                }
+            });
+        }
     
-                fetch('/api/forgot-password', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        console.log('Reset link sent to email.');
-                    } else {
-                        console.log('Error sending reset link.');
-                    }
-                });
-            }}>
-                <input type="email" name="email" placeholder="Email" required />
-                <button type="submit">Send Reset Link</button>
-            </form>
-        </div>
-    );
-
-    const SignInForm = () => (
-        <div className="modalContent">
-            <h2>Sign In</h2>
-            {/* ... (keep the rest of this component as it is) */}
-            <div className="signInFooter">
-                <div className="rememberSection">
-                    {/* ... (keep the checkbox related code) */}
-                </div>
+        return (
+            <div className="modalContent">
+                <h2>Reset Password</h2>
+                <form onSubmit={handleSubmit}>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        placeholder="Email" 
+                        required 
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                    />
+                    <button type="submit">Request Reset Link</button>
+                </form>
+            </div>
+        );
+    };
+    
+    
+   
+    const SignInForm = () => {
+        const [isOpen, setIsOpen] = useState(false);
+    
+        const togglePopup = () => {
+            setIsOpen(!isOpen);
+        }
+    
+        return (
+            <div className="modalContent">
+                <h2>Sign In</h2>
+                <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                    e.preventDefault();
+                    console.log('User credentials submitted. Integrate with backend or further functionality.');
+                }}>
+                    <input type="email" placeholder="Email" required />
+                    <input type="password" placeholder="Password" required />
+                    <div className="rememberSection">
+                        <label htmlFor="rememberMe">Remember Me</label>
+                        <input 
+                            type="checkbox" 
+                            id="rememberMe" 
+                            checked={rememberMe}
+                            onChange={handleCheckboxChange}
+                        />
+                    </div>
+                    <div className="signInFooter">
+                        <button type="submit">Sign In</button>
+                        <a className="forgotPassword" onClick={togglePopup}>Forgot Password?</a>
+                    </div>
+                </form>
                 <Popup 
-                    trigger={<a href="#" className="forgotPassword">Forgot Password?</a>} 
-                    onOpen={() => document.body.style.overflowY = 'hidden'}
-                    onClose={() => document.body.style.overflowY = 'scroll'}
+                    open={isOpen}
+                    onClose={togglePopup}
+                    contentStyle={{width: '300px', height: 'auto'}}
                 >
-                    <ForgotPasswordForm />
+                    <ResetPasswordForm />
                 </Popup>
             </div>
-            <button type="submit">Sign In</button>
-        </div>
-    );
+        );
+    };
+    
+    
+
+
 
     const JoinForm = () => (
         <div className="modalContent">
@@ -127,6 +165,7 @@ function NavBar({ movieData }: NavBarProps) {
     <JoinForm />
 </Popup>
                     </div>
+                   
                 </div>
             </div>
         </nav>
