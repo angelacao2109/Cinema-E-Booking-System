@@ -75,6 +75,8 @@ function NavBar({ movieData }: NavBarProps) {
                 <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
                     e.preventDefault();
                     console.log('User credentials submitted. Integrate with backend or further functionality.');
+                    alert('Successfully signed in.');
+
                 }}>
                     <input type="email" placeholder="Email" required />
                     <input type="password" placeholder="Password" required />
@@ -95,7 +97,7 @@ function NavBar({ movieData }: NavBarProps) {
                 <Popup 
                     open={isOpen}
                     onClose={togglePopup}
-                    contentStyle={{width: '300px', height: 'auto'}}
+                    contentStyle={{width: 'auto', height: 'auto'}}
                 >
                     <ResetPasswordForm />
                 </Popup>
@@ -114,6 +116,7 @@ function NavBar({ movieData }: NavBarProps) {
                 e.preventDefault();
                 console.log('User details submitted. Integrate with backend or further functionality.');
                 console.log('Register for promotions:', registerForPromotions);
+                alert('Successfully registered.');
             }}>
                 <input type="email" placeholder="Email" required />
                 <input type="text" placeholder="First Name" required />
