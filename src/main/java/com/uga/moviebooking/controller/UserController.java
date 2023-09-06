@@ -1,5 +1,7 @@
-package com.uga.moviebooking.model.user;
+package com.uga.moviebooking.controller;
 
+import com.uga.moviebooking.model.user.User;
+import com.uga.moviebooking.model.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,10 +12,5 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @PostMapping("/register")
-    public Long register(@RequestBody User user) {
-       return userService.registerUser(user);
-    }
 
 }
