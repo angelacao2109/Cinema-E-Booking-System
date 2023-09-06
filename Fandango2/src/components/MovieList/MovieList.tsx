@@ -38,12 +38,20 @@ const MovieList: React.FC<MovieProps> = ({ movieData }) => {
       <h2>Available Movies</h2>
       <div className="movies-grid">
         {movieData.map((movie, index) => {
+          console.log(movie.trailer); 
           const showDetails = getMultipleShowtimesAndDates();
           return (
             <div key={index} className="movie-item">
               <img src={movie.thumbnail} alt={`${movie.title} poster`} className="movie-poster"/>
               <h3>{movie.title}</h3>
               <p>{movie.genres.join(', ')}</p>
+              <button onClick={() => {
+    const win = window.open(movie.trailer, '_blank');
+    if (win) {
+        win.focus();
+    }
+}} className="showtime-btn">Watch Trailer</button>
+
               {showDetails.map((detail, detailIndex) => (
                 <div key={detailIndex}>
                   <p>Show Date: {detail.date}</p>
