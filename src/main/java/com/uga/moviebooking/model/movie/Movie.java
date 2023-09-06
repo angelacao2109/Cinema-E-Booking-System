@@ -20,12 +20,16 @@ public class Movie {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String category;
 
+    @Column(nullable = false)
     private String cast;
 
+    @Column(nullable = false)
     private String director;
 
+    @Column(nullable = false)
     private String producer;
 
     @Column(columnDefinition = "TEXT")
@@ -36,10 +40,9 @@ public class Movie {
     @ElementCollection
     private List<String> reviews;
 
+    @Column(nullable = false)
     private String trailerPictureUrl;
 
+    @Column(nullable = false)
     private String trailerVideoUrl;
-
-
-
 }
