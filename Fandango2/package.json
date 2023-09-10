@@ -19,6 +19,7 @@
     "movie-trailer": "^3.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-modal": "^3.16.1",
     "react-player": "^2.12.0",
     "reactjs-popup": "^2.0.5",
     "styled-components": "^5.3.11"
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/react-modal": "^3.16.0",
     "@vitejs/plugin-react": "^3.1.0",
     "typescript": "^4.9.3",
     "vite": "^4.1.0"

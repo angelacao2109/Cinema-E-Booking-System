@@ -1,0 +1,65 @@
+.seat-selection {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .screen {
+    background-color: #eee;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .seat-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .seat-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .row-label {
+    width: 20px;
+    text-align: right;
+    margin-right: 10px;
+  }
+  
+  .seat {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ddd;
+    border: none;
+    margin: 0 2px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s;
+  }
+  
+  .seat:hover {
+    background-color: #bbb;
+  }
+  
+  .seat.selected {
+    background-color: #4CAF50;
+  }
+  
+  .confirm-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .confirm-btn:hover {
+    background-color: #45a049;
+  }
+  

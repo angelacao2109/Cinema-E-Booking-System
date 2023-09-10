@@ -1,74 +1,39 @@
 import React, { useState } from 'react';
+import './SeatSelection.css';
 
-type Seat = {
-  row: number;
-  column: number;
-};
+function SeatSelection() {
+  const totalRows = 10;
+  const totalSeatsPerRow = 15;
+  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
 
-type SeatChartProps = {
-  rows: number;
-  columns: number;
-};
-
-const SeatSelection: React.FC<SeatChartProps> = ({ rows, columns }) => {
-  const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
-
-  const toggleSeatSelection = (row: number, column: number) => {
-    const seatIndex = selectedSeats.findIndex(
-      (seat) => seat.row === row && seat.column === column
+  const toggleSeat = (row: number, seat: number) => {
+    const seatId = `${row}-${seat}`;
+    setSelectedSeats(prev => 
+      prev.includes(seatId) ? prev.filter(s => s !== seatId) : [...prev, seatId]
     );
-
-    if (seatIndex !== -1) {
-      setSelectedSeats((prevSelectedSeats) =>
-        prevSelectedSeats.filter(
-          (seat) => !(seat.row === row && seat.column === column)
-        )
-      );
-    } else {
-      setSelectedSeats((prevSelectedSeats) => [
-        ...prevSelectedSeats,
-        { row, column },
-      ]);
-    }
-  };
-
+  }
+  
   return (
-    <div>
-      <div>
-        {Array.from({ length: rows }, (_, rowIndex) => (
-          <div key={rowIndex} style={{ display: 'flex' }}>
-            {Array.from({ length: columns }, (_, columnIndex) => (
-              <div
-                key={columnIndex}
-                onClick={() => toggleSeatSelection(rowIndex, columnIndex)}
-                style={{
-                  padding: 10,
-                  border: '1px solid #ccc',
-                  backgroundColor: selectedSeats.some(
-                    (seat) => seat.row === rowIndex && seat.column === columnIndex
-                  )
-                    ? 'green'
-                    : 'white',
-                }}
-              >
-                {rowIndex + 1}-{columnIndex + 1}
-              </div>
+    <div className="seat-selection">
+      <h2>Select Your Seats</h2>
+      <div className="screen">SCREEN</div>
+      <div className="seat-grid">
+        {Array.from({ length: totalRows }).map((_, rowIndex) => (
+          <div key={rowIndex} className="seat-row">
+            <div className="row-label">{String.fromCharCode(65 + rowIndex)}</div>
+            {Array.from({ length: totalSeatsPerRow }).map((_, seatIndex) => (
+              <button 
+                key={seatIndex} 
+                className={`seat ${selectedSeats.includes(`${rowIndex}-${seatIndex}`) ? 'selected' : ''}`} 
+                onClick={() => toggleSeat(rowIndex, seatIndex)}
+              ></button>
             ))}
           </div>
         ))}
       </div>
-      <div>
-        <h2>Selected Seats</h2>
-        <ul>
-          {selectedSeats.map((seat, index) => (
-            <li key={index}>
-              Row: {seat.row + 1}, Column: {seat.column + 1}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <button className="confirm-btn">Confirm Selection</button>
     </div>
   );
-};
+}
 
 export default SeatSelection;

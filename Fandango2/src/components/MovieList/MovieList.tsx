@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './MovieList.css';
+import SeatSelection from '../SeatSelection/SeatSelection';
+import Modal from 'react-modal';
+
 
 const getRandomDate = (start = new Date(), end = new Date(new Date().setDate(new Date().getDate() + 14))) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -33,6 +36,8 @@ type MovieProps = {
 };
 
 const MovieList: React.FC<MovieProps> = ({ movieData }) => {
+  const [selectedShowtime, setSelectedShowtime] = useState<{ movieIndex: number, date: string, time: string } | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
   return (
     <div className="movie-list">
       <h2>Available Movies</h2>
@@ -56,14 +61,40 @@ const MovieList: React.FC<MovieProps> = ({ movieData }) => {
                 <div key={detailIndex}>
                   <p>Show Date: {detail.date}</p>
                   {detail.times.map((time, timeIndex) => (
-                    <button key={timeIndex} className="showtime-btn">{time}</button>
+                   <button 
+                   key={timeIndex} 
+                   className="showtime-btn"
+                   onClick={() => {
+                    setSelectedShowtime({ movieIndex: index, date: detail.date, time });
+                    setModalOpen(true);
+                  }}
+                >
+                   {time}
+                   </button>
                   ))}
                 </div>
               ))}
+
             </div>
           );
-        })}
+                })}
+
       </div>
+      
+    
+    <Modal 
+        isOpen={isModalOpen}
+        onRequestClose={() => setModalOpen(false)}
+        contentLabel="Seat Selection"
+      >
+        {selectedShowtime && (
+          <div>
+            <h4>Seat Selection for {movieData[selectedShowtime.movieIndex].title} on {selectedShowtime.date} at {selectedShowtime.time}</h4>
+            <SeatSelection />
+            <button onClick={() => setModalOpen(false)}>Close</button>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

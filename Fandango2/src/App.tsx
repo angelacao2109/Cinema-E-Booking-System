@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar/NavBar';
 import MovieList from './components/MovieList/MovieList'; // Make sure to import MovieList component
 import moviesData from './movies-2020s.json';
