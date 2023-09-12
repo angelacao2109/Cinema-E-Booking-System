@@ -28,6 +28,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    //New additions here on. Delete if needed
+    //https://www.codejava.net/frameworks/spring-boot/email-verification-example
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
+    private boolean enabled;
+
     //https://www.javaguides.net/2018/10/user-registration-module-using-springboot-springmvc-springsecurity-hibernate5-thymeleaf-mysql.html ideas from here <--
     @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinTable(
@@ -35,4 +42,7 @@ public class User {
             joinColumns={@JoinColumn(name="user_id", referencedColumnName="ID")},
             inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="ID")})
     private Set<Role> roles;
+
+
+
 }
