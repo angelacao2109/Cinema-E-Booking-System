@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SearchBar.css';
-import SearchIcon from '@mui/icons-material/Search'; 
+import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
 
 
 type Movie = {
@@ -18,46 +19,48 @@ type Movie = {
 
 type SearchBarProps = {
     placeholder: string;
-    data: Movie[]; 
+  
 };
 
-function SearchBar({ placeholder, data }: SearchBarProps) {
-    const [inputValue, setInputValue] = useState(''); 
+function SearchBar({ placeholder }: SearchBarProps) {
+    const [inputValue, setInputValue] = useState('');
+    const [filteredData, setFilteredData] = useState<Movie[]>([]); 
 
-    const filteredData = data.filter(movie => {
-        const searchString = inputValue.toLowerCase();
-        
-        // Check if the search is specific to rating
-        const isRatingSearch = searchString.startsWith('rating:');
-        if (isRatingSearch) {
-            const ratingSearchValue = parseFloat(searchString.split(':')[1]);
-            return movie.rating === ratingSearchValue;
+    useEffect(() => {
+        if (inputValue) {
+            const timerId = setTimeout(async () => {
+                try {
+                    const response = await axios.get('/api/movies/search', { 
+                        params: { query: inputValue } 
+                    });
+                    setFilteredData(response.data);
+                } catch (error) {
+                    console.error('Error fetching movies:', error);
+                }
+            }, 500);
+          
+            return () => clearTimeout(timerId);
+        } else {
+            setFilteredData([]);
         }
-
+    }, [inputValue]);
+    
         return (
-            movie.title.toLowerCase().includes(searchString) || 
-            movie.cast.some((castName: string) => castName.toLowerCase().includes(searchString)) || 
-            movie.genres.some((genre: string) => genre.toLowerCase().includes(searchString)) ||
-            (movie.rating && movie.rating.toString().includes(searchString))  // Checking rating normally
-        );
-    });
-
-    return (
-        <div className="searchbar">
-            <div className="searchInputs"> 
-                <input 
-                    type="text" 
-                    placeholder={placeholder}
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)} 
-                />
-                <div className="searchIcon">
-                    <SearchIcon /> 
+            <div className="searchbar">
+                <div className="searchInputs"> 
+                    <input 
+                        type="text" 
+                        placeholder={placeholder}
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)} 
+                    />
+                    <div className="searchIcon">
+                        <SearchIcon /> 
+                    </div>
                 </div>
-            </div>
-            {inputValue.length > 0 && (   // Start of conditional rendering
-                <>
-                    {filteredData.map((movie, key) => (
+                {filteredData.length > 0 && (
+                    <>
+                      {filteredData.map((movie, key) => (
                         <div key={key} className="movieResult">
                             <img src={movie.thumbnail} alt={`${movie.title} poster`} className="movieThumbnail"/>
                             <div className="movieDetails">
@@ -72,8 +75,6 @@ function SearchBar({ placeholder, data }: SearchBarProps) {
         </div>
     );
 }
-
-
-
+                    
 
 export default SearchBar;
