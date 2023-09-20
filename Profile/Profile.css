@@ -1,0 +1,76 @@
+.profile-form{
+    background-color: rgba(3, 3, 3, 0.304);
+    border-radius: 5px;
+    width: 550px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    /* height: 600px; */
+}
+
+.profile-form-header{
+    background-color: #E9D8A6;
+    border-radius: 10px;
+    font-size: 50px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+    color: #005F73;
+}
+
+.profile-form-items{
+    background-color: #E9D8A6;
+    border-radius: 10px;
+    color: #005F73;
+}
+
+.profile-form-label{
+    display: inline-block;
+    text-align: left;
+    padding-bottom: 10px;
+    font-size: 17px;
+    width: 40%;
+}
+
+.profile-form-input{
+    border: none;
+    border-radius: 10px;
+    padding-left: 10px;
+    font-size: 17px;
+    width: 40%;
+}
+
+.button{
+    text-align: left;
+    color: #005F73;
+    font-size: 15px;
+    width: stretch;
+    background-color: rgba(255, 255, 0, 0);
+    border: none;
+}
+
+.hidden {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-footer{
+    padding-top: 20px;
+    text-align: center;
+}
+
+.profile-footer-button{
+    border-radius: 10px;
+    background-color: #E9D8A6;
+    border: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+
+.save-button{
+    background-color: #e2cc8900;
+    color: white;
+    border-color: #005F73;
+    color: #005F73;
+}
