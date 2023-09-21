@@ -1,0 +1,48 @@
+.signInContent {
+    width: 80%;
+    min-width: 300px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    
+    /* Centering logic */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.signInContent form input {
+    width: 100%;
+    max-width: none;
+    margin: 10px auto;
+    display: block;
+}
+
+.rememberSection {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.signInFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.forgotPassword {
+    color: #007BFF;
+    transition: color 0.3s ease;
+    cursor: pointer;
+    text-decoration: none; /* added to override default link styles */
+}
+
+.forgotPassword:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}

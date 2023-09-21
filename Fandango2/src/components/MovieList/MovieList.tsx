@@ -3,6 +3,7 @@ import './MovieList.css';
 import SeatSelection from '../SeatSelection/SeatSelection';
 import Modal from 'react-modal';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 type Movie = {
@@ -47,7 +48,10 @@ const MovieList: React.FC<MovieProps> = () => {
 
   return (
     <div className="movie-list">
+        
+       
             <h2>Available Movies</h2>
+            
             <div className="movies-grid">
                 {movieData.map((movie, index) => (
                     <div key={index} className="movie-item">
@@ -100,7 +104,9 @@ const MovieList: React.FC<MovieProps> = () => {
                     </div>
                 )}
             </Modal>
+            
         </div>
+        
     );
 }
 

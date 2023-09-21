@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './SeatSelection.css';
-
+import { useNavigate } from 'react-router-dom';
 function SeatSelection() {
+
   const totalRows = 10;
   const totalSeatsPerRow = 15;
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
@@ -31,8 +32,10 @@ function SeatSelection() {
           </div>
         ))}
       </div>
+      
       <button className="confirm-btn">Confirm Selection</button>
     </div>
+  
   );
 }
 
