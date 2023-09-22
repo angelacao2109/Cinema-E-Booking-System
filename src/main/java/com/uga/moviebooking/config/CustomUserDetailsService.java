@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -30,18 +29,8 @@ public class CustomUserDetailsService implements UserDetailsService {
      * @throws UsernameNotFoundException when user is not found
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = repo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
-
-        //Convert role list to Spring GrantedAuthority list
-        Set<GrantedAuthority> roles = user
-                .getRoles()
-                .stream()
-                .map((role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toSet());
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                roles);
+        return user;
     }
 }

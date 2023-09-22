@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 database/data
 .env
+src/main/resources/application-secret.properties
 ### STS ###
 .apt_generated
 .classpath
