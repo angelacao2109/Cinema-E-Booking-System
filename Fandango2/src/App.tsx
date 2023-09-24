@@ -9,27 +9,42 @@ import Registration from './components/Registration/Registration';
 import SignIn from './components/SignIn/SignIn'; 
 import ResetPasswordForm from './components/ResetPasswordForm/ResetPasswordForm';
 import EditProfile from './components/EditProfile/EditProfile';
-
+import SelectTicket from './components/SelectTicket/SelectTicket';
+import Checkout from './components/Checkout/Checkout';
+import Confirmation from './components/Confirmation/Confirmation';
 
 function App() {
   console.log(moviesData);
-  return (
+
+  const [ticketCount, setTicketCount] = useState<number>(0);
+
+  const handleTicketChange = (count: number) => {
+    setTicketCount(count);
+  };
     
-    <Router>
-      <div>
-        <NavBar movieData={moviesData} />
-     
-        <Routes>
-          <Route path="/" element={<MovieList />} />
-          <Route path="/Seats" element={<SeatSelection />} />
-          <Route path="/register" element={<Registration />} />
-          <Route path="/signin" element={<SignIn />} /> 
-          <Route path="/forgot-password" element={<ResetPasswordForm />} />
-          <Route path="/edit-profile" element={<EditProfile />} />
-        </Routes>
-      </div>
-    </Router>
-  );
-}
+    return (
+      <Router>
+        <div>
+          <NavBar movieData={moviesData} />
+         
+          <Routes>
+            <Route path="/" element={<MovieList />} />
+            <Route path="/tickets" element={
+              <div className="app-container">
+                <SelectTicket onTicketChange={handleTicketChange} />
+              </div>
+            } />
+            <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} />} />
+            <Route path="/register" element={<Registration />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/forgot-password" element={<ResetPasswordForm />} />
+            <Route path="/edit-profile" element={<EditProfile />} />
+          </Routes>
+        </div>
+      </Router>
+    );
+  }
 
 export default App;
+
+//<Route path="/tickets" element={<SelectTicket onTicketChange={handleTicketChange} />} />
