@@ -12,6 +12,13 @@ import EditProfile from './components/EditProfile/EditProfile';
 import SelectTicket from './components/SelectTicket/SelectTicket';
 import Checkout from './components/Checkout/Checkout';
 import Confirmation from './components/Confirmation/Confirmation';
+import Summary from './components/Summary/Summary';
+import AdminNavBar from './components/AdminPage/AdminNav/AdminNavBar';
+import Dash from './components/AdminPage/Dash/Dash';
+import EditMovies from './components/AdminPage/EditMovies/EditMovies';
+import EditPromo from './components/AdminPage/EditPromo/EditPromo';
+import EditUser from './components/AdminPage/EditUser/EditUser';
+
 
 function App() {
   console.log(moviesData);

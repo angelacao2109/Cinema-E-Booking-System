@@ -4,9 +4,15 @@ import SearchBar from '../SearchBar/SearchBar';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import axios from 'axios'; 
-import {Routes} from "react-router-dom"
-import { Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 import EditProfile from '../EditProfile/EditProfile';
+import AdminNavBar from '../AdminPage/AdminNav/AdminNavBar';
+import EditMovies from '../AdminPage/EditMovies/EditMovies.js';
+import EditPromo from '../AdminPage/EditPromo/EditPromo';
+import EditUser from '../AdminPage/EditUser/EditUser';
+import Dash from '../AdminPage/Dash/Dash';
+
+
 
 
 
@@ -38,7 +44,7 @@ function NavBar({ movieData }: NavBarProps) {
                 console.error('Error fetching movies coming soon:', error);
             });
 
-    }, []); // Empty dependency array means this useEffect runs once when component mounts
+    }, []); 
 
 
 
@@ -52,34 +58,43 @@ function NavBar({ movieData }: NavBarProps) {
 
     
 
-        
+    const location = useLocation();
         
 
     return (
-        <nav className="navbar">
-            <div className="leftLinks">
-                <a href="/" className="link">Home</a>
-                <SearchBar placeholder="Search..." />
+        location.pathname.startsWith('/admin') ? (
+            <div>
+                <Routes>
+                    <Route path="/admin" element={<AdminNavBar />}>
+                        <Route index element={<Dash />} />
+                        <Route path="editmovies" element={<EditMovies />} />
+                        <Route path="editpromo" element={<EditPromo />} />
+                        <Route path="edituser" element={<EditUser />} />
+                    </Route>
+                </Routes>
             </div>
-            <div className="rightLinks">
-            <Link to="/movies-playing" className="link">Movies Playing</Link>
-            <Link to="/movies-coming-soon" className="link">Movies Coming Soon</Link>
-            <Link to="/Admin" className="link">Admin</Link>
-                <Link to="/edit-profile" className="link">Edit Profile</Link>
-                <div className="accountSection">
-                    <span>Account</span>
-                    <div className="accountLinks">
-                    <Link to="/signin" className="accountLink">Sign In</Link>
-<Link to="/register" className="accountLink">Join Now</Link> 
-                    </div>
-                   
+        ) : (
+            <nav className="navbar">
+                <div className="leftLinks">
+                    <a href="/" className="link">Home</a>
+                    <SearchBar placeholder="Search..." />
                 </div>
-            </div>
-        </nav>
+                <div className="rightLinks">
+                <Link to="/movies-playing" className="link">Movies Playing</Link>
+                    <Link to="/movies-coming-soon" className="link">Movies Coming Soon</Link>
+                    <Link to="/admin" className="link">Admin</Link>
+                    <Link to="/edit-profile" className="link">Edit Profile</Link>
+                    <div className="accountSection">
+                        <span>Account</span>
+                        <div className="accountLinks">
+                            <Link to="/signin" className="accountLink">Sign In</Link>
+                            <Link to="/register" className="accountLink">Join Now</Link> 
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        )
     );
-    }
-
-
+}
 
 export default NavBar;
-

@@ -10,10 +10,13 @@ const Summary: React.FC = () => {
         alert('Proceed button clicked!');
           };
   return (
-    <div>
+    <div className='summary-container'>
+        <h1>Summary</h1>
+        <h2>MovieName</h2>
+        <h3>Date and Time</h3>
     <table>
       <tbody>
-      <tr>
+        <tr>
           <td>Tickets:</td>
           <td></td>
         </tr>
@@ -30,8 +33,8 @@ const Summary: React.FC = () => {
           <td></td>
         </tr>
         <tr>
-          <td>Total:</td>
-          <td></td>
+          <th>Total:</th>
+          <th></th>
         </tr>
       </tbody>
     </table>
