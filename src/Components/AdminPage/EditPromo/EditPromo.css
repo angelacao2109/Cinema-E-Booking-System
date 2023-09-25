@@ -1,0 +1,12 @@
+.curr{
+    margin: 15px 15px 15px 15px;
+    display: grid;
+    justify-content: center;
+    text-align: center;
+    background-color: rgba(255, 0, 0, 0.335);
+}
+
+.promo-btn{
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+}
