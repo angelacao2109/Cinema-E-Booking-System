@@ -32,28 +32,49 @@ const Checkout: React.FC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className = "container">
-        <label> First Name: <input type="text" name="firstName" value={userData.firstName} onChange={handleChange} /></label>
-      
-        <label> Last Name: <input type="text" name="lastName" value={userData.lastName} onChange={handleChange} /></label>
+      <h1>Checkout</h1>
+	    <h3>Order Total : </h3>
+        <table>
+            <tr>
+                <td>First Name:</td>
+                <td><input type="text" name="firstName" value={userData.firstName} onChange={handleChange} /></td>
+            </tr>
+            <tr>
+                <td>Last Name:</td>
+                <td><input type="text" name="lastName" value={userData.lastName} onChange={handleChange} /></td>
+            </tr>
+            <tr>
+                <td>Address:</td>
+                <td><input type="text" name="address" value={userData.Address} onChange={handleChange} /></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><input type="text" name="email" value={userData.Email} onChange={handleChange} /></td>
+            </tr>
+        </table>
+      </div>
 
-        <label> Address: <input type="text" name="address" value={userData.Address} onChange={handleChange} /></label>
-
-        <label> Email: <input type="text" name="email" value={userData.Email} onChange={handleChange} /></label>
-        
-        </div>
-
-        <div className = "container2">
-      
-        <label> Promo Code: <input type="text" name="PromoCode" value={userData.PromoCode} onChange={handleChange} /></label>
-
-        <label> Credit Card Number: <input type="text" name="CreditCardNumber" value={userData.CreditCardNumber} onChange={handleChange} /></label>
-
-        <label> Expiry Date: <input type="text" name="expiryDate" value={userData.ExpiryDate} onChange={handleChange} /></label>
-        
-        <label> CVV: <input type="text" name="CVV" value={userData.CVV} onChange={handleChange} /></label>
-
-        </div>
-        <button type="submit">Submit</button>
+      <div className = "container2">
+        <table>
+            <tr>
+                <td>Promo Code:</td>
+                <td><input type="text" name="PromoCode" value={userData.PromoCode} onChange={handleChange} /></td>
+            </tr>
+            <tr>
+                <td>Credit Card Number:</td>
+                <td><input type="text" name="CreditCardNumber" value={userData.CreditCardNumber} onChange={handleChange} /></td>
+            </tr>
+            <tr>
+                <td>Expiry Date:</td>
+                <td><input type="text" name="ExpiryDate" value={userData.ExpiryDate} onChange={handleChange} /></td>
+            </tr>
+            <tr>
+                <td>CVV:</td>
+                <td><input type="text" name="CVV" value={userData.CVV} onChange={handleChange} /></td>
+            </tr>
+        </table>      
+      </div>
+      <button type="submit">Submit</button>
     </form>
     
   );

@@ -1,4 +1,10 @@
 /* Summary.css */
+.summary-container {
+  max-width: 600px;
+  margin:  auto;
+  padding: 20px;
+  background-color: #b6b6b6;
+}
 
 .App{
   text-align: justify;
@@ -11,7 +17,10 @@ table {
   margin: 20px auto;
   margin-bottom: 20px;
   font-size: 20px;
+  border-collapse: separate;
+  border-spacing: 20px;
 }
+
 tr{
   margin-bottom: 200px;
 }
@@ -24,6 +33,7 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin: 20px auto;
 }
 
 button:hover {
