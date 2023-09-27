@@ -1,2 +1,0 @@
-# Cinema-E-Booking-System
-
