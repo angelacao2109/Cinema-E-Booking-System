@@ -23,6 +23,25 @@ function Registration () {
         subscribeOffers: false,
         agreeTerms: false,
     });
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (formData.password !== formData.confirmPassword) {
+            alert("Passwords do not match!");
+            return;
+        }
+
+        try {
+            const response = await axios.post('/api/register', formData);
+            if (response.status === 200) {
+                alert("Registration Successful");
+                navigate("/"); // or wherever you'd like to navigate the user post-registration
+            }
+        } catch (error) {
+                console.error('Error registering:', error);
+                alert("Error during registration. Please try again.");
+            }
+        }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -40,24 +59,16 @@ function Registration () {
         }));
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        try {
-            const response = await axios.post('/api/register', formData);
-        } catch (error) {
-                console.error('Error registering:', error);
-            }
-        }
-
+   
    return(
     <form onSubmit={handleSubmit}>
       <div className="form">
         <div className="header">Registration for Club Access!</div>
         <div className="form-body">
             <div className='header2'>Registration Information</div>
+
             <div className="firstName">
-                <label className="form-label">First Name </label>
+                <label className="form-label">First Name * </label>
                 <input
                     className="form-input"
                     type="text"
@@ -65,10 +76,11 @@ function Registration () {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
+                    required
               />
               </div>
                  <div className="lastName">
-                <label className="form-label">Last Name </label>
+                <label className="form-label">Last Name * </label>
                 <input
                     className="form-input"
                     type="text"
@@ -76,39 +88,43 @@ function Registration () {
                     name="lastName"
                     value={formData.firstName}
                     onChange={handleChange}
+                    required
                 />
                 </div>
                  <div className="email">
-                <label className="form-label">Email </label>
+                <label className="form-label">Email * </label>
                 <input
                     className="form-input"
-                    type="text"
+                    type="email"
                     placeholder='email'
                     name="email"
-                    value={formData.firstName}
+                    value={formData.email}
                     onChange={handleChange}
+                    required
                 />
                 </div>
             <div className="Password">
-                <label className="form-label">Password </label>
+                <label className="form-label">Password * </label>
                 <input
                     className="form-input"
-                    type="text"
+                    type="password"
                     placeholder='Password'
                     name="Password"
-                    value={formData.firstName}
+                    value={formData.password}
                     onChange={handleChange}
+                    required
                 />
            </div>
            <div className="confirmPassword">
-                <label className="form-label">Confirm Password </label>
+                <label className="form-label">Confirm Password * </label>
                 <input
                     className="form-input"
-                    type="text"
+                    type="password"
                     placeholder='Confirm Password'
                     name="Confirm Password"
-                    value={formData.firstName}
+                    value={formData.password}
                     onChange={handleChange}
+                    required
                 />
             </div>
             
@@ -164,7 +180,7 @@ function Registration () {
     <label className="form-label">Phone Number </label>
     <input 
         className="form-input" 
-        type="text" 
+        type="tel" 
         placeholder='Phone Number' 
         name="phone" 
         value={formData.phone} 
@@ -248,12 +264,7 @@ function Registration () {
                 <button className="button" type="submit">Register</button>
                 <div className="signIn">Already have an account? <a href='#SIGNIN'>Sign In</a></div>
                 <div>
-                    <button
-                        onClick={() => {
-                        navigate("/");
-                        }}>
-                        Return
-                    </button>
+                     <button type="button" onClick={() => navigate("/")}>Return</button>
                 </div>
             </div>
         </div>

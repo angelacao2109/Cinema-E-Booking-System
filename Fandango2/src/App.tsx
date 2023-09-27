@@ -13,12 +13,12 @@ import SelectTicket from './components/SelectTicket/SelectTicket';
 import Checkout from './components/Checkout/Checkout';
 import Confirmation from './components/Confirmation/Confirmation';
 import Summary from './components/Summary/Summary';
-import AdminNavBar from './components/AdminPage/AdminNav/AdminNavBar';
 import Dash from './components/AdminPage/Dash/Dash';
 import EditMovies from './components/AdminPage/EditMovies/EditMovies';
 import EditPromo from './components/AdminPage/EditPromo/EditPromo';
 import EditUser from './components/AdminPage/EditUser/EditUser';
-
+import { AdminNavBar } from './components/AdminPage/AdminNav/AdminNavBar';
+import AdminRoutes from './components/AdminPage/AdminNav/AdminRoutes';
 
 function App() {
   console.log(moviesData);
@@ -35,22 +35,23 @@ function App() {
           <NavBar movieData={moviesData} />
          
           <Routes>
-            <Route path="/" element={<MovieList />} />
-            <Route path="/tickets" element={
-              <div className="app-container">
-                <SelectTicket onTicketChange={handleTicketChange} />
-              </div>
-            } />
-            <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} />} />
-            <Route path="/register" element={<Registration />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/forgot-password" element={<ResetPasswordForm />} />
-            <Route path="/edit-profile" element={<EditProfile />} />
-          </Routes>
-        </div>
-      </Router>
-    );
-  }
+          <Route path="/" element={<MovieList />} />
+          <Route path="/tickets" element={
+            <div className="app-container">
+              <SelectTicket onTicketChange={handleTicketChange} />
+            </div>
+          } />
+          <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} />} />
+          <Route path="/register" element={<Registration />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/forgot-password" element={<ResetPasswordForm />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/admin/*" element={<AdminRoutes />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
 
 export default App;
 

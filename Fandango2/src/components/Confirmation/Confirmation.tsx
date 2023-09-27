@@ -4,7 +4,6 @@ import './Confirmation.css';
 const Confirmation: React.FC = () => {
     const Cancellation = () => {
       
-
     }
 
     return(

@@ -10,31 +10,31 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 800px; /* Doubled the width */
+    width: 800px; 
     border: 1px solid #ddd;
-    padding: 40px; /* Adjusted padding */
+    padding: 40px; 
     border-radius: 5px;
     background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 0 5px #ddd; /* Added another "border" */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 0 5px #ddd; 
 }
 
 .ticket-category {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px; /* Adjusted for spacing */
+    margin-bottom: 20px; 
 }
 
 .ticket-category button {
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 20px; /* Adjusted for size */
+    padding: 10px 20px; 
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
-    width: 60px; /* Adjusted for size */
-    height: 60px; /* Adjusted for size */
+    width: 60px; 
+    height: 60px;
     flex-basis: 60px;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .ticket-category span:first-child {
-    flex-basis: 120px; /* Adjusted for size */
+    flex-basis: 120px; 
     text-align: left;
 }
 
@@ -54,14 +54,14 @@
 }
 
 .ticket-category span:last-child {
-    flex-basis: 100px; /* Adjusted for size */
+    flex-basis: 100px; 
     text-align: right;
 }
 
 .close-btn {
     position: absolute;
-    top: 10px; /* Adjust as needed */
-    right: 10px; /* Adjust as needed */
+    top: 10px; 
+    right: 10px;
     background-color: red; 
     color: white;
     border: none;

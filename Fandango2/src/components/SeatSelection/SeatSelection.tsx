@@ -12,7 +12,7 @@ function SeatSelection({ maxSeats, occupiedSeats = [] }: Props) {
   const totalRows = 10;
   const totalSeatsPerRow = 15;
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const isSeatOccupied = (seatId: string) => occupiedSeats.includes(seatId);
 
 
@@ -20,14 +20,22 @@ function SeatSelection({ maxSeats, occupiedSeats = [] }: Props) {
     const seatId = `${row}-${seat}`;
     if (selectedSeats.includes(seatId)) {
       setSelectedSeats(prev => prev.filter(s => s !== seatId));
+      setErrorMessage(''); 
     } else if (selectedSeats.length < maxSeats) {
       setSelectedSeats(prev => [...prev, seatId]);
+      if (selectedSeats.length === maxSeats - 1) {
+        setErrorMessage('You have selected the maximum number of seats.'); 
+      } else {
+        setErrorMessage('');
+      }
+    } else {
+      setErrorMessage('You selected too many seats.');
+      return;
     }
-  };
+};
+
   const handleConfirm = () => {
-    // Handle your confirm logic here. Either send the selected seats to the server or navigate to another page.
     console.log("Seats selected: ", selectedSeats);
-    // You can add more actions or navigation logic here
   }
 
   return (
@@ -45,19 +53,19 @@ function SeatSelection({ maxSeats, occupiedSeats = [] }: Props) {
                   key={seatIndex}
                   className={`seat 
                     ${selectedSeats.includes(seatId) ? 'selected' : ''} 
-                    ${isSeatOccupied(seatId) ? 'occupied' : ''}`}  // Add 'occupied' class if the seat is already taken
+                    ${isSeatOccupied(seatId) ? 'occupied' : ''}`} 
                   onClick={() => toggleSeat(rowIndex, seatIndex)}
-                  disabled={isSeatOccupied(seatId)}  // Disable the button if the seat is already occupied
+                  disabled={isSeatOccupied(seatId)}  
                 >
-                  {`${String.fromCharCode(65 + rowIndex)}${seatIndex + 1}`} {/* Displaying row and column on seat */}
+                  {`${String.fromCharCode(65 + rowIndex)}${seatIndex + 1}`} 
                 </button>
               );
             })}
           </div>
         ))}
       </div>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <button className="confirm-btn" onClick={handleConfirm}>Confirm Selection</button>
-      {selectedSeats.length >= maxSeats && <p className="max-seats-warning">You have selected the maximum number of seats.</p>}
     </div>
   );
 }

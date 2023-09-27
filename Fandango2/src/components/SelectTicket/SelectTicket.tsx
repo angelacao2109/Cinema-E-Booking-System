@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SelectTicket.css';
 
-
-
 interface Props {
     onTicketChange: (count: number) => void;
   }

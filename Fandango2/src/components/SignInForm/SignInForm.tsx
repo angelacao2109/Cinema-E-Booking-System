@@ -1,58 +1,73 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './SignInForm.css';
-import { Link } from 'react-router-dom';
 
-type SignInFormProps = {};
-
-const SignInForm: React.FC<SignInFormProps> = () => {
+const SignInForm: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        axios.post('/api/signin', { email, password, remember: rememberMe })
-            .then(response => {
-                const { data } = response;
-                if (data.success) {
-                    console.log('Successfully signed in.');
-                    alert('Successfully signed in.');
-                } else {
-                    console.log('Error signing in.', data.message);
-                    alert('Error signing in.');
-                }
-            })
-            .catch(error => {
-                console.error('Error signing in:', error);
-            });
+        setLoading(true);
+        try {
+            const response = await axios.post('/api/sign-in', { email, password, rememberMe });
+            if (response.data.success) {
+                setFeedbackMessage('Successfully signed in.');
+                // Redirect to dashboard or another success action
+            } else {
+                setFeedbackMessage('Error signing in. Please check your credentials and try again.');
+            }
+        } catch (error) {
+            setFeedbackMessage('Error signing in. Please check your connection and try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRememberMe(event.target.checked);
-    }
-
     return (
-        <div className="signInContent">
-            <h2>Sign In</h2>
-            <form onSubmit={handleSubmit}>
-                <input type="email" placeholder="Email" required />
-                <input type="password" placeholder="Password" required />
-                <div className="rememberSection">
-                    <label htmlFor="rememberMe">Remember Me</label>
+        <div className="centerContainer">
+            <div className="modalContent">
+                <h2>Sign In</h2>
+                {feedbackMessage && <p>{feedbackMessage}</p>}
+                <form onSubmit={handleSubmit}>
                     <input 
-                        type="checkbox" 
-                        id="rememberMe" 
-                        checked={rememberMe}
-                        onChange={handleCheckboxChange}
+                        type="email" 
+                        name="email" 
+                        placeholder="Email" 
+                        required 
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        aria-label="Email address"
                     />
-                </div>
-                <div className="signInFooter">
-                    <button type="submit">Sign In</button>
-                    <Link to="/forgot-password" className="forgotPassword">Forgot Password?</Link>
-                </div>
-            </form>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        placeholder="Password" 
+                        required 
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        aria-label="Password"
+                    />
+                    <div className="checkboxContainer">
+                        <input 
+                            type="checkbox"
+                            id="rememberMe"
+                            checked={rememberMe}
+                            onChange={() => setRememberMe(!rememberMe)}
+                        />
+                        <label htmlFor="rememberMe">Remember me</label>
+                    </div>
+                    <button type="submit" disabled={loading}>
+                        {loading ? 'Processing...' : 'Sign In'}
+                    </button>
+                    <div className="forgotPasswordLink">
+                        <a href="/forgot-password">Forgot Password?</a>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

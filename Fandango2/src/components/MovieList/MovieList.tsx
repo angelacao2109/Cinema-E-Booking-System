@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-
 type Movie = {
   thumbnail: string;
   title: string;

@@ -1,17 +1,17 @@
 .searchbar {
-    margin: 0 20px; /* Add some margin to space out the search bar */
+    margin: 0 20px; 
 }
 .searchInputs {
-    display: flex;        /* This will line up its children horizontally by default */
-    align-items: center;  /* This will vertically center the children elements */
+    display: flex;       
+    align-items: center;  
 }
 
-/* Style for the input if needed */
+
 input {
-    flex: 1;             /* This will allow the input to take up any available space */
+    flex: 1;           
     border: 1px solid #ccc;
     padding: 10px;
-    border-radius: 4px 0 0 4px;  /* Round the left side only */
+    border-radius: 4px 0 0 4px;  
 }
 
 .searchIcon {
@@ -19,28 +19,28 @@ input {
     background-color: #f0f0f0;
     padding: 10px;
     border: 1px solid #ccc;
-    border-left: none;         /* Removes the left border to make it blend with the input */
-    border-radius: 0 4px 4px 0;  /* Round the right side only */
+    border-left: none;        
+    border-radius: 0 4px 4px 0;  
 }
 
 .dataResult {
-    /* ... other styles ... */
+   
     max-height: 300px;
-    overflow-y: auto; /* Allows scrolling if there are many search results */
+    overflow-y: auto; 
 }
 
 .movieResult {
-    display: flex;     /* Aligns the image and movie details horizontally */
+    display: flex;     
     margin-bottom: 10px;
 }
 
 .movieThumbnail {
-    width: 50px;       /* Adjust as needed */
-    height: 75px;      /* Adjust as needed */
+    width: 50px;       
+    height: 75px;      
     margin-right: 10px;
-    object-fit: cover; /* Ensures the image fits well in the given dimensions */
+    object-fit: cover; 
 }
 
 .movieDetails {
-    flex: 1;           /* Takes up the remaining space after the image */
+    flex: 1;          
 }

@@ -6,14 +6,11 @@ import 'reactjs-popup/dist/index.css';
 import axios from 'axios'; 
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 import EditProfile from '../EditProfile/EditProfile';
-import AdminNavBar from '../AdminPage/AdminNav/AdminNavBar';
-import EditMovies from '../AdminPage/EditMovies/EditMovies.js';
+import EditMovies from '../AdminPage/EditMovies/EditMovies.jsx';
 import EditPromo from '../AdminPage/EditPromo/EditPromo';
 import EditUser from '../AdminPage/EditUser/EditUser';
 import Dash from '../AdminPage/Dash/Dash';
-
-
-
+import { AdminNavBar, AdminRoutes } from '../AdminPage/AdminNav/AdminNavBar';
 
 
 type NavBarProps = {
@@ -25,25 +22,18 @@ function NavBar({ movieData }: NavBarProps) {
     const [registerForPromotions, setRegisterForPromotions] = useState(false); 
     const [moviesPlaying, setMoviesPlaying] = useState<any[]>([]);
     const [moviesComingSoon, setMoviesComingSoon] = useState<any[]>([]);
+    const fetchMovies = (endpoint: string, setMovies: React.Dispatch<React.SetStateAction<any[]>>) => {
+        axios.get(endpoint)
+            .then(response => {
+                setMovies(response.data);
+            })
+            .catch(error => {
+                console.error(`Error fetching movies from ${endpoint}:`, error);
+            });
+    }
     useEffect(() => {
-        // Fetching movies playing now
-        axios.get('/api/movies-playing')
-            .then(response => {
-                setMoviesPlaying(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching movies playing:', error);
-            });
-
-        // Fetching movies coming soon
-        axios.get('/api/movies-coming-soon')
-            .then(response => {
-                setMoviesComingSoon(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching movies coming soon:', error);
-            });
-
+        fetchMovies('/api/movies-playing', setMoviesPlaying);
+        fetchMovies('/api/movies-coming-soon', setMoviesComingSoon);
     }, []); 
 
 
@@ -63,18 +53,9 @@ function NavBar({ movieData }: NavBarProps) {
 
     return (
         location.pathname.startsWith('/admin') ? (
-            <div>
-                <Routes>
-                    <Route path="/admin" element={<AdminNavBar />}>
-                        <Route index element={<Dash />} />
-                        <Route path="editmovies" element={<EditMovies />} />
-                        <Route path="editpromo" element={<EditPromo />} />
-                        <Route path="edituser" element={<EditUser />} />
-                    </Route>
-                </Routes>
-            </div>
-        ) : (
-            <nav className="navbar">
+            <AdminRoutes/>
+            ) : (
+           <nav className="navbar">
                 <div className="leftLinks">
                     <a href="/" className="link">Home</a>
                     <SearchBar placeholder="Search..." />
@@ -93,7 +74,7 @@ function NavBar({ movieData }: NavBarProps) {
                     </div>
                 </div>
             </nav>
-        )
+            )
     );
 }
 
