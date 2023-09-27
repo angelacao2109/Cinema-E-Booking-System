@@ -1,11 +1,8 @@
 package com.uga.moviebooking.controller;
 
-import com.google.gson.Gson;
 import com.uga.moviebooking.model.dto.MovieDto;
 import com.uga.moviebooking.model.movie.Movie;
-import com.uga.moviebooking.model.movie.MovieRepository;
 import com.uga.moviebooking.model.movie.MovieService;
-import org.jose4j.http.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +20,9 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @GetMapping("/search/{name}")
-    public ResponseEntity<List<Movie>> searchMovie(@PathVariable String name) {
-        List<Movie> movieList = movieService.searchByTitle(name);
+    @GetMapping("/search")
+    public ResponseEntity<List<Movie>> searchMovie(@RequestParam String title) {
+        List<Movie> movieList = movieService.searchByTitle("%" + title + "%");
         if(movieList == null) {
             return ResponseEntity.notFound().build();
         }
