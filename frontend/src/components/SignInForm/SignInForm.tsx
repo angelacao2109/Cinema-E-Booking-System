@@ -51,6 +51,7 @@ const SignInForm: React.FC = () => {
                         onChange={e => setPassword(e.target.value)}
                         aria-label="Password"
                     />
+                    <div className="actionContainer">
                     <div className="checkboxContainer">
                         <input 
                             type="checkbox"
@@ -63,13 +64,16 @@ const SignInForm: React.FC = () => {
                     <button type="submit" disabled={loading}>
                         {loading ? 'Processing...' : 'Sign In'}
                     </button>
-                    <div className="forgotPasswordLink">
-                        <a href="/forgot-password">Forgot Password?</a>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div className="forgotPasswordLink">
+                    <a href="/forgot-password">Forgot Password?</a>
+                </div>
+            </form>
         </div>
-    );
-};
-
+    </div>
+);
+    }
 export default SignInForm;
+
+
+

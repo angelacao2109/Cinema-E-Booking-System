@@ -31,7 +31,7 @@ function SearchBar({ placeholder }: SearchBarProps) {
         if (inputValue) {
             const timerId = setTimeout(async () => {
                 try {
-                    const response = await axios.get('/api/movies/search', { 
+                    const response = await axios.get('localhost:8080/api/movie/search?title=exorcist', { 
                         params: { query: inputValue } 
                     });
                     setFilteredData(response.data);

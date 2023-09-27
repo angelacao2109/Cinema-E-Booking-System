@@ -96,7 +96,7 @@ function Registration () {
                 <input
                     className="form-input"
                     type="email"
-                    placeholder='email'
+                    placeholder='Email'
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
@@ -116,22 +116,23 @@ function Registration () {
                 />
            </div>
            <div className="confirmPassword">
-                <label className="form-label">Confirm Password * </label>
-                <input
-                    className="form-input"
-                    type="password"
-                    placeholder='Confirm Password'
-                    name="Confirm Password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
+    <label className="form-label">Confirm Password * </label>
+    <input
+        className="form-input"
+        type="password"
+        placeholder='Confirm Password'
+        name="confirmPassword"
+        value={formData.confirmPassword}
+        onChange={handleChange}
+        required
+    />
+</div>
             
             <hr className='hr'/>
             <div className='header2'>
                 Personal Information
             </div>
+
             <div className="Address">
     <label className="form-label">Address </label>
     <input 
@@ -241,6 +242,7 @@ function Registration () {
             <div>
 
                 <br/>
+              
                 <input 
         className="checkbox" 
         type="checkbox" 
@@ -250,6 +252,8 @@ function Registration () {
     />
                 <label className="checkbox-label">Subscribe for exclusive offers and the latest movie news</label>
                 <br/>
+             
+             
                 <input 
         className="checkbox" 
         type="checkbox" 
@@ -259,6 +263,8 @@ function Registration () {
     />
                  <label className="checkbox-label">I agree to the <a href="#TERMS">Terms and Conditions</a></label>
             </div>
+           
+        
             <div className="footer">
                 <br/>
                 <button className="button" type="submit">Register</button>
@@ -267,8 +273,9 @@ function Registration () {
                      <button type="button" onClick={() => navigate("/")}>Return</button>
                 </div>
             </div>
-        </div>
-      </div>     
+       </div>
+       </div>
+          
       </form> 
     );      
                     }

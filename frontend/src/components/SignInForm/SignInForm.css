@@ -7,12 +7,12 @@
 
 .modalContent {
     background: #ffffff;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
-    width: 300px;  /* Decreased width */
-    height: 400px; /* Increased height */
+    width: 300px;  /* Adjusted width to match the height */
+    height: 300px; /* Keeping the height as before */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #cccccc; /* Added border */
+    border: 1px solid #cccccc;
 }
 
 h2 {
@@ -24,7 +24,7 @@ form input[type="email"],
 form input[type="password"] {
     width: 100%;
     padding: 10px;
-    margin: 10px 0;
+    margin: 5px 0;
     border-radius: 5px;
     border: 1px solid #cccccc;
 }
@@ -32,24 +32,28 @@ form input[type="password"] {
 .checkboxContainer {
     display: flex;
     align-items: center;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
-.checkboxContainer label {
-    margin-left: 5px;
-    padding-top: 10px; 
-    top: 20px;
+
+
+.checkboxContainer input[type="checkbox"] {
+    margin-right: 5px; /* Space between the checkbox and its label */
 }
 
 button {
+    margin-left: auto;
     width: 100%;
-    padding: 10px;
+    max-width: 250px; /* Optionally set a max-width */
+    padding: 8px;
     background: #007BFF;
     color: #ffffff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
+    margin: 5px 0;
+    display: block;
 }
 
 button:disabled {
@@ -60,9 +64,17 @@ button:disabled {
 .forgotPasswordLink {
     margin-top: 10px;
     text-align: right;
+    margin: 5px 0;
 }
 
 a {
     text-decoration: none;
     color: #007BFF;
+}
+
+.actionContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; 
 }
