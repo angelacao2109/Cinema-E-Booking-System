@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "movies")
 public class Movie {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,6 +40,10 @@ public class Movie {
     // For simplicity, let's assume a list of strings to store reviews
     @ElementCollection
     private List<String> reviews;
+
+    @Column(nullable = false)
+    private String rating;
+
 
     @Column(nullable = false)
     private String trailerPictureUrl;
