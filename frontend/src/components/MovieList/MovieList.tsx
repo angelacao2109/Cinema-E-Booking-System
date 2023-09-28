@@ -3,10 +3,11 @@ import './MovieList.css';
 import SeatSelection from '../SeatSelection/SeatSelection';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Embed from 'react-embed';
 
 
 type Movie = {
-  thumbnail: string;
+trailerPictureUrl: string;
   title: string;
   category: string;
   cast: string[];
@@ -14,9 +15,9 @@ type Movie = {
   producer: string;
   synopsis: string;
   reviews: string[];
-  mpaaRating: string;
+  rating: string;
   trailerPicture: string;
-  trailerVideo: string;
+  trailerVideoUrl: string;
   trailer: string;
   showtimes: Showtime[];
 };
@@ -35,7 +36,7 @@ const MovieList: React.FC<{}> = () => {
   useEffect(() => {
     const fetchMovies = async () => {
         try {
-          const response = await axios.get('/api/movies');
+          const response = await axios.get('http://localhost:8080/api/movie/homepage');
           setMovieData(response.data);
         } catch (error) {
             console.error("Error fetching movies:", error);
@@ -50,39 +51,34 @@ const MovieList: React.FC<{}> = () => {
             <div className="movies-grid">
                 {movieData.map((movie, index) => (
                     <div key={index} className="movie-item">
-                        <img src={movie.thumbnail} alt={`${movie.title} poster`} className="movie-poster"/>
+                       <div className="movie-poster-wrapper">
+    <img src={movie.trailerPictureUrl} alt={`${movie.title} poster`} className="movie-poster"/>
+                        </div>
+                        <div className="movie-details">
                         <h3>{movie.title}</h3>
                         <p><strong>Category:</strong> {movie.category}</p>
-                        <p><strong>Cast:</strong> {movie.cast.join(', ')}</p>
+                         <p><strong>Cast:</strong> {movie.cast}</p>
                         <p><strong>Director:</strong> {movie.director}</p>
                         <p><strong>Producer:</strong> {movie.producer}</p>
                         <p><strong>Synopsis:</strong> {movie.synopsis}</p>
                         <p><strong>Reviews:</strong> {movie.reviews.join(', ')}</p>
-                        <p><strong>MPAA Rating:</strong> {movie.mpaaRating}</p>
-                        <img src={movie.trailerPicture} alt="Trailer thumbnail" />
-                        <video src={movie.trailerVideo} controls>Trailer not supported</video>
+                        <p><strong>MPAA Rating:</strong> {movie.rating}</p>
+                        </div>
+                        <div className="embeded-videos">    <iframe
+     width="200"
+     height="100"
+      src={movie.trailerVideoUrl}
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+                        </div>
                         <button onClick={() => {
-                            const win = window.open(movie.trailer, '_blank');
+                            const win = window.open(movie.trailerVideoUrl, movie.trailerVideoUrl);
                             win?.focus();
                         }} className="showtime-btn">Watch Trailer</button>
                         
-                        {movie.showtimes.map((showtime: Showtime, showtimeIndex: number) => (
-                            <div key={showtimeIndex}>
-                                <p>Show Date: {showtime.date}</p>
-                                {showtime.times.map((time: string, timeIndex: number) => (
-                                    <button 
-                                        key={timeIndex} 
-                                        className="showtime-btn"
-                                        onClick={() => {
-                                            setSelectedShowtime({ movieIndex: index, date: showtime.date, time });
-                                            navigate(`/ticket-selection/${index}/${showtime.date}/${time}`);
-                                        }}
-                                    >
-                                        {time}
-                                    </button>
-                                ))}
-                            </div>
-                        ))}
+                    
                     </div>
                 ))}
             </div>

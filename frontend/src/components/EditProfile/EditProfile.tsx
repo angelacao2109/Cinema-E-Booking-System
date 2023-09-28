@@ -61,15 +61,18 @@ function EditProfile () {
                 
                 <div className='profile-form-items'>
                     <div className="section-title">Change Password</div>
-                    <div>
+                    <div className="form-section"> 
+                    <div className="input-group">
                         <label className="profile-form-label">Current Password</label>
-                        
                         <input 
             className="profile-form-input" 
             type='password' 
             value={passwordData.currentPassword}
             onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
         />
+        </div>
+
+            <div className="input-group"> 
                         <label className="profile-form-label">New Password</label>
                         <input 
             className="profile-form-input" 
@@ -77,6 +80,9 @@ function EditProfile () {
             value={passwordData.newPassword}
             onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
         />
+              </div>
+
+              <div className="input-group"> 
                         <label className="profile-form-label">Confirm New Password</label>
                         <input 
             className="profile-form-input" 
@@ -84,13 +90,21 @@ function EditProfile () {
             value={passwordData.confirmNewPassword}
             onChange={(e) => setPasswordData(prev => ({ ...prev, confirmNewPassword: e.target.value }))}
         />
+        </div>
+
                     </div>
+
+
+                    <div className="form-section-button">
                     <div><button className='save-button' onClick={updatePassword}>Save Password</button></div>
                 </div>
+                </div>
+                
 
                 <div className='profile-form-items'>
                     <div className="section-title">Change Personal Information</div>
-                    <div>
+                    <div className="form-section">
+                    <div className="input-group">
                         <label className="profile-form-label">First Name</label>
                         <input 
             className="profile-form-input" 
@@ -98,6 +112,8 @@ function EditProfile () {
             value={personalInfo.firstName}
             onChange={(e) => setPersonalInfo(prev => ({ ...prev, firstName: e.target.value }))}
         />
+        </div>
+        <div className="input-group"> 
                         <label className="profile-form-label">Last Name</label> 
                         <input 
             className="profile-form-input" 
@@ -105,6 +121,8 @@ function EditProfile () {
             value={personalInfo.lastName}
             onChange={(e) => setPersonalInfo(prev => ({ ...prev, lastName: e.target.value }))}
         />
+         </div>
+         <div className="input-group">
                         <label className="profile-form-label">Address</label>
                         <input 
             className="profile-form-input" 
@@ -112,6 +130,8 @@ function EditProfile () {
             value={personalInfo.address}
             onChange={(e) => setPersonalInfo(prev => ({ ...prev, address: e.target.value }))}
         />
+         </div>
+         <div className="input-group">
                         <label className="profile-form-label">City</label> 
                         <input 
             className="profile-form-input" 
@@ -119,6 +139,8 @@ function EditProfile () {
             value={personalInfo.city}
             onChange={(e) => setPersonalInfo(prev => ({ ...prev, city: e.target.value }))}
         />
+         </div>
+         <div className="input-group">
                         <label className="profile-form-label">State</label>
                         <input 
             className="profile-form-input" 
@@ -126,6 +148,8 @@ function EditProfile () {
             value={personalInfo.state}
             onChange={(e) => setPersonalInfo(prev => ({ ...prev, state: e.target.value }))}
         />
+         </div>
+         <div className="input-group">
                         <label className="profile-form-label">Zip Code</label> 
                         <input 
             className="profile-form-input" 
@@ -133,13 +157,19 @@ function EditProfile () {
             value={personalInfo.zipCode}
             onChange={(e) => setPersonalInfo(prev => ({ ...prev, zipCode: e.target.value }))}
         />
+        
                     </div>
-                    <div><button className='save-button' onClick={updatePersonalInfo}>Update Info</button></div>
+
+                    <div className="form-section-button">
+                        <button className='save-button' onClick={updatePersonalInfo}>Update Info</button></div>
                 </div>
+                </div>
+                
 
                 <div className='profile-form-items'>
                     <div className="section-title">Change Card Information</div>
-                    <div>
+                    <div className="form-section">
+                    <div className="input-group">
                         <label className="profile-form-label">Card Number</label> 
                         <input 
             className="profile-form-input" 
@@ -147,6 +177,8 @@ function EditProfile () {
             value={cardInfo.cardNumber}
             onChange={(e) => setCardInfo(prev => ({ ...prev, cardNumber: e.target.value }))}
         />
+        </div>
+        <div className="input-group">
                         <label className="profile-form-label">Name on Card</label> 
                         <input 
             className="profile-form-input" 
@@ -154,6 +186,8 @@ function EditProfile () {
             value={cardInfo.nameOnCard}
             onChange={(e) => setCardInfo(prev => ({ ...prev, nameOnCard: e.target.value }))}
         />
+        </div>
+        <div className="input-group">
                         <label className="profile-form-label">Expiration Date</label> 
                         <input 
             className="profile-form-input" 
@@ -161,6 +195,8 @@ function EditProfile () {
             value={cardInfo.expirationDate}
             onChange={(e) => setCardInfo(prev => ({ ...prev, expirationDate: e.target.value }))}
         />
+        </div>
+        <div className="input-group">
                         <label className="profile-form-label">CVC</label> 
                         <input 
             className="profile-form-input" 
@@ -168,8 +204,11 @@ function EditProfile () {
             value={cardInfo.cvc}
             onChange={(e) => setCardInfo(prev => ({ ...prev, cvc: e.target.value }))}
         />
-                    </div>
-                    <div>  <button className='save-button' onClick={updateCardInfo}>SAVE</button></div>
+        </div>
+        
+        <div className="form-section-button">
+             <button className='save-button' onClick={updateCardInfo}>SAVE</button></div>
+                </div>
                 </div>
 
                 <div className='profile-footer'>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SelectTicket.css';
 
+
 interface Props {
     onTicketChange: (count: number) => void;
   }
@@ -30,13 +31,21 @@ const SelectTicket: React.FC<Props> = ({ onTicketChange }) => {
         }));
       };
 
+      
       useEffect(() => {
         // Compute the total ticket count here
         const totalCount = Object.values(tickets).reduce((acc, curr) => acc + curr, 0);
         onTicketChange(totalCount);
       }, [tickets]);
+      
+      const handleConfirmClick = () => {
+        onTicketChange(Object.values(tickets).reduce((acc, curr) => acc + curr, 0)); // This updates the parent component with total ticket count
+        navigate("/seats"); // Navigating to SeatSelection
+      };
+   
 
       return (
+        <div className="app-container">
         <div className="ticket-selector">
             <button className="close-btn" onClick={() => navigate("/")}>X</button>
             {Object.entries(ticketPrices).map(([category, price]) => (
@@ -48,8 +57,14 @@ const SelectTicket: React.FC<Props> = ({ onTicketChange }) => {
                     </span>
                     <button onClick={() => changeTicketCount(category as keyof typeof tickets, 1)}>+</button>
                     <span>${price * tickets[category as keyof typeof tickets]}</span>
+                    
                 </div>
             ))}
+             <div className="confirm-container">
+            <button onClick={handleConfirmClick} className="confirm-btn">Confirm</button>
+            </div>
+            </div>
+            
         </div>
     );
 }

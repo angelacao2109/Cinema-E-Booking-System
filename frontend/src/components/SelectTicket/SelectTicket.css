@@ -16,6 +16,7 @@
     border-radius: 5px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 0 5px #ddd; 
+    
 }
 
 .ticket-category {
@@ -65,8 +66,28 @@
     background-color: red; 
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 3px 6px;  /* Slight padding adjustment */
+    width: 30px;       /* Explicitly set the width */
+    height: 30px;      /* If you want to adjust the height too */
     cursor: pointer;
     border-radius: 5px;
     font-weight: bold;
+    font-size: 14px;   /* Adjust font size if needed */
+    text-align: center; /* Ensure the X is centered */
+}
+
+.confirm-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-top: 20px;  
+    align-self: center; 
+}
+
+.confirm-btn:hover {
+    background-color: #0056b3;
 }

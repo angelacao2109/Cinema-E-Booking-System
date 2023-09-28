@@ -32,8 +32,8 @@ function NavBar({ movieData }: NavBarProps) {
             });
     }
     useEffect(() => {
-        fetchMovies('/api/movies-playing', setMoviesPlaying);
-        fetchMovies('/api/movies-coming-soon', setMoviesComingSoon);
+        fetchMovies('http://localhost:8080/api/movies-playing', setMoviesPlaying);
+        fetchMovies('http://localhost:8080/api/movies-coming-soon', setMoviesComingSoon);
     }, []); 
 
 
@@ -65,6 +65,8 @@ function NavBar({ movieData }: NavBarProps) {
                     <Link to="/movies-coming-soon" className="link">Movies Coming Soon</Link>
                     <Link to="/admin" className="link">Admin</Link>
                     <Link to="/edit-profile" className="link">Edit Profile</Link>
+                    <Link to="/summary" className="link">Order History</Link>
+                    <Link to="/select-ticket" className="link">Select Ticket</Link>
                     <div className="accountSection">
                         <span>Account</span>
                         <div className="accountLinks">

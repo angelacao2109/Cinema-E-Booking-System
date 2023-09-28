@@ -1,48 +1,73 @@
-/* Checkout.css */
+body {
+  background-color: #f3f4f6;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.checkout-form {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.summary {
+  background-color: #f7f7f9;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
 .container {
-  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.container2 {
-  margin-bottom: 20px;
+.personal-info, .payment-info {
+  flex: 1;
+  min-width: calc(50% - 1rem);
 }
 
-table {
-  width: 50%;
-  margin-bottom: 20px;
-  font-size: 20px;
+h1, h2 {
+  text-align: center;
+}
+
+h3, h4 {
+  margin: 0;
+}
+
+.input-field {
+  margin-bottom: 1rem;
+}
+
+.input-field label {
+  display: block;
+  margin-bottom: 0.5rem;
   font-weight: bold;
-}
-
-table, th, td {
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 10px;
-  text-align: left;
 }
 
 input[type="text"] {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 button {
   padding: 10px 20px;
-  background-color: #f6f6f6;
-  color: #000000;
+  background-color: #007bff;
+  color: #ffffff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  display: block;
+  margin: 1rem auto;
+  transition: background-color 0.2s;
 }
 
 button:hover {
-  background-color: #d00a0a;
-}
-
-body {
-  background-color: #b6b6b6;
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0056b3;
 }

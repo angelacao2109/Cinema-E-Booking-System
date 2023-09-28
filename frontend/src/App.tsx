@@ -36,16 +36,15 @@ function App() {
          
           <Routes>
           <Route path="/" element={<MovieList />} />
-          <Route path="/tickets" element={
-            <div className="app-container">
-              <SelectTicket onTicketChange={handleTicketChange} />
-            </div>
-          } />
+          <Route path="/select-ticket" element={<SelectTicket onTicketChange={handleTicketChange} />} />
           <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/forgot-password" element={<ResetPasswordForm />} />
           <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/summary" element={<Summary />} /> 
           <Route path="/admin/*" element={<AdminRoutes />} />
         </Routes>
       </div>

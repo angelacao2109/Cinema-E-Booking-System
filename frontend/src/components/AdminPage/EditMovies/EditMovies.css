@@ -71,3 +71,40 @@ input[type="file"]{
 input[type="file"]::-webkit-file-upload-button {
     float: right;
   }
+
+  .btn, .add_btn {
+    padding: 10px 20px;
+    background-color: #3498db; /* Blue color */
+    color: #ffffff; /* White text color */
+    border: none; /* Remove borders */
+    border-radius: 4px; /* Add rounded corners */
+    font-weight: bold; /* Bold font */
+    cursor: pointer; /* Cursor on hover */
+    transition: background-color 0.3s; /* Transition effect */
+}
+
+.btn:hover, .add_btn:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+}
+
+.modal-content button {
+    padding: 15px 30px; /* Adjust these values as needed */
+    margin: 10px 5px;  /* Providing some space between the buttons */
+    background-color: #328be3; /* Providing a background color for distinction */
+    color: #ffffff;    /* Text color */
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #34495e; /* Darker shade for hover effect */
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;  /* Provides space between the buttons */
+}

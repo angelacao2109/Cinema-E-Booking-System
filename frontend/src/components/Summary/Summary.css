@@ -1,45 +1,49 @@
-/* Summary.css */
 .summary-container {
-  max-width: 600px;
-  margin:  auto;
-  padding: 20px;
-  background-color: #b6b6b6;
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 40px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  color: #2e3d49; /* Dark blue-gray */
 }
 
-.App{
-  text-align: justify;
+h1 {
+  font-size: 2em;
+  margin-bottom: 30px;
+  color: #2c3e50; /* Darker blue-gray */
 }
 
+h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: #34495e; /* Even darker blue-gray for contrast */
+}
 
-table {
-  border-collapse: collapse;
-  width: 50%;
-  margin: 20px auto;
+h3 {
+  font-size: 1.2em;
   margin-bottom: 20px;
-  font-size: 20px;
-  border-collapse: separate;
-  border-spacing: 20px;
 }
 
-tr{
-  margin-bottom: 200px;
+p {
+  margin-bottom: 10px;
 }
 
+.order-item {
+  padding: 20px;
+  background-color: #ecf0f1; /* Light gray */
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
 
-button {
-  padding: 10px 20px;
-  background-color: #f6f6f6;
-  color: #000000;
+hr {
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 20px auto;
+  border-top: 2px dashed #bdc3c7; /* Slightly dark gray */
+  margin: 20px 0;
 }
 
-button:hover {
-  background-color: #d00a0a;
-}
-body{
-  background-color: #b6b6b6;
+body {
+  background-color: #e9eef1; /* Soft blue-gray background */
   font-family: Arial, Helvetica, sans-serif;
 }

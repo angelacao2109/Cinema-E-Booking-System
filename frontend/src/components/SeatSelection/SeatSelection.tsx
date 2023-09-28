@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './SeatSelection.css';
 import { useNavigate } from 'react-router-dom';
-import SelectTicket from '../SelectTicket/SelectTicket';
 
 interface Props {
   maxSeats: number;
@@ -15,16 +14,17 @@ function SeatSelection({ maxSeats, occupiedSeats = [] }: Props) {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const isSeatOccupied = (seatId: string) => occupiedSeats.includes(seatId);
 
+  const navigate = useNavigate(); // define navigate here
 
   const toggleSeat = (row: number, seat: number) => {
     const seatId = `${row}-${seat}`;
     if (selectedSeats.includes(seatId)) {
       setSelectedSeats(prev => prev.filter(s => s !== seatId));
-      setErrorMessage(''); 
+      setErrorMessage('');
     } else if (selectedSeats.length < maxSeats) {
       setSelectedSeats(prev => [...prev, seatId]);
       if (selectedSeats.length === maxSeats - 1) {
-        setErrorMessage('You have selected the maximum number of seats.'); 
+        setErrorMessage('You have selected the maximum number of seats.');
       } else {
         setErrorMessage('');
       }
@@ -32,10 +32,11 @@ function SeatSelection({ maxSeats, occupiedSeats = [] }: Props) {
       setErrorMessage('You selected too many seats.');
       return;
     }
-};
+  };
 
   const handleConfirm = () => {
     console.log("Seats selected: ", selectedSeats);
+    navigate('/checkout', { state: { selectedSeats: selectedSeats } });
   }
 
   return (
@@ -52,12 +53,12 @@ function SeatSelection({ maxSeats, occupiedSeats = [] }: Props) {
                 <button
                   key={seatIndex}
                   className={`seat 
-                    ${selectedSeats.includes(seatId) ? 'selected' : ''} 
-                    ${isSeatOccupied(seatId) ? 'occupied' : ''}`} 
+                    ${selectedSeats.includes(seatId) ? 'selected' : ''}
+                    ${isSeatOccupied(seatId) ? 'occupied' : ''}`}
                   onClick={() => toggleSeat(rowIndex, seatIndex)}
-                  disabled={isSeatOccupied(seatId)}  
+                  disabled={isSeatOccupied(seatId)}
                 >
-                  {`${String.fromCharCode(65 + rowIndex)}${seatIndex + 1}`} 
+                  {`${String.fromCharCode(65 + rowIndex)}${seatIndex + 1}`}
                 </button>
               );
             })}

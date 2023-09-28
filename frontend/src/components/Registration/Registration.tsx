@@ -58,7 +58,42 @@ function Registration () {
             [name]: checked
         }));
     }
+    
+    
+    const [sameAsPersonal, setSameAsPersonal] = useState(false);
+  const [billingData, setBillingData] = useState({
+    billingAddress: '',
+    billingCity: '',
+    billingState: '',
+    billingZipCode: ''
+  });
 
+  const handleBillingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setBillingData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSameAsPersonal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSameAsPersonal(e.target.checked);
+    if (e.target.checked) {
+      setBillingData({
+        billingAddress: formData.address,
+        billingCity: formData.city,
+        billingState: formData.state,
+        billingZipCode: formData.zipCode
+      });
+    } else {
+      setBillingData({
+        billingAddress: '',
+        billingCity: '',
+        billingState: '',
+        billingZipCode: ''
+      });
+    }
+  };
    
    return(
     <form onSubmit={handleSubmit}>
@@ -239,10 +274,60 @@ function Registration () {
         onChange={handleChange}
     />
 </div>
+<hr className='hr'/>
+            <div className='header2'>
+                Billing Address
+            </div>
+
+            <div className="Address">
+    <label className="form-label">Address </label>
+    <input 
+        className="form-input" 
+        type="text" 
+        placeholder='Address' 
+        name="address" 
+        value={formData.address} 
+        onChange={handleChange}
+    />
+    </div>
+    <div className="City">
+    <label className="form-label">City </label>
+    <input 
+        className="form-input" 
+        type="text" 
+        placeholder='City' 
+        name="city" 
+        value={formData.city} 
+        onChange={handleChange}
+    />
+</div>
+<div className="State">
+    <label className="form-label">State</label>
+    <input 
+        className="form-input" 
+        type="text" 
+        placeholder='State' 
+        name="state" 
+        value={formData.state} 
+        onChange={handleChange}
+    />
+</div>
+<div className="ZipCode">
+    <label className="form-label">Zip Code</label>
+    <input 
+        className="form-input" 
+        type="text" 
+        placeholder='Zip Code' 
+        name="zipCode" 
+        value={formData.zipCode} 
+        onChange={handleChange}
+    />
+</div>
             <div>
 
                 <br/>
-              
+                <div className="checkbox-container">
+                <label className="checkbox-label">Subscribe for exclusive offers and the latest movie news</label>
                 <input 
         className="checkbox" 
         type="checkbox" 
@@ -250,10 +335,11 @@ function Registration () {
         checked={formData.subscribeOffers} 
         onChange={handleCheckboxChange}
     />
-                <label className="checkbox-label">Subscribe for exclusive offers and the latest movie news</label>
-                <br/>
+                
+                </div> 
              
-             
+                <div className="checkbox-container">
+                <label className="checkbox-label">I agree to the <a href="#TERMS">Terms and Conditions</a></label>
                 <input 
         className="checkbox" 
         type="checkbox" 
@@ -261,21 +347,26 @@ function Registration () {
         checked={formData.agreeTerms} 
         onChange={handleCheckboxChange}
     />
-                 <label className="checkbox-label">I agree to the <a href="#TERMS">Terms and Conditions</a></label>
-            </div>
-           
-        
+                </div>
+
+            </div> 
+    
+
             <div className="footer">
-                <br/>
-                <button className="button" type="submit">Register</button>
-                <div className="signIn">Already have an account? <a href='#SIGNIN'>Sign In</a></div>
+            <div className="register-button-container">
+            <button className="button" type="submit"><span className="button-text">Register</span></button>
+                </div>
+            <div className="signIn">Already have an account? <a href='#SIGNIN'>Sign In</a></div>
+      
+       </div>
+        
                 <div>
                      <button type="button" onClick={() => navigate("/")}>Return</button>
                 </div>
             </div>
        </div>
-       </div>
-          
+       
+        
       </form> 
     );      
                     }

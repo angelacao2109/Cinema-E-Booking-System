@@ -50,30 +50,36 @@
     margin-bottom: 10px;
 }
 
-.checkbox{
-    accent-color: red;
+.checkbox {
     width: 20px;
     height: 20px;
-    margin-right: 8px
+    margin-left: 15px; /* Adjust for spacing between label & checkbox */
+    accent-color: red;
 }
 .checkbox-container {
     display: flex;
-    align-items: center; /* Vertically aligns the checkbox with the text */
+    align-items: center;  /* This centers items vertically in the flex container */
     margin-bottom: 10px;
-   
+    width: 100%;  /* Take the full width of the parent container */
 }
 
-.checkbox-label{
+
+.checkbox-label {
+    width: calc(100% - 25px);  /* Take up all the space except for the checkbox width and its margins */
     color: white;
-    padding-inline-start: 10px;
+    line-height: 24px;  /* Adjust if needed */
     font-size: 17px;
+    margin: 0;
+    padding: 0;
 }
 
-.footer{
-    text-align: center;
+.footer {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center items horizontally */
 }
 
-.button{
+.button {
     background-color: rgba(128, 128, 128, 0.363);
     border-radius: 5px;
     border-color: rgba(128, 128, 128, 0.363);
@@ -81,11 +87,25 @@
     height: 40px;
     width: 150px;
     color: white;
+    text-align: center;
+    padding-left: 25%; /* Adjust this value to move the text more or less to the right */
 }
 
-.signIn{
-    padding-top: 15px;
-    color: white;
+.button span {
+    align-self: center;
+}
+
+
+
+.register-button-container {
+    align-self: flex-end; /* Push the button container to the right edge */
+    margin-bottom: 10px; /* Space between the button and the sign-in link */
+}
+
+
+.signIn {
+    flex: 1; /* This allows the sign-in text to grow and take up any remaining space */
+    text-align: center; /* This centers the sign-in text */
 }
 
 .hr{
@@ -102,6 +122,14 @@
     align-items: flex-end;
 }
 
+.checkbox, .checkbox-label {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+
 .form a {
     color: #d3d3d3;  /* Light gray color */
     text-decoration: none; /* Removes the underline */
@@ -110,4 +138,8 @@
 
 .form a:hover {
     color: #ffffff; /* White color on hover for a bit of interaction */
+}
+
+.register-button-container {
+    margin-left: auto;
 }

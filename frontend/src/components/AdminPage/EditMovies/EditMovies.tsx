@@ -2,7 +2,23 @@ import React, { ReactNode, useState } from 'react';
 import axios from 'axios'; 
 import './EditMovies.css';
 
+
+
 const EditMovies: React.FC = () => {
+  const [movieForm, setMovieForm] = useState({
+    trailerPictureUrl: "",
+    trailerVideoUrl: "",
+    title: "",
+    rating: "",
+    category: "",
+    director: "",
+    producer: "",
+    cast: "",
+    synopsis: "",
+    reviews: [""]
+    //showTime: "",
+    //showDate: ""
+  });
   const [editing, setEditing] = useState(false);
   const [adding, setAdding] = useState(false);
 
@@ -19,27 +35,79 @@ const EditMovies: React.FC = () => {
     setAdding(false);
   };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setMovieForm(prevState => ({ ...prevState, [name]: value }));
+  };
+  
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name } = event.target;
+    const file = event.target.files![0]; // The "!" after "files" is a non-null assertion.
+    setMovieForm(prevState => ({ ...prevState, [name]: file }));
+  };
+  
+  const handleAddMovie = async () => {
+    // Create a FormData instance
+    const formData = new FormData();
+    
+    for (let key in movieForm) {
+      formData.append(key, movieForm[key]);
+    }
+  
+    try {
+      
+      const response = await axios.post("http://localhost:8080/api/movie/add", 
+      {
+        trailerPictureUrl: movieForm['trailerPictureUrl'],
+        trailerVideoUrl: movieForm['trailerVideoUrl'],
+        title: movieForm['title'],
+        rating: movieForm['rating'],
+        category: movieForm['category'],
+        director: movieForm['director'],
+        producer: movieForm['producer'],
+        cast: movieForm['cast'],
+        synopsis: movieForm['synopsis'],
+        reviews: [""]
+      });
+      console.log(response.data);
+      // Close the adding modal after successful addition
+      setAdding(false);
+    } catch (error) {
+      console.error("There was an error adding the movie", error);
+      console.log(JSON.stringify({
+        trailerPictureUrl: movieForm['trailerPictureUrl'],
+        trailerVideoUrl: movieForm['trailerVideoUrl'],
+        title: movieForm['title'],
+        rating: movieForm['rating'],
+        category: movieForm['category'],
+        director: movieForm['director'],
+        producer: movieForm['producer'],
+        cast: movieForm['cast'],
+        synopsis: movieForm['synopsis'],
+        reviews: [""]
+      }))
+    }
+  };
+
+  
   return (
     <div>
       <h1>MANAGE MOVIES</h1>
       <div className='header'>
-        <div>0000 Movies</div>
-        <div>Archive</div>
-        <div>Sort By</div>
       </div>
       <hr />
       <div className='poster'>
-        <div className='content'>
-          <div>IMAGE</div>
-          <div>MOVIE TITLE</div>
-          <div>DATE</div>
-          <div>
+    <div className='content'>
+        <div>IMAGE</div>
+        <div>MOVIE TITLE</div>
+        <div>DATE</div>
+        <div>
             <button className='btn' onClick={handleEditClick}>
-              EDIT
+                EDIT
             </button>
-          </div>
         </div>
-      </div>
+    </div>
+</div>
 
       {editing && (
         <div className='custom-modal'>
@@ -120,48 +188,77 @@ const EditMovies: React.FC = () => {
             <h2>Add Movies</h2>
             <div>
               <label>Movie Poster:</label>
-              <input type="file" />
+              <input 
+                 
+                name="trailerPictureUrl" 
+                value={movieForm.trailerPictureUrl} 
+                onChange={handleInputChange} />
             </div>
             <div>
               <label>Movie Trailer:</label>
-              <input />
+              <input 
+                name="trailerVideoUrl" 
+                value={movieForm.trailerVideoUrl} 
+                onChange={handleInputChange} />
             </div>
             <div>
               <label>Movie Title:</label>
-              <input />
+              <input 
+                name="title" 
+                value={movieForm.title} 
+                onChange={handleInputChange} />
             </div>
-            <div>
-              <label>Movie Description:</label>
-              <input />
-            </div>
+           
             <div>
               <label>Movie Rating:</label>
-              <input />
+              <input 
+                name="rating" 
+                value={movieForm.rating} 
+                onChange={handleInputChange} />
             </div>
             <div>
               <label>Movie Category:</label>
-              <input />
+              <input 
+                name="category" 
+                value={movieForm.category} 
+                onChange={handleInputChange} />
             </div>
             <div>
               <label>Movie Director(s):</label>
-              <input />
+              <input 
+                name="director" 
+                value={movieForm.director} 
+                onChange={handleInputChange} />
             </div>
             <div>
               <label>Movie Producer(s):</label>
-              <input />
+              <input 
+                name="producer" 
+                value={movieForm.producer} 
+                onChange={handleInputChange} />
             </div>
             <div>
               <label>Movie Cast:</label>
-              <input />
+              <input 
+                name="cast" 
+                value={movieForm.cast} 
+                onChange={handleInputChange} />
             </div>
             <div>
               <label>Movie Synopsis:</label>
-              <input />
+              <input 
+                name="synopsis" 
+                value={movieForm.synopsis} 
+                onChange={handleInputChange} />
             </div>
             <div>
               <label>Movie Reviews:</label>
-              <input />
+              <input 
+                name="reviews" 
+                value={movieForm.reviews} 
+                onChange={handleInputChange} />
             </div>
+            {/*
             <div>
               <label>Show Time:</label>
               <input type="time" />
@@ -170,8 +267,9 @@ const EditMovies: React.FC = () => {
               <label>Show Date:</label>
               <input type="date" />
             </div>
+      */}
             <div>
-              <button>Save</button>
+            <button onClick={handleAddMovie}>Save</button>
               <button onClick={handleClose}>Exit</button>
             </div>
           </div>

@@ -11,7 +11,7 @@ type Movie = {
     genres: string[];
     href: string;
     extract: string;
-    thumbnail: string;
+    trailerPictureUrl: string;
     thumbnail_width: number;
     thumbnail_height: number;
     rating?: number;  
@@ -31,8 +31,8 @@ function SearchBar({ placeholder }: SearchBarProps) {
         if (inputValue) {
             const timerId = setTimeout(async () => {
                 try {
-                    const response = await axios.get('localhost:8080/api/movie/search?title=exorcist', { 
-                        params: { query: inputValue } 
+                    const response = await axios.get('http://localhost:8080/api/movie/search', { 
+                        params: { title: inputValue } 
                     });
                     setFilteredData(response.data);
                     setError(null); 
@@ -68,7 +68,7 @@ function SearchBar({ placeholder }: SearchBarProps) {
                     {filteredData.map((movie, key) => (
                         //would need to change later to find other movie results
                         <div key={movie.title} className="movieResult">  
-                            <img src={movie.thumbnail} alt={`${movie.title} poster`} className="movieThumbnail"/>
+                            <img src={movie.trailerPictureUrl} alt={`${movie.title} poster`} className="movieThumbnail"/>
                             <div className="movieDetails">
                                 <h4>{movie.title}</h4>
                                 <p>{movie.extract}</p>
