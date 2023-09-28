@@ -17,10 +17,21 @@ const Checkout: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserData({
-      ...userData,
-      [name]: value
-    });
+
+    if (name === 'CreditCardNumber') {
+      const formattedValue = value.replace(/\D/g, '');
+      const formattedNumber = formattedValue.replace(/(\d{4})/g, '$1 ').trim();
+
+      setUserData({
+        ...userData,
+        [name]: formattedNumber
+      });
+    } else {
+      setUserData({
+        ...userData,
+        [name]: value
+      });
+    }
   };
 
   const handleCheckout = (e: React.FormEvent) => {
@@ -76,7 +87,7 @@ const Checkout: React.FC = () => {
             </tr>
             <tr>
                 <td>Credit Card Number:</td>
-                <td><input type="text" name="CreditCardNumber" value={userData.CreditCardNumber} onChange={handleChange} maxLength={16}/></td>
+                <td><input type="text" name="CreditCardNumber" value={userData.CreditCardNumber} onChange={handleChange} maxLength={19} placeholder='xxxx xxxx xxxx xxxx'/></td>
             </tr>
             <tr>
                 <td>Expiry Date:</td>
