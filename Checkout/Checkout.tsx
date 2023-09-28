@@ -23,14 +23,24 @@ const Checkout: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleCheckout = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your logic to handle form submission (e.g., sending data to a server)
+    // Add your logic to handle form submission
     console.log('Form submitted:', userData);
   };
 
+  const handleSaveInfo = () => {
+    // Add logic to save user info
+    console.log('User info saved:', userData);
+  };
+
+  const handleSaveInfo2 = () => {
+    // Add logic to save payment info
+    console.log('User info saved:', userData);
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleCheckout}>
       <div className = "container">
       <h1>Checkout</h1>
 	    <h3>Order Total : </h3>
@@ -51,6 +61,10 @@ const Checkout: React.FC = () => {
                 <td>Email:</td>
                 <td><input type="text" name="email" value={userData.Email} onChange={handleChange} /></td>
             </tr>
+            <tr>
+                <td></td>
+                <td><button type="button" onClick={handleSaveInfo} className="save-info-button">Save Info</button></td>
+            </tr>
         </table>
       </div>
 
@@ -62,19 +76,24 @@ const Checkout: React.FC = () => {
             </tr>
             <tr>
                 <td>Credit Card Number:</td>
-                <td><input type="text" name="CreditCardNumber" value={userData.CreditCardNumber} onChange={handleChange} /></td>
+                <td><input type="text" name="CreditCardNumber" value={userData.CreditCardNumber} onChange={handleChange} maxLength={16}/></td>
             </tr>
             <tr>
                 <td>Expiry Date:</td>
-                <td><input type="text" name="ExpiryDate" value={userData.ExpiryDate} onChange={handleChange} /></td>
+                <td><input type="text" name="ExpiryDate" value={userData.ExpiryDate} onChange={handleChange} maxLength={5} placeholder='MM/YY'/></td>
             </tr>
             <tr>
                 <td>CVV:</td>
-                <td><input type="text" name="CVV" value={userData.CVV} onChange={handleChange} /></td>
+                <td><input type="text" name="CVV" value={userData.CVV} onChange={handleChange} maxLength={3} placeholder='CVV'/></td>
             </tr>
-        </table>      
+            <tr>
+                <td></td>
+                <td><button type="button" onClick={handleSaveInfo2} className="save-info-button">Save Info</button></td>
+            </tr>
+        </table>
+        
+        <button type="submit" className='checkout-button'>Checkout</button>     
       </div>
-      <button type="submit">Submit</button>
     </form>
     
   );
