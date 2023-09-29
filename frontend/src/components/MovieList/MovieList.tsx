@@ -31,8 +31,9 @@ const MovieList: React.FC<{}> = () => {
     const navigate = useNavigate();
     const [movieData, setMovieData] = useState<Movie[]>([]);
     const [selectedShowtime, setSelectedShowtime] = useState<{ movieIndex: number, date: string, time: string } | null>(null);
-  
+    
 
+    
   useEffect(() => {
     const fetchMovies = async () => {
         try {
@@ -47,7 +48,7 @@ const MovieList: React.FC<{}> = () => {
 
     return (
         <div className="movie-list">
-            <h2>Available Movies</h2>
+            <h2 style={{ color: '#CF291D' }}>Available Movies</h2>
             <div className="movies-grid">
                 {movieData.map((movie, index) => (
                     <div key={index} className="movie-item">

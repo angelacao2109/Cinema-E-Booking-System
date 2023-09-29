@@ -4,6 +4,8 @@
     padding: 10px 20px;
     border-bottom: 1px solid #ddd;
     align-items: center;
+    background-color: #1D1D1D;
+    color: #ECECEC;
 }
 
 .leftLinks, .rightLinks {
@@ -13,13 +15,13 @@
 
 .link {
     text-decoration: none;
-    color: black;
+    color: #ECECEC;
     padding: 5px 10px;
     border-radius: 4px;
     transition: background-color 0.2s;
 
     &:hover {
-        background-color: #f0f0f0;
+        background-color: #BFBFBF;
     }
 }
 
@@ -40,12 +42,12 @@
 .accountLink {
     font-size: 12px;
     text-decoration: none;
-    color: #007BFF;
+    color: #CF291D;
     transition: color 0.3s ease;
 }
 
 .accountLink:hover {
-    color: #0056b3;
+    color: #850717;
     text-decoration: underline;
 }
 
@@ -60,93 +62,6 @@
     gap: 10px;
 }
 
-.modalOverlay {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90vw;          
-    max-height: 90vh;
-    background: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-}
 
 
-.modalContent {
-    width: 80%;        
-    min-width: 300px; 
-    max-width: none;   
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
-    overflow-y: auto; 
-}
 
-.modalContent form input {
-    width: 100%;         
-    max-width: none;   
-    margin: 10px auto;  
-    display: block;
-}
-
-.forgotPassword {
-    display: block;
-    margin: 10px 0;
-    text-align: right;
-    color: #007BFF;
-    transition: color 0.3s ease;
-}
-
-.forgotPassword:hover {
-    color: #0056b3;
-    text-decoration: underline;
-}
-
-body {
-    overflow-y: scroll;
-}
-
-
-.signInFooter {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 15px 0;
-}
-
-.rememberSection {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 15px;
-}
-.forgotPassword {
-    color: #007BFF;
-    transition: color 0.3s ease;
-    cursor: pointer;
-}
-
-.forgotPassword:hover {
-    color: #0056b3;
-    text-decoration: underline;
-}
-
-.checkboxSection {
-    display: flex;
-    align-items: center;
-    gap: 5px; 
-}
-
-.promotionSection label {
-    display: flex;
-    align-items: center;
-    gap: 5px; 
-}
-
-.promotionSection {
-    display: flex;
-    align-items: center;
-    gap: 5px; }

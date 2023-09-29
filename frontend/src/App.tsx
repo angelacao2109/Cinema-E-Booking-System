@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar/NavBar';
-import MovieList from './components/MovieList/MovieList'; // Make sure to import MovieList component
+import MovieList from './components/MovieList/MovieList'; 
 import moviesData from './movies-2020s.json';
 import {BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import SeatSelection from './components/SeatSelection/SeatSelection';
@@ -12,7 +12,7 @@ import EditProfile from './components/EditProfile/EditProfile';
 import SelectTicket from './components/SelectTicket/SelectTicket';
 import Checkout from './components/Checkout/Checkout';
 import Confirmation from './components/Confirmation/Confirmation';
-import Summary from './components/Summary/Summary';
+import OrderHistory from './components/OrderHistory/OrderHistory';
 import Dash from './components/AdminPage/Dash/Dash';
 import EditMovies from './components/AdminPage/EditMovies/EditMovies';
 import EditPromo from './components/AdminPage/EditPromo/EditPromo';
@@ -44,7 +44,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/forgot-password" element={<ResetPasswordForm />} />
           <Route path="/edit-profile" element={<EditProfile />} />
-          <Route path="/summary" element={<Summary />} /> 
+          <Route path="/orderhistory" element={<OrderHistory />} /> 
           <Route path="/admin/*" element={<AdminRoutes />} />
         </Routes>
       </div>

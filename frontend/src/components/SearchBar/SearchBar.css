@@ -2,8 +2,10 @@
     margin: 0 20px; 
 }
 .searchInputs {
-    display: flex;       
-    align-items: center;  
+    border: 1px solid #BFBFBF;
+    display: flex;
+    align-items: center;
+    background-color: #ECECEC;
 }
 
 
@@ -12,26 +14,31 @@ input {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 4px 0 0 4px;  
+    color: #1D1D1D;
 }
 
 .searchIcon {
     display: flex;
-    background-color: #f0f0f0;
     padding: 10px;
     border: 1px solid #ccc;
     border-left: none;        
     border-radius: 0 4px 4px 0;  
+    background-color: #CF291D;
+    color: #ECECEC;
 }
 
 .dataResult {
    
     max-height: 300px;
     overflow-y: auto; 
+    background-color: #ECECEC;
+    color: #1D1D1D;
 }
 
 .movieResult {
     display: flex;     
     margin-bottom: 10px;
+    border-bottom: 1px solid #BFBFBF;
 }
 
 .movieThumbnail {
@@ -43,4 +50,13 @@ input {
 
 .movieDetails {
     flex: 1;          
+}
+
+.movieDetails h4 {
+    color:#BFBFBF;
+}
+
+.movieDetails p {
+    color:  #BFBFBF;
+    font-size: 14px;
 }

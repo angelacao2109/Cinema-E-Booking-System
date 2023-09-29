@@ -3,21 +3,23 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: #1D1D1D;
 }
 
 .modalContent {
-    background: #ffffff;
-    padding: 10px;
+    width: 80%;
+    min-width: 300px;
+    padding: 20px;
+    background: #ECECEC; 
     border-radius: 10px;
-    width: 300px;  /* Adjusted width to match the height */
-    height: 300px; /* Keeping the height as before */
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #cccccc;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+    overflow-y: auto;
 }
 
 h2 {
     text-align: center;
     margin-bottom: 20px;
+    color: #CF291D;
 }
 
 form input[type="email"],
@@ -26,7 +28,7 @@ form input[type="password"] {
     padding: 10px;
     margin: 5px 0;
     border-radius: 5px;
-    border: 1px solid #cccccc;
+    border: 1px solid #BFBFBF; 
 }
 
 .checkboxContainer {
@@ -36,28 +38,32 @@ form input[type="password"] {
 }
 
 
-
 .checkboxContainer input[type="checkbox"] {
-    margin-right: 5px; /* Space between the checkbox and its label */
+    margin-right: 5px;
 }
 
 button {
     margin-left: auto;
     width: 100%;
-    max-width: 250px; /* Optionally set a max-width */
+    max-width: 250px; 
     padding: 8px;
-    background: #007BFF;
-    color: #ffffff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
     margin: 5px 0;
     display: block;
+    color: #ECECEC; 
+    background-color: #CF291D; 
+    
+}
+
+button:hover {
+    background-color: #850717;
 }
 
 button:disabled {
-    background: #cccccc;
+    background: #BFBFBF;
     cursor: not-allowed;
 }
 
@@ -69,7 +75,10 @@ button:disabled {
 
 a {
     text-decoration: none;
-    color: #007BFF;
+    color: #CF291D;
+}
+a:hover {
+    color: #850717; 
 }
 
 .actionContainer {

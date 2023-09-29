@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f4;
+    background-color: #ECECEC; 
 }
 
 .ticket-selector {
@@ -11,11 +11,11 @@
     display: flex;
     flex-direction: column;
     width: 800px; 
-    border: 1px solid #ddd;
+    border: 1px solid #BFBFBF;
     padding: 40px; 
     border-radius: 5px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 0 5px #ddd; 
+    background-color: #FFFFFF;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 0 5px #BFBFBF; 
     
 }
 
@@ -27,7 +27,7 @@
 }
 
 .ticket-category button {
-    background-color: #007bff;
+    background-color: #CF291D;
     color: white;
     border: none;
     padding: 10px 20px; 
@@ -40,44 +40,47 @@
 }
 
 .ticket-category button:hover {
-    background-color: #0056b3;
+    background-color: #850717;
 }
 
 .ticket-category span:first-child {
     flex-basis: 120px; 
     text-align: left;
+    color: #1D1D1D;
 }
 
 .ticket-count {
     display: inline-block;
     flex-basis: 60px;
     text-align: center;
+    color: #1D1D1D; 
 }
 
 .ticket-category span:last-child {
     flex-basis: 100px; 
     text-align: right;
+    color: #1D1D1D; 
 }
 
 .close-btn {
     position: absolute;
     top: 10px; 
     right: 10px;
-    background-color: red; 
+    background-color: #850717; 
     color: white;
     border: none;
-    padding: 3px 6px;  /* Slight padding adjustment */
-    width: 30px;       /* Explicitly set the width */
-    height: 30px;      /* If you want to adjust the height too */
+    padding: 3px 6px;  
+    width: 30px;      
+    height: 30px;    
     cursor: pointer;
     border-radius: 5px;
     font-weight: bold;
-    font-size: 14px;   /* Adjust font size if needed */
-    text-align: center; /* Ensure the X is centered */
+    font-size: 14px;  
+    text-align: center; 
 }
 
 .confirm-btn {
-    background-color: #007bff;
+    background-color: #CF291D; 
     color: white;
     border: none;
     padding: 10px 20px;
@@ -89,5 +92,5 @@
 }
 
 .confirm-btn:hover {
-    background-color: #0056b3;
+    background-color: #850717;
 }

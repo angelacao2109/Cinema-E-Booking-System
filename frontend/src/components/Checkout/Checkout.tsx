@@ -39,7 +39,7 @@ const Checkout: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your logic to handle form submission (e.g., sending data to a server)
+
     console.log('Form submitted:', userData);
     navigate("/confirmation");
   };
@@ -50,7 +50,7 @@ const Checkout: React.FC = () => {
     <form onSubmit={handleSubmit} className="checkout-form">
       <h1>Checkout</h1>
       <div className="summary">
-        <h3>Order Total: ${total}</h3>
+        <h4>Order Total: ${total}</h4>
         <h4>Selected Seats: {selectedSeats.join(', ')}</h4>
       </div>
       <div className="container">
@@ -69,7 +69,9 @@ const Checkout: React.FC = () => {
           <InputField label="CVV:" name="CVV" value={userData.CVV} onChange={handleChange} />
         </div>
       </div>
-      <button type="submit">Submit</button>
+      <div className="button-container">
+  <button type="submit">Submit</button>
+</div>
     </form>
   );
 };

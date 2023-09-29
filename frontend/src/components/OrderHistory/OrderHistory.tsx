@@ -1,5 +1,5 @@
 import React from 'react';
-import './Summary.css';
+import './OrderHistory.css';
 
 const OrderHistory: React.FC = () => {
     const orders = [
@@ -25,7 +25,7 @@ const OrderHistory: React.FC = () => {
             ],
             total: "$40"
         }
-        // ... more orders
+       
     ];
 
     return (

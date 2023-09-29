@@ -3,17 +3,18 @@
     font-size: 40px;
     font-family: Arial, Helvetica, sans-serif;
     color: white;
+    margin: 10px;
+  
 }
 
 .header2{
     text-align: center;
     color: white;
     margin: 10px;
-    font-size: 17px;
 }
 
 .form{
-    background-color: rgba(3, 3, 3, 0.564);
+    background-color: #1D1D1D;
     border-radius: 5px;
     width: 550px;
     margin: 20px auto;
@@ -34,61 +35,65 @@
 
 .form-label{
     display: inline-block;
-    color: white;
+    color: #ECECEC;
     font-size: 17px;
     width: 45%;
 }
 
 .form-input{
-    border: 1px solid white; 
     border-radius: 10px;
-    background-color: white;
     padding-left: 10px;
-    color:white;
     font-size: 17px;
     width: 40%;
     margin-bottom: 10px;
+    border: 1px solid #CF291D;
+    background-color: #ECECEC;
+    color: #1D1D1D;
 }
 
 .checkbox {
     width: 20px;
     height: 20px;
-    margin-left: 15px; /* Adjust for spacing between label & checkbox */
-    accent-color: red;
+    margin-left: 15px; 
+    accent-color: #CF291D;
 }
 .checkbox-container {
     display: flex;
-    align-items: center;  /* This centers items vertically in the flex container */
+    align-items: center; 
     margin-bottom: 10px;
-    width: 100%;  /* Take the full width of the parent container */
+    width: 100%;
+    
 }
 
 
 .checkbox-label {
-    width: calc(100% - 25px);  /* Take up all the space except for the checkbox width and its margins */
-    color: white;
-    line-height: 24px;  /* Adjust if needed */
+    width: calc(100% - 25px); 
+    color: #ECECEC;
+    line-height: 24px; 
     font-size: 17px;
     margin: 0;
     padding: 0;
+    
 }
 
 .footer {
     display: flex;
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center items horizontally */
+    flex-direction: column; 
+    align-items: center; 
 }
 
 .button {
-    background-color: rgba(128, 128, 128, 0.363);
     border-radius: 5px;
     border-color: rgba(128, 128, 128, 0.363);
     font-size: 20px;
     height: 40px;
     width: 150px;
-    color: white;
     text-align: center;
-    padding-left: 25%; /* Adjust this value to move the text more or less to the right */
+    padding-left: 25%; 
+    background-color: #CF291D;
+    color: #ECECEC;
+    transition: background-color 0.3s ease; 
+    cursor: pointer; 
 }
 
 .button span {
@@ -98,15 +103,18 @@
 
 
 .register-button-container {
-    align-self: flex-end; /* Push the button container to the right edge */
-    margin-bottom: 10px; /* Space between the button and the sign-in link */
+    align-self: flex-end; 
+    margin-bottom: 10px; 
+    margin-left: auto;
 }
-
 
 .signIn {
-    flex: 1; /* This allows the sign-in text to grow and take up any remaining space */
-    text-align: center; /* This centers the sign-in text */
+    flex: 1; 
+    text-align: center; 
+    color: white; 
 }
+
+
 
 .hr{
     border-top: none;
@@ -129,17 +137,22 @@
     box-sizing: border-box;
 }
 
+.signIn a {
+    color: #CF291D;  
+    text-decoration: none;
+    transition: color 0.3s ease; 
+}
+
+.signIn a:hover {
+    color: #850717;
+}
 
 .form a {
-    color: #d3d3d3;  /* Light gray color */
-    text-decoration: none; /* Removes the underline */
-    transition: color 0.3s ease; /* Smooth transition for hover effect */
+    color: #CF291D; 
+    text-decoration: none; 
+    transition: color 0.3s ease; 
 }
 
 .form a:hover {
-    color: #ffffff; /* White color on hover for a bit of interaction */
-}
-
-.register-button-container {
-    margin-left: auto;
+    color: #850717;
 }
