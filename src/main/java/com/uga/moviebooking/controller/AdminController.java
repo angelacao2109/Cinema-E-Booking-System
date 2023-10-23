@@ -2,6 +2,7 @@ package com.uga.moviebooking.controller;
 
 import com.uga.moviebooking.model.dto.LoginDto;
 import com.uga.moviebooking.model.dto.RegisterDto;
+import com.uga.moviebooking.model.dto.UserDto;
 import com.uga.moviebooking.model.role.Role;
 import com.uga.moviebooking.model.role.RoleRepository;
 import com.uga.moviebooking.model.user.User;
@@ -57,8 +58,43 @@ public class AdminController {
 
     }
     //TODO:delete memember
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/deleteUser")
+    public ResponseEntity<String> deleteUser(@RequestBody String email) {
+        Optional<User> userBox = userRepository.findByEmail(email);
+        if (userBox.isPresent()) {
+            User user = userBox.get();
+            userRepository.delete(user);
+            return new ResponseEntity<>("User " + user.getId() + " successfully deleted", HttpStatus.OK);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 
     //TODO:update memember
+
+    // Update a user
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/updateUser")
+    public ResponseEntity<String> updateUser(@RequestBody UserDto updatedUser) {
+        Optional<User> userBox = userRepository.findByEmail(updatedUser.getEmail());
+        if (userBox.isPresent()) {
+            User existingUser = userBox.get();
+
+            // Update the user's properties
+            existingUser.setFirstname(updatedUser.getFirstname());
+            existingUser.setLastname(updatedUser.getLastname());
+            existingUser.setEmail(updatedUser.getEmail());
+            //should admin update their passwords too?
+
+            // Save the updated user
+            userRepository.save(existingUser);
+
+            return new ResponseEntity<>("User " + existingUser.getId() + " successfully updated", HttpStatus.OK);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 
     //suspended member
     @PreAuthorize("hasRole('ROLE_ADMIN')")

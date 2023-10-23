@@ -83,4 +83,6 @@ public class PromotionService {
         return promotionRepository.findByIntializationDateBeforeAndExpirationDateAfter(givenDate, givenDate);
     }
 
+
+
 }
