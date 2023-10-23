@@ -1,19 +1,27 @@
 package com.uga.moviebooking.model.promotion;
 
 import com.uga.moviebooking.model.dto.PromotionDto;
-import com.uga.moviebooking.model.movie.Movie;
+import com.uga.moviebooking.model.user.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PromotionService {
     PromotionRepository promotionRepository;
+
+    @Autowired
+    public PromotionService(PromotionRepository promotionRepository) {
+        this.promotionRepository = promotionRepository;
+    }
     public Promotion createPromotion(PromotionDto promotionDto){
         Promotion promotion = new Promotion();
         promotion.setPromoTitle(promotionDto.getPromoTitle());
         promotion.setMessage(promotionDto.getMessage());
-        promotion.setIntializationDate(promotionDto.getInitializationDate());
+        promotion.setInitializationDate(promotionDto.getInitializationDate());
         promotion.setExpirationDate(promotionDto.getExpirationDate());
         promotion.setPromoCode(promotionDto.getPromoCode());
         return promotionRepository.save(promotion);
@@ -44,8 +52,8 @@ public class PromotionService {
 
             }
 
-            if(!promotion.getIntializationDate().equals(promotionDto.getInitializationDate())){
-                promotion.setIntializationDate(promotionDto.getInitializationDate());
+            if(!promotion.getInitializationDate().equals(promotionDto.getInitializationDate())){
+                promotion.setInitializationDate(promotionDto.getInitializationDate());
             }
 
             if(!promotion.getExpirationDate().equals(promotionDto.getExpirationDate())){
@@ -80,7 +88,7 @@ public class PromotionService {
     }
 
     public List<Promotion> findActivePromotions(Date givenDate) {
-        return promotionRepository.findByIntializationDateBeforeAndExpirationDateAfter(givenDate, givenDate);
+        return promotionRepository.findByInitializationDateBeforeAndExpirationDateAfter(givenDate, givenDate);
     }
 
 

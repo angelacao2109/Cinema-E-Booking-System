@@ -18,7 +18,7 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
     Page<Promotion> findAll(Pageable pageable);
     //this checks for active promotions
-    List<Promotion> findByIntializationDateBeforeAndExpirationDateAfter(Date startDate, Date endDate);
+    List<Promotion> findByInitializationDateBeforeAndExpirationDateAfter(Date startDate, Date endDate);
 
 
 }

@@ -12,22 +12,6 @@ services:
       - back-net
     env_file:
       - .env
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: pma
-    links:
-      - database
-    ports:
-      - '8080:80'
-    expose:
-      - '8080'
-    networks:
-      - back-net
-    environment:
-      PMA_HOST: database
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
 
 volumes:
   my-db:
