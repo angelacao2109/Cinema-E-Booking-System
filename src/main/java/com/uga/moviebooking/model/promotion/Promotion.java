@@ -24,7 +24,7 @@ public class Promotion {
     private String message;
 
     @Column(nullable = false)
-    private Date intializationDate;
+    private Date initializationDate;
 
     @Column(nullable = false)
     private Date expirationDate;
