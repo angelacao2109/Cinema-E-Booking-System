@@ -1,6 +1,7 @@
 package com.uga.moviebooking.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.uga.moviebooking.model.payment.PaymentCard;
 import com.uga.moviebooking.model.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,6 +52,8 @@ public class User implements UserDetails {
             inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="ID")})
     private Set<Role> roles;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PaymentCard> paymentCards;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
