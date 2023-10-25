@@ -19,6 +19,7 @@ import EditPromo from './components/AdminPage/EditPromo/EditPromo';
 import EditUser from './components/AdminPage/EditUser/EditUser';
 import { AdminNavBar } from './components/AdminPage/AdminNav/AdminNavBar';
 import AdminRoutes from './components/AdminPage/AdminNav/AdminRoutes';
+import { Movie} from "./components/types";
 
 function App() {
   console.log(moviesData);
@@ -28,14 +29,23 @@ function App() {
   const handleTicketChange = (count: number) => {
     setTicketCount(count);
   };
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<Movie[]>([]);
+
     
     return (
       <Router>
         <div>
-          <NavBar movieData={moviesData} />
+        <NavBar 
+          movieData={moviesData} 
+          searchQuery={searchQuery} 
+          onSearchChange={setSearchQuery}
+          onSearchResultsChange={setSearchResults}
+        />
          
           <Routes>
-          <Route path="/" element={<MovieList />} />
+          <Route path="/" element={<MovieList searchResults={searchResults} />} />
           <Route path="/select-ticket" element={<SelectTicket onTicketChange={handleTicketChange} />} />
           <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} />} />
           <Route path="/checkout" element={<Checkout />} />
