@@ -39,35 +39,56 @@ public class LoginController {
         this.userRepository = userRepository;
         this.userService = userService;
     }
-    @CrossOrigin(origins = "http://localhost:5173")
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDto login) {
-        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                login.getEmail(),login.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        return new ResponseEntity<>("User signed-in successfully!", HttpStatus.OK);
+        Authentication auth = UsernamePasswordAuthenticationToken.unauthenticated(login.getEmail(), login.getPassword());
+        Authentication response = this.authenticationManager.authenticate(auth);
+        System.out.println("Reached");
+        if(response.isAuthenticated()) {
+            return new ResponseEntity<>("User signed-in successfully!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Sign-in Failed!", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     //will be deprecated in final version, just creates an already enabled user.
-    @CrossOrigin(origins = "http://localhost:5173")
+//    @PostMapping("/register")
+//    public ResponseEntity<String> register(@RequestBody RegisterDto register) {
+//        if(userRepository.existsByEmail(register.getEmail())){
+//            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        User user = new User();
+//        user.setFirstname(register.getFirstName());
+//        user.setLastname(register.getLastName());
+//        user.setEmail(register.getEmail());
+//        user.setPassword(register.getPassword());
+//
+//        long id = userService.registerUser(user);
+//        return new ResponseEntity<>("User id " + id + " successfully registered",HttpStatus.OK);
+//
+//    }
+
+
+//    @PostMapping("/register")
+//    public ResponseEntity<String> register(@RequestBody RegisterDto register) {
+//        if(userRepository.existsByEmail(register.getEmail())){
+//            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        User user = new User();
+//        user.setFirstname(register.getFirstName());
+//        user.setLastname(register.getLastName());
+//        user.setEmail(register.getEmail());
+//        user.setPassword(register.getPassword());
+//        user.setEnabled(false);
+//        long id = userService.registerUser(user);
+//        return new ResponseEntity<>("User id " + id + " successfully registered",HttpStatus.OK);
+//
+//    }
+
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto register) {
-        if(userRepository.existsByEmail(register.getEmail())){
-            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
-        }
-
-        User user = new User();
-        user.setFirstname(register.getFirstName());
-        user.setLastname(register.getLastName());
-        user.setEmail(register.getEmail());
-        user.setPassword(register.getPassword());
-
-        long id = userService.registerUser(user);
-        return new ResponseEntity<>("User id " + id + " successfully registered",HttpStatus.OK);
-
-    }
-    @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping("/registerReal")
     public ResponseEntity<String> processRegister(@RequestBody RegisterDto register, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
         if(userRepository.existsByEmail(register.getEmail())){
@@ -78,6 +99,7 @@ public class LoginController {
         user.setLastname(register.getLastName());
         user.setEmail(register.getEmail());
         user.setPassword(register.getPassword());
+        user.setEnabled(false);
         long id = userService.registerUser(user, getSiteURL(request));
         return new ResponseEntity<>("User id " + id + " successfully registered",HttpStatus.OK);
     }
@@ -86,13 +108,13 @@ public class LoginController {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }
-    @CrossOrigin(origins = "http://localhost:5173")
+
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         //TOOD: IMPLEMENT!
         return new ResponseEntity<>("Successfully logged out!", HttpStatus.OK);
     }
-    @CrossOrigin(origins = "http://localhost:5173")
+
     @GetMapping("/verify")
     public ResponseEntity<String> verifyUser(@Param("code") String code) {
         if (userService.verify(code)) {

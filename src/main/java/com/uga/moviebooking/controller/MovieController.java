@@ -21,7 +21,6 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/search")
     public ResponseEntity<List<Movie>> searchMovie(@RequestParam String title) {
         List<Movie> movieList = movieService.searchByTitle("%" + title + "%");
@@ -31,7 +30,6 @@ public class MovieController {
         return ResponseEntity.ok(movieList);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/homepage")
     public ResponseEntity<List<Movie>> getTopMovies() {
         List<Movie> movieList = movieService.getFrontpageMovies().orElse(null);
@@ -41,7 +39,6 @@ public class MovieController {
         return ResponseEntity.ok(movieList);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<String> addMovie(@RequestBody MovieDto mov) {
@@ -51,7 +48,6 @@ public class MovieController {
 
     //Needed delete
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/delete")
     public ResponseEntity<String> deleteMovie(@RequestBody MovieDto mov) {

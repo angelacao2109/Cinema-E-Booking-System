@@ -30,8 +30,6 @@ public class PromotionService {
         promotion.setPromoCode(promotionDto.getPromoCode());
         return promotionRepository.save(promotion);
     }
-
-
     //get
 
     public Promotion retrievePromotion(Long ID){
