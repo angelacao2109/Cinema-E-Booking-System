@@ -1,10 +1,13 @@
 package com.uga.moviebooking.model.promotion;
 
 import com.uga.moviebooking.model.dto.PromotionDto;
+import com.uga.moviebooking.model.email.EmailService;
+import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.naming.Context;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -12,10 +15,11 @@ import java.util.Optional;
 @Service
 public class PromotionService {
     PromotionRepository promotionRepository;
-
+    EmailService emailService;
     @Autowired
-    public PromotionService(PromotionRepository promotionRepository) {
+    public PromotionService(PromotionRepository promotionRepository, EmailService emailService) {
         this.promotionRepository = promotionRepository;
+        this.emailService = emailService;
     }
     public Promotion createPromotion(PromotionDto promotionDto){
         Promotion promotion = new Promotion();
@@ -90,6 +94,22 @@ public class PromotionService {
     public List<Promotion> findActivePromotions(Date givenDate) {
         return promotionRepository.findByInitializationDateBeforeAndExpirationDateAfter(givenDate, givenDate);
     }
+
+    //Send Promo Via Email
+
+
+    public void sendPromotionEmail(Promotion promotion, List<User> userElement) {
+        // 1. Prepare the email content using your email template.
+        String emailContent = promotion.getMessage() + " CODE: " + promotion.getPromoCode();
+
+        // 2. Send the email to each user in the list.
+        for (int i = 0; i < userElement.size(); i++) {
+            String to = userElement.get(i).getUsername();
+
+            emailService.sendEmail(to, "New Promotion Alert", emailContent);
+        }
+    }
+
 
 
 
