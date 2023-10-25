@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,12 +22,15 @@ import java.util.Optional;
 @RestController
 public class PromotionController {
 
+    UserRepository userRepository;
+
+
     PromotionService promotionService;
     @Autowired
-    public PromotionController(PromotionService promotionService) {
+    public PromotionController(PromotionService promotionService, UserRepository userRepository) {
         this.promotionService = promotionService;
+        this.userRepository = userRepository;
     }
-    UserController userController;
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -90,7 +94,7 @@ public class PromotionController {
 
         Promotion promotion = promotionService.retrievePromotion(ID);
         if (promotion != null) {
-            List<User> userEmails = userController.getUser("user");
+            List<User> userEmails = userRepository.findByRolesIn(Arrays.asList("USER_ROLE"));
             promotionService.sendPromotionEmail(promotion, userEmails);
             return ResponseEntity.ok("Promotion emails sent successfully.");
         } else {
