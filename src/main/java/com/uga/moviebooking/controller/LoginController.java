@@ -1,29 +1,30 @@
 package com.uga.moviebooking.controller;
 
+import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.model.dto.LoginDto;
 import com.uga.moviebooking.model.dto.RegisterDto;
-import com.uga.moviebooking.model.role.Role;
 import com.uga.moviebooking.model.role.RoleRepository;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
 import com.uga.moviebooking.model.user.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -41,53 +42,27 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto login) {
-        Authentication auth = UsernamePasswordAuthenticationToken.unauthenticated(login.getEmail(), login.getPassword());
-        Authentication response = this.authenticationManager.authenticate(auth);
-        System.out.println("Reached");
-        if(response.isAuthenticated()) {
-            return new ResponseEntity<>("User signed-in successfully!", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Sign-in Failed!", HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<?> login(@Validated @RequestBody LoginDto login, BindingResult bindingResult,
+                                        HttpServletRequest request, HttpServletResponse response) {
+
+        if(request.getUserPrincipal() != null) {
+            throw new AppException("User already logged in!");
         }
+        if(bindingResult.hasErrors()) {
+            throw new AppException("Invalid request");
+        }
+
+        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        User user = (User) auth.getPrincipal();
+
+        List<String> roles = user.getAuthorities().stream()
+                .map(item -> item.getAuthority()).toList();
+
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE).body(new loginResponse(user.getId(), user.getEmail(),roles));
+
     }
 
-    //will be deprecated in final version, just creates an already enabled user.
-//    @PostMapping("/register")
-//    public ResponseEntity<String> register(@RequestBody RegisterDto register) {
-//        if(userRepository.existsByEmail(register.getEmail())){
-//            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        User user = new User();
-//        user.setFirstname(register.getFirstName());
-//        user.setLastname(register.getLastName());
-//        user.setEmail(register.getEmail());
-//        user.setPassword(register.getPassword());
-//
-//        long id = userService.registerUser(user);
-//        return new ResponseEntity<>("User id " + id + " successfully registered",HttpStatus.OK);
-//
-//    }
-
-
-//    @PostMapping("/register")
-//    public ResponseEntity<String> register(@RequestBody RegisterDto register) {
-//        if(userRepository.existsByEmail(register.getEmail())){
-//            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        User user = new User();
-//        user.setFirstname(register.getFirstName());
-//        user.setLastname(register.getLastName());
-//        user.setEmail(register.getEmail());
-//        user.setPassword(register.getPassword());
-//        user.setEnabled(false);
-//        long id = userService.registerUser(user);
-//        return new ResponseEntity<>("User id " + id + " successfully registered",HttpStatus.OK);
-//
-//    }
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/register")
     public ResponseEntity<String> processRegister(@RequestBody RegisterDto register, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
@@ -111,16 +86,19 @@ public class LoginController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
-        //TOOD: IMPLEMENT!
+        //TODO: IMPLEMENT!
         return new ResponseEntity<>("Successfully logged out!", HttpStatus.OK);
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<String> verifyUser(@Param("code") String code) {
+    public ResponseEntity<String> verifyUser(@Param("code") String code, HttpServletResponse res) {
         if (userService.verify(code)) {
+
             return new ResponseEntity<>("Verification Success! Redirecting to homepage...", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Verification Failed... Please try again", HttpStatus.NOT_FOUND);
         }
     }
+
+    public record loginResponse(long id, String email, List<String> roles) {}
 }
