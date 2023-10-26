@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function EditProfile() {
+function EditProfile({ userEmail }: { userEmail: string | null }) {
   const navigate = useNavigate();
 
   const [passwordData, setPasswordData] = useState({
@@ -28,35 +28,31 @@ function EditProfile() {
     cvc: "",
   });
 
-  const updatePassword = async () => {
+  const updateProfile = async () => {
+    const profileData: any = {};
+
+    if (passwordData.currentPassword && passwordData.newPassword && passwordData.confirmNewPassword) {
+        profileData.passwordData = passwordData;
+    }
+
+    if (personalInfo.address || personalInfo.city || personalInfo.state || personalInfo.zipCode) {
+        profileData.personalInfo = personalInfo;
+    }
+
+    if (cardInfo.cardNumber || cardInfo.nameOnCard || cardInfo.expirationDate || cardInfo.cvc) {
+        profileData.cardInfo = cardInfo;
+    }
+
     try {
-      const response = await axios.post("/api/update-password", passwordData);
-      console.log(response.data);
+        const response = await axios.post("/api/update-profile", profileData);
+        console.log(response.data);
     } catch (error) {
-      console.error("Error updating password:", error);
+        console.error("Error updating profile:", error);
     }
   };
 
-  const updatePersonalInfo = async () => {
-    try {
-      const response = await axios.post(
-        "/api/update-personal-info",
-        personalInfo
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error updating personal info:", error);
-    }
-  };
   
-  const updateCardInfo = async () => {
-    try {
-      const response = await axios.post("/api/update-card-info", cardInfo);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error updating card info:", error);
-    }
-  };
+  
 
   return (
     <>
@@ -114,44 +110,16 @@ function EditProfile() {
 
           <div className="form-section-button">
             <div>
-              <button className="save-button" onClick={updatePassword}>
-                Save Password
-              </button>
+             
             </div>
           </div>
         </div>
 
         <div className="profile-form-items">
-          <div className="section-title">Change Personal Information</div>
+          <div className="section-title">Change Billing Information</div>
           <div className="form-section">
-            <div className="input-group">
-              <label className="profile-form-label">First Name</label>
-              <input
-                className="profile-form-input"
-                type="text"
-                value={personalInfo.firstName}
-                onChange={(e) =>
-                  setPersonalInfo((prev) => ({
-                    ...prev,
-                    firstName: e.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div className="input-group">
-              <label className="profile-form-label">Last Name</label>
-              <input
-                className="profile-form-input"
-                type="text"
-                value={personalInfo.lastName}
-                onChange={(e) =>
-                  setPersonalInfo((prev) => ({
-                    ...prev,
-                    lastName: e.target.value,
-                  }))
-                }
-              />
-            </div>
+            
+       
             <div className="input-group">
               <label className="profile-form-label">Address</label>
               <input
@@ -207,15 +175,13 @@ function EditProfile() {
             </div>
 
             <div className="form-section-button">
-              <button className="save-button" onClick={updatePersonalInfo}>
-                Update Info
-              </button>
+             
             </div>
           </div>
         </div>
 
         <div className="profile-form-items">
-          <div className="section-title">Change Card Information</div>
+          <div className="section-title">Add Card Information</div>
           <div className="form-section">
             <div className="input-group">
               <label className="profile-form-label">Card Number</label>
@@ -272,9 +238,9 @@ function EditProfile() {
             </div>
 
             <div className="form-section-button">
-              <button className="save-button" onClick={updateCardInfo}>
-                SAVE
-              </button>
+             <button className="save-button" onClick={updateProfile}>
+            Save All Changes
+          </button>
             </div>
           </div>
         </div>

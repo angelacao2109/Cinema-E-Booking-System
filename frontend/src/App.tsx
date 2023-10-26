@@ -34,11 +34,14 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
 
-    
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedInUserEmail, setLoggedInUserEmail] = useState<string | null>(null);
+
     return (
       <Router>
         <div>
         <NavBar 
+         isLoggedIn={isLoggedIn}
           movieData={moviesData} 
           searchQuery={searchQuery} 
           onSearchChange={setSearchQuery}
@@ -53,10 +56,12 @@ function App() {
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/register" element={<Registration />} />
           <Route  path="/confirm" element={<RegistrationConfirmation/>} />
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signin" element={<SignIn setIsLoggedIn={setIsLoggedIn} onSuccessfulLogin={setLoggedInUserEmail} />} />
+
+
           <Route path="/forgot-password" element={<ResetPasswordForm />} />
           <Route path="/change-password" element={<ResetPasswordPostLink />} />  
-          <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/edit-profile" element={<EditProfile userEmail={loggedInUserEmail} />} />
           <Route path="/orderhistory" element={<OrderHistory />} /> 
           <Route path="/admin/*" element={<AdminRoutes />} />
         </Routes>

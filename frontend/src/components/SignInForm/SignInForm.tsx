@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./SignInForm.css";
 
-const SignInForm: React.FC = () => {
+const SignInForm: React.FC<{ setIsLoggedIn: (value: boolean) => void; onSuccessfulLogin: (email: string) => void; }> = ({ setIsLoggedIn, onSuccessfulLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -21,7 +21,9 @@ const SignInForm: React.FC = () => {
       });
       if (response.data.success) {
         setFeedbackMessage("Successfully signed in.");
-        // Redirect to dashboard or another success action
+        setIsLoggedIn(true);
+        onSuccessfulLogin(email); 
+
       } else {
         setFeedbackMessage(
           "Error signing in. Please check your credentials and try again."

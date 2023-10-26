@@ -55,6 +55,7 @@ public class UserService {
         userRepository.save(user);
         return user.getId();
     }
+
     //https://www.codejava.net/frameworks/spring-boot/email-verification-example
     public Long registerUser(User user, String siteURL) throws UnsupportedEncodingException, MessagingException {
 
@@ -75,6 +76,7 @@ public class UserService {
         sendVerificationEmail(user, siteURL);
         return user.getId();
     }
+
     private void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException  {
         String toAddress = user.getEmail();
         String fromAddress = "cinema.ebooking.movies.us@gmail.com";
@@ -148,7 +150,7 @@ public class UserService {
 
         content = content.replace("[[name]]", user.getFirstname());
         // Encode the URL with the reset token
-        String resetURL = siteURL + resetPasswordPath + "?token=" + URLEncoder.encode(resetToken, StandardCharsets.UTF_8);
+        String resetURL = "http://localhost:5173" + "/change-password" + "?token=" + URLEncoder.encode(resetToken, StandardCharsets.UTF_8);
 
         content = content.replace("[[URL]]", resetURL);
 
