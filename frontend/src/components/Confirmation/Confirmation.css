@@ -66,3 +66,7 @@ footer {
   justify-content: space-between;
   align-items: center;
 }
+
+.theatre-info h3{
+  color: black;
+}

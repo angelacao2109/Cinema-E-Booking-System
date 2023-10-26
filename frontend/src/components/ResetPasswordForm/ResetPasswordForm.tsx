@@ -11,7 +11,7 @@ const ResetPasswordForm: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("/api/request-password-reset", {
+      const response = await axios.post("/api/forgetpassword", {
         email,
       });
       if (response.data.success) {

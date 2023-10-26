@@ -32,10 +32,10 @@ function Registration() {
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/registerReal", formData);
+      const response = await axios.post("http://localhost:8080/api/auth/register", formData);
       if (response.status === 200) {
         alert("Registration Successful");
-        navigate("/"); // or wherever you'd like to navigate the user post-registration
+        navigate("/confirm");
       }
     } catch (error) {
       console.error("Error registering:", error);
@@ -100,7 +100,7 @@ function Registration() {
         <div className="header">Registration for Club Access!</div>
         <div className="form-body">
           <div className="header2">Registration Information</div>
-
+          <div className="header2">* Required Fields </div>
           <div className="firstName">
             <label className="form-label">First Name * </label>
             <input

@@ -20,7 +20,8 @@ import EditUser from './components/AdminPage/EditUser/EditUser';
 import { AdminNavBar } from './components/AdminPage/AdminNav/AdminNavBar';
 import AdminRoutes from './components/AdminPage/AdminNav/AdminRoutes';
 import { Movie} from "./components/types";
-
+import RegistrationConfirmation from './components/RegistrationConfirmation/RegistrationConfirmation';
+import ResetPasswordPostLink from './components/ResetPasswordPostLink/ResetPasswordPostLink';
 function App() {
   console.log(moviesData);
 
@@ -51,8 +52,10 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/register" element={<Registration />} />
+          <Route  path="/confirm" element={<RegistrationConfirmation/>} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/forgot-password" element={<ResetPasswordForm />} />
+          <Route path="/change-password" element={<ResetPasswordPostLink />} />  
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/orderhistory" element={<OrderHistory />} /> 
           <Route path="/admin/*" element={<AdminRoutes />} />

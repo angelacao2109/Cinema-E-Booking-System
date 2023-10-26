@@ -36,6 +36,7 @@ function EditProfile() {
       console.error("Error updating password:", error);
     }
   };
+
   const updatePersonalInfo = async () => {
     try {
       const response = await axios.post(
@@ -47,6 +48,7 @@ function EditProfile() {
       console.error("Error updating personal info:", error);
     }
   };
+  
   const updateCardInfo = async () => {
     try {
       const response = await axios.post("/api/update-card-info", cardInfo);
@@ -55,6 +57,7 @@ function EditProfile() {
       console.error("Error updating card info:", error);
     }
   };
+
   return (
     <>
       <div className="profile-form">
