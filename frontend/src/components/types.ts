@@ -1,13 +1,16 @@
 export type Movie = {
-    title: string;
-    year: number;
-    cast: string[];
-    genres: string[];
-    href: string;
-    extract: string;
-    trailerPictureUrl: string;
-    thumbnail_width: number;
-    thumbnail_height: number;
-    rating?: number;
-  };
   
+    trailerPictureUrl: string;
+    title: string;
+    category: string;
+    cast: string[];
+    director: string;
+    producer: string;
+    synopsis: string;
+    reviews: string[];
+    rating: string;
+    trailerPicture: string;
+    trailerVideoUrl: string;
+    trailer: string;
+  
+  };

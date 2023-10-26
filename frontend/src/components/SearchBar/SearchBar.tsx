@@ -75,7 +75,8 @@ function SearchBar({
               />
               <div className="movieDetails">
                 <h4>{movie.title}</h4>
-                <p>{movie.extract}</p>
+   {/* <p>{movie.extract}</p> */}
+
               </div>
             </div>
           ))}

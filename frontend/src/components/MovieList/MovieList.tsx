@@ -18,7 +18,7 @@ type Movie = {
   trailerPicture: string;
   trailerVideoUrl: string;
   trailer: string;
-  showtimes: Showtime[];
+ 
 };
 
 type Showtime = {

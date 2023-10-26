@@ -87,7 +87,7 @@ public class LoginController {
 //        return new ResponseEntity<>("User id " + id + " successfully registered",HttpStatus.OK);
 //
 //    }
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/register")
     public ResponseEntity<String> processRegister(@RequestBody RegisterDto register, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {

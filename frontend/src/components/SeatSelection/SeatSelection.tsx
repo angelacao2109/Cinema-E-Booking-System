@@ -14,7 +14,7 @@ function SeatSelection({ maxSeats, occupiedSeats = [] }: Props) {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const isSeatOccupied = (seatId: string) => occupiedSeats.includes(seatId);
 
-  const navigate = useNavigate(); // define navigate here
+  const navigate = useNavigate(); 
 
   const toggleSeat = (row: number, seat: number) => {
     const seatId = `${row}-${seat}`;
