@@ -29,51 +29,30 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
   });
 
   const updateProfile = async () => {
-    // Update password
+    const profileData: any = {};
+
     if (passwordData.currentPassword && passwordData.newPassword && passwordData.confirmNewPassword) {
-      await updatePassword();
+        profileData.passwordData = passwordData;
     }
-    
-    // Update personal info
+
     if (personalInfo.address || personalInfo.city || personalInfo.state || personalInfo.zipCode) {
-      await updatePersonalInfo();
+        profileData.personalInfo = personalInfo;
     }
 
-    // Update card info
     if (cardInfo.cardNumber || cardInfo.nameOnCard || cardInfo.expirationDate || cardInfo.cvc) {
-      await updateCardInfo();
+        profileData.cardInfo = cardInfo;
+    }
+
+    try {
+        const response = await axios.post("/api/update-profile", profileData);
+        console.log(response.data);
+    } catch (error) {
+        console.error("Error updating profile:", error);
     }
   };
 
-  const updatePassword = async () => {
-    try {
-      const response = await axios.post("/api/update-password", passwordData);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error updating password:", error);
-    }
-  };
-
-  const updatePersonalInfo = async () => {
-    try {
-      const response = await axios.post(
-        "/api/update-personal-info",
-        personalInfo
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error updating personal info:", error);
-    }
-  };
   
-  const updateCardInfo = async () => {
-    try {
-      const response = await axios.post("/api/update-card-info", cardInfo);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error updating card info:", error);
-    }
-  };
+  
 
   return (
     <>
