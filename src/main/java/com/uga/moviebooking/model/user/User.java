@@ -1,6 +1,9 @@
 package com.uga.moviebooking.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.uga.moviebooking.model.dto.RegisterDto;
+import com.uga.moviebooking.model.dto.UserDto;
+import com.uga.moviebooking.model.payment.PaymentAddress;
 import com.uga.moviebooking.model.payment.PaymentCard;
 import com.uga.moviebooking.model.role.Role;
 import jakarta.persistence.*;
@@ -10,10 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -22,6 +22,17 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
+    public User(RegisterDto user) {
+        this.firstname = user.getFirstName();
+        this.lastname = user.getLastName();
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+        this.password = user.getPassword();
+        this.promotionEnrolled = user.isPromotionEnrolled();
+        this.enabled = false;
+        this.paymentCards = new HashSet<>();
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // auto-incrementing id value
     private Long id;
@@ -32,12 +43,11 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
+    private String phoneNumber;
     @JsonIgnore
     @Column(nullable = false)
     private String password;
-
-
-
 
     //New additions here on. Delete if needed
     //https://www.codejava.net/frameworks/spring-boot/email-verification-example
@@ -53,8 +63,11 @@ public class User implements UserDetails {
 
     private boolean enabled;
 
+    private boolean promotionEnrolled;
+
+
     //https://www.javaguides.net/2018/10/user-registration-module-using-springboot-springmvc-springsecurity-hibernate5-thymeleaf-mysql.html ideas from here <--
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinTable(
             name="user_roles",
             joinColumns={@JoinColumn(name="user_id", referencedColumnName="ID")},
@@ -63,6 +76,9 @@ public class User implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PaymentCard> paymentCards;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private PaymentAddress paymentAddress;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -77,7 +93,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
@@ -87,6 +103,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 }

@@ -2,7 +2,10 @@ package com.uga.moviebooking.controller;
 
 import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.model.dto.LoginDto;
+import com.uga.moviebooking.model.dto.PaymentCardDto;
 import com.uga.moviebooking.model.dto.RegisterDto;
+import com.uga.moviebooking.model.payment.PaymentAddress;
+import com.uga.moviebooking.model.payment.PaymentCard;
 import com.uga.moviebooking.model.role.RoleRepository;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
@@ -12,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,23 +60,26 @@ public class LoginController {
 
         List<String> roles = user.getAuthorities().stream()
                 .map(item -> item.getAuthority()).toList();
-
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE).body(new loginResponse(user.getId(), user.getEmail(),roles));
-
+        return ResponseEntity.ok().body(new loginResponse(user.getId(), user.getEmail(),roles));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> processRegister(@RequestBody RegisterDto register, HttpServletRequest request)
+    public ResponseEntity<String> processRegister(@Validated @RequestBody RegisterDto register, BindingResult bind, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
+        if(bind.hasErrors())
+            throw new AppException("Invalid parameters for registration!");
         if(userRepository.existsByEmail(register.getEmail())){
             return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }
-        User user = new User();
-        user.setFirstname(register.getFirstName());
-        user.setLastname(register.getLastName());
-        user.setEmail(register.getEmail());
-        user.setPassword(register.getPassword());
-        user.setEnabled(false);
+        User user = new User(register);
+        if(register.getPaymentCard() != null) {
+            PaymentCard card = new PaymentCard(register.getPaymentCard());
+            user.getPaymentCards().add(card);
+        }
+        if(register.getPaymentAddress() != null) {
+            PaymentAddress address = new PaymentAddress(register.getPaymentAddress());
+            user.setPaymentAddress(address);
+        }
         long id = userService.registerUser(user, getSiteURL(request));
         return new ResponseEntity<>("User id " + id + " successfully registered",HttpStatus.OK);
     }

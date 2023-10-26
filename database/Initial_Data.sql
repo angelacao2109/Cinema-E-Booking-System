@@ -19,4 +19,6 @@ INSERT INTO movies (cast, category, director, producer, title, trailer_picture_u
 
      ('Jason Statham, 50 Cent, Megan Fox','Action','Scott Waugh','Kurt Wimmer, Tad Daggerhart, Max Adams','Expend4bles','https://static.wikia.nocookie.net/filmguide/images/e/ee/Expendables_4_official_poster.jpg','https://www.youtube.com/watch?v=DhlaBO-SwVE','R');
 
-
+INSERT INTO role (name) VALUES
+                            ('ROLE_USER'),
+                            ('ROLE_ADMIN');

@@ -34,7 +34,7 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/reset-password-email")
     public ResponseEntity<String> sendResetEmail(HttpServletRequest request, @RequestParam("email") String userEmail) throws UnsupportedEncodingException, MessagingException { //need to change thse parameters
-        User user = userRepository.findByUserEmail(userEmail);
+        User user = userRepository.findByEmail(userEmail).orElse(null);
         if (user == null) {
             return ResponseEntity.ok("Password reset unsucessful because user not found.");
         }
@@ -48,6 +48,9 @@ public class UserController {
     @PostMapping("/reset-password-verify")
     public ResponseEntity<String> verifyResetToken(@RequestParam("token") String token){
         User resetUser = userRepository.findByPasswordResetToken(token);
+        if(resetUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No such token exists.");
+        }
 
         // Check if the token has not expired
         if (resetUser.getResetTokenExpiry().isBefore(LocalDateTime.now())) {

@@ -15,7 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Boolean existsByEmail(String email);
 
-
     @Query("SELECT u FROM User u WHERE u.verificationCode = ?1")
     User findByVerificationCode(String code);
 
@@ -23,8 +22,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
    @Query("SELECT u from User u WHERE u.passwordResetToken = ?1")
          User findByPasswordResetToken(String code);
-
-   @Query("SELECT u from User u WHERE u.email = ?1")  //maybe?
-        User findByUserEmail(String email);
 
 }
