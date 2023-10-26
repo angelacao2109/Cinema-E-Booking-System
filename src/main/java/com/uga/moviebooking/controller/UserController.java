@@ -31,7 +31,6 @@ public class UserController {
     @Autowired
 
     private UserService userService;
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/reset-password-email")
     public ResponseEntity<String> sendResetEmail(HttpServletRequest request, @RequestParam("email") String userEmail) throws UnsupportedEncodingException, MessagingException { //need to change thse parameters
         User user = userRepository.findByUserEmail(userEmail);
@@ -44,7 +43,6 @@ public class UserController {
         return ResponseEntity.ok("Password reset successfully.");
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/reset-password-verify")
     public ResponseEntity<String> verifyResetToken(@RequestParam("token") String token){
         User resetUser = userRepository.findByPasswordResetToken(token);
@@ -56,7 +54,6 @@ public class UserController {
         return ResponseEntity.ok("Token has been validated sucessfully.");
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestParam("token") String token, @RequestBody  String newPassword){
         User resetUser = userRepository.findByPasswordResetToken(token);

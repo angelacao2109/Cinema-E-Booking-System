@@ -42,8 +42,8 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/movie/homepage"
+        const response = await axios({method:"get",url:"http://localhost:8080/api/movie/homepage"}
+          
         );
         setMovieData(response.data);
       } catch (error) {
@@ -91,7 +91,7 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
                 <strong>MPAA Rating:</strong> {movie.rating}
               </p>
             </div>
-            <div className="embeded-videos">
+            <div className="embedded-videos">
               {" "}
               <iframe
                 width="200"
