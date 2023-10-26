@@ -81,11 +81,11 @@ public class UserController {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }
-   //TODO: GET /api/profile (returns profile fields)
+   // DONE: GET /api/profile (returns profile fields)
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/api/profile")
-    public ResponseEntity<User> getProfile(@RequestBody Long userId){
+    public ResponseEntity<User> getProfile(@RequestParam Long userId){
         Optional<User> profileBox = userRepository.findById(userId);
         if(profileBox.isPresent()){
             User profile = profileBox.get();
@@ -95,7 +95,7 @@ public class UserController {
         }
     }
 
-    //TODO: POST /api/profile/update (takes in profile fields to update user account)
+    //DONE: POST /api/profile/update (takes in profile fields to update user account)
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/api/profile/update")
