@@ -1,5 +1,8 @@
 package com.uga.moviebooking.model.user;
 
+import com.uga.moviebooking.model.dto.PromotionDto;
+import com.uga.moviebooking.model.dto.UserDto;
+import com.uga.moviebooking.model.promotion.Promotion;
 import com.uga.moviebooking.model.role.Role;
 import com.uga.moviebooking.model.role.RoleRepository;
 import jakarta.mail.internet.MimeMessage;
@@ -172,6 +175,30 @@ public class UserService {
         user.setPasswordResetToken(token);
         user.setResetTokenExpiry(LocalDateTime.now().plus(duration));
         userRepository.save(user);
+    }
+
+    public boolean updateProfile(Long Id, UserDto userDto){
+        Optional<User> userProfileBox = userRepository.findById(Id);
+
+        if(userProfileBox.isPresent()){
+            User user = userProfileBox.get();
+            if(!user.getFirstname().equals(userDto.getFirstname())){
+               user.setFirstname(userDto.getFirstname());
+
+            }
+
+            if(!user.getLastname().equals(userDto.getLastname())){
+               user.setLastname(userDto.getLastname());
+            }
+
+            if(!user.getEmail().equals(userDto.getEmail())){
+                user.setEmail(userDto.getEmail());
+            }
+
+           userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
 

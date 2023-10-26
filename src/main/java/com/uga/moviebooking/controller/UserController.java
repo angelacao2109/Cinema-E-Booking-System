@@ -1,5 +1,7 @@
 package com.uga.moviebooking.controller;
 
+import com.uga.moviebooking.model.dto.PromotionDto;
+import com.uga.moviebooking.model.dto.UserDto;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
 import com.uga.moviebooking.model.user.UserService;
@@ -9,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/api/user")
 @RestController
@@ -77,5 +81,31 @@ public class UserController {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }
+   //TODO: GET /api/profile (returns profile fields)
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/api/profile")
+    public ResponseEntity<User> getProfile(@RequestBody Long userId){
+        Optional<User> profileBox = userRepository.findById(userId);
+        if(profileBox.isPresent()){
+            User profile = profileBox.get();
+            return ResponseEntity.ok(profile);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //TODO: POST /api/profile/update (takes in profile fields to update user account)
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/api/profile/update")
+    public ResponseEntity<String> updateProfile(@RequestBody UserDto userDto) {
+        if (userService.updateProfile(userDto.getId(), userDto)) {
+            return ResponseEntity.ok("User Profile successfully updated");
+        }
+        return ResponseEntity.ok("User Profile could not be updated or does not exist.");
+    }
+
+
 
 }
