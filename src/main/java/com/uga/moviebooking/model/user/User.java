@@ -9,7 +9,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,6 +43,13 @@ public class User implements UserDetails {
     //https://www.codejava.net/frameworks/spring-boot/email-verification-example
     @Column(name = "verification_code", length = 128)
     private String verificationCode;
+
+    @Column(name = "password_reset_token ", length = 128)
+    private String passwordResetToken;
+
+    @Column (name = "reset_token_expiry")
+    private LocalDateTime resetTokenExpiry;
+
 
     private boolean enabled;
 

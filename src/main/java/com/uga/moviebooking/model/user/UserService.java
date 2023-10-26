@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.io.*;
 import jakarta.mail.MessagingException;
@@ -25,6 +27,8 @@ import org.apache.commons.codec.binary.Base64;
 public class UserService {
 
     private String verificationPath = "/api/auth/verify";
+    private String resetPasswordPath = "/api/user/reset";
+    private String resetTokenPath = "/api/auth/resetToken";
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
@@ -109,4 +113,67 @@ public class UserService {
             return true;
         }
     }
+
+    public void resetSetUpUserPassword(User user, String siteURL) throws UnsupportedEncodingException, MessagingException {
+
+        String resetToken = generateResetToken(); //make the token
+        savePasswordResetToken(user,resetToken, Duration.ofHours(1)); //save the token in the database with the user
+        sendPasswordResetEmail(user, siteURL, resetToken); //send the reset link to them
+
+
+    }
+    private void sendPasswordResetEmail(User user, String siteURL, String resetToken) throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String fromAddress = "cinema.ebooking.movies.us@gmail.com";
+        String senderName = "Cinema Ebooking";
+        String subject = "Password Reset Request";
+
+        // Modify the email content to provide a password reset link
+        String content = "Dear [[name]],<br>"
+                + "You have requested to reset your password. Please click the link below to reset your password:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">RESET PASSWORD</a></h3>"
+                + "If you did not request this, please ignore this email.<br>"
+                + "Thank you,<br>"
+                + "Your company name.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getFirstname());
+        // Encode the URL with the reset token
+        String resetURL = siteURL + resetPasswordPath + "?token=" + URLEncoder.encode(resetToken, StandardCharsets.UTF_8);
+
+        content = content.replace("[[URL]]", resetURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
+    //Not sure
+
+    private String generateResetToken() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder token = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < 32; i++) {
+            token.append(characters.charAt(random.nextInt(characters.length())));
+        }
+
+        return token.toString();
+    }
+
+    public void savePasswordResetToken(User user, String token, Duration duration ){
+        user.setPasswordResetToken(token);
+        user.setResetTokenExpiry(LocalDateTime.now().plus(duration));
+        userRepository.save(user);
+    }
+
+
+
 }

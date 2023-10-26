@@ -1,24 +1,81 @@
 package com.uga.moviebooking.controller;
 
-import com.uga.moviebooking.model.dto.UserDto;
-import com.uga.moviebooking.model.dto.UserProfileDto;
+import com.uga.moviebooking.model.user.User;
+import com.uga.moviebooking.model.user.UserRepository;
+import com.uga.moviebooking.model.user.UserService;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
-@RestController
 @RequestMapping("/api/user")
+@RestController
 public class UserController {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+
+    private UserService userService;
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/reset-password-email")
+    public ResponseEntity<String> sendResetEmail(HttpServletRequest request, @RequestParam("email") String userEmail) throws UnsupportedEncodingException, MessagingException { //need to change thse parameters
+        User user = userRepository.findByUserEmail(userEmail);
+        if (user == null) {
+            return ResponseEntity.ok("Password reset unsucessful because user not found.");
+        }
+        userService.resetSetUpUserPassword(user, getSiteURL(request));
 
 
-    @GetMapping("/current-user")
-    public ResponseEntity<String> getCurrentUser() {
-        return null;
+        return ResponseEntity.ok("Password reset successfully.");
     }
 
-    @GetMapping("/user-details")
-    public ResponseEntity<UserProfileDto> getUserProfile() {
-        return null;
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/reset-password-verify")
+    public ResponseEntity<String> verifyResetToken(@RequestParam("token") String token){
+        User resetUser = userRepository.findByPasswordResetToken(token);
+
+        // Check if the token has not expired
+        if (resetUser.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token has expired.");
+        }
+        return ResponseEntity.ok("Token has been validated sucessfully.");
     }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestParam("token") String token, @RequestBody  String newPassword){
+        User resetUser = userRepository.findByPasswordResetToken(token);
+
+        if(resetUser == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token has expired.");
+        }
+
+        resetUser.setPassword(passwordEncoder.encode(newPassword));
+
+        resetUser.setPasswordResetToken(null);
+        resetUser.setResetTokenExpiry(null);
+        userRepository.save(resetUser);
+
+        return ResponseEntity.ok("Password reset successfully.");
+
+
+    }
+
+
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
+    }
+
 }
