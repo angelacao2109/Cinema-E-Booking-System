@@ -22,8 +22,8 @@ type NavBarProps = {
   movieData: any[];
 };
 
-function NavBar({ movieData, searchQuery, onSearchChange, onSearchResultsChange }: NavBarProps & { searchQuery: string, onSearchChange: (query: string) => void, onSearchResultsChange: (results: Movie[]) => void }) {
-
+function NavBar({ isLoggedIn, movieData, searchQuery, onSearchChange, onSearchResultsChange }: NavBarProps & { isLoggedIn: boolean, searchQuery: string, onSearchChange: (query: string) => void, onSearchResultsChange: (results: Movie[]) => void }) {
+ 
   
   const [rememberMe, setRememberMe] = useState(false);
   const [registerForPromotions, setRegisterForPromotions] = useState(false);
@@ -84,6 +84,8 @@ function NavBar({ movieData, searchQuery, onSearchChange, onSearchResultsChange 
         <Link to="/movies-coming-soon" className="link">
           Movies Coming Soon
         </Link>
+        {isLoggedIn ? (
+                    <>
         <Link to="/admin" className="link">
           Admin
         </Link>
@@ -96,6 +98,9 @@ function NavBar({ movieData, searchQuery, onSearchChange, onSearchResultsChange 
         <Link to="/select-ticket" className="link">
           Select Ticket
         </Link>
+        </>
+         ) : (
+          
         <div className="accountSection">
           <span>Account</span>
           <div className="accountLinks">
@@ -107,6 +112,7 @@ function NavBar({ movieData, searchQuery, onSearchChange, onSearchResultsChange 
             </Link>
           </div>
         </div>
+         )}
       </div>
     </nav>
   );

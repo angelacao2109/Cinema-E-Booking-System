@@ -80,10 +80,9 @@ public class UserController {
     }
    // DONE: GET /api/profile (returns profile fields)
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/api/profile")
-    public ResponseEntity<User> getProfile(@RequestParam Long userId){
-        Optional<User> profileBox = userRepository.findById(userId);
+    public ResponseEntity<User> getProfile(@RequestParam String userEmail){
+        Optional<User> profileBox = userRepository.findByEmail(userEmail);
         if(profileBox.isPresent()){
             User profile = profileBox.get();
             return ResponseEntity.ok(profile);
@@ -94,7 +93,6 @@ public class UserController {
 
     //DONE: POST /api/profile/update (takes in profile fields to update user account)
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/api/profile/update")
     public ResponseEntity<String> updateProfile(@RequestBody UserDto userDto) {
         if (userService.updateProfile(userDto.getId(), userDto)) {
@@ -102,7 +100,5 @@ public class UserController {
         }
         return ResponseEntity.ok("User Profile could not be updated or does not exist.");
     }
-
-
 
 }
