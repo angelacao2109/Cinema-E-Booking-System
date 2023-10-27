@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,25 +38,12 @@ public class MovieService {
     }
 
     //for delete movies
-   public boolean deleteMovie(MovieDto mov){
-        Optional<List<Movie>> movieList = movieRepository.findByTitleLike(mov.getTitle());
-
-       if(movieList.isPresent()) {
-           List<Movie>movies= movieList.get();
-
-           for (Movie m: movies ) {
-
-               if(m.getTitle().equals(mov.getTitle())&& m.getDirector().equals(mov.getDirector())){
-                   movieRepository.delete(m);
-                   return true;
-               }
-
-           }
-
-
-       }
-
-        return false;
+   public String deleteMovie(long id) {
+       Movie movie = movieRepository.findById(id).orElse(null);
+       if(movie == null)
+           return null;
+       movieRepository.delete(movie);
+       return movie.getTitle();
    }
 
    //Get Movie

@@ -8,25 +8,22 @@ import com.uga.moviebooking.model.payment.PaymentCard;
 import com.uga.moviebooking.model.promotion.Promotion;
 import com.uga.moviebooking.model.role.Role;
 import com.uga.moviebooking.model.role.RoleRepository;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.io.*;
-import jakarta.mail.MessagingException;
-import java.security.SecureRandom;
 import java.util.concurrent.ThreadLocalRandom;
-import org.apache.commons.codec.binary.Base64;
 
 
 @Service
@@ -57,6 +54,17 @@ public class UserService {
         user.setEnabled(true);
         userRepository.save(user);
         return user.getId();
+    }
+
+    public Long registerAdmin(User admin) {
+
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+        Set<Role> roles = new HashSet<>();
+        Collections.addAll(roles,roleRepository.findByName("ROLE_USER"),roleRepository.findByName("ROLE_ADMIN"));
+        admin.setRoles(roles);
+        admin.setEnabled(true);
+        userRepository.save(admin);
+        return admin.getId();
     }
 
     //https://www.codejava.net/frameworks/spring-boot/email-verification-example
@@ -249,6 +257,10 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public boolean isTaken(String email) {
+        return userRepository.existsByEmail(email);
     }
 
 

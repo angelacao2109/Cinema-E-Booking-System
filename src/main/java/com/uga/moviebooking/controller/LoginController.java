@@ -1,12 +1,11 @@
 package com.uga.moviebooking.controller;
 
 import com.uga.moviebooking.AppException;
+import com.uga.moviebooking.config.JWTUtil;
 import com.uga.moviebooking.model.dto.LoginDto;
-import com.uga.moviebooking.model.dto.PaymentCardDto;
 import com.uga.moviebooking.model.dto.RegisterDto;
 import com.uga.moviebooking.model.payment.PaymentAddress;
 import com.uga.moviebooking.model.payment.PaymentCard;
-import com.uga.moviebooking.model.role.RoleRepository;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
 import com.uga.moviebooking.model.user.UserService;
@@ -26,7 +25,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -34,33 +32,27 @@ public class LoginController {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final JWTUtil jwtUtil;
 
 
     @Autowired
-    public LoginController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, UserService userService) {
+    public LoginController(AuthenticationManager authenticationManager, UserRepository userRepository, JWTUtil jwtUtil, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated @RequestBody LoginDto login, BindingResult bindingResult,
                                         HttpServletRequest request, HttpServletResponse response) {
-
-        if(request.getUserPrincipal() != null) {
-            throw new AppException("User already logged in!");
-        }
         if(bindingResult.hasErrors()) {
             throw new AppException("Invalid request");
         }
-
-        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        User user = (User) auth.getPrincipal();
-
-        List<String> roles = user.getAuthorities().stream()
-                .map(item -> item.getAuthority()).toList();
-        return ResponseEntity.ok().body(new loginResponse(user.getId(), user.getEmail(),roles));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(),login.getPassword()));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String token = jwtUtil.generateToken(login.getEmail());
+        return ResponseEntity.ok(new loginResponse(token,"Login Successful!"));
     }
 
     @PostMapping("/register")
@@ -105,5 +97,5 @@ public class LoginController {
         }
     }
 
-    public record loginResponse(long id, String email, List<String> roles) {}
+    public record loginResponse(String token, String message) {}
 }

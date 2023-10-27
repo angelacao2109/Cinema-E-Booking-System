@@ -6,10 +6,12 @@ import com.uga.moviebooking.model.movie.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@EnableMethodSecurity
 @RequestMapping("/api/movie")
 @RestController
 public class MovieController {
@@ -50,9 +52,10 @@ public class MovieController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/delete")
-    public ResponseEntity<String> deleteMovie(@RequestBody MovieDto mov) {
-        if(movieService.deleteMovie(mov)){
-            return ResponseEntity.ok("Movie deleted.");
+    public ResponseEntity<String> deleteMovie(@RequestBody long id) {
+        String title = movieService.deleteMovie(id);
+        if(title != null){
+            return ResponseEntity.ok("Movie " + title + " deleted.");
         }
         return ResponseEntity.ok("Movie not found, or can not be deleted");
     }

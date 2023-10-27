@@ -9,19 +9,21 @@ import com.uga.moviebooking.model.user.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@EnableMethodSecurity
 @RequestMapping("/api/user")
 @RestController
 public class UserController {
@@ -31,8 +33,23 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-
     private UserService userService;
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal String email) {
+        if(email == null) {
+            return ResponseEntity.notFound().build();
+        }
+        User user = userRepository.findByEmail(email).orElse(null);
+        if(user == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<String> roles = user.getAuthorities().stream()
+                .map(item -> item.getAuthority()).toList();
+        return ResponseEntity.ok().body(new userResponse(user.getId(), user.getEmail(),roles));
+    }
+
     @PostMapping("/reset-password-email")
     public ResponseEntity<String> sendResetEmail(HttpServletRequest request, @RequestParam("email") String userEmail) throws UnsupportedEncodingException, MessagingException { //need to change thse parameters
         User user = userRepository.findByEmail(userEmail).orElse(null);
@@ -85,8 +102,8 @@ public class UserController {
     }
    // DONE: GET /api/profile (returns profile fields)
 
-    @GetMapping("/api/profile")
-    public ResponseEntity<User> getProfile(@RequestParam String userEmail){
+    @GetMapping("/profile")
+    public ResponseEntity<User> getProfile(@AuthenticationPrincipal String userEmail){
         Optional<User> profileBox = userRepository.findByEmail(userEmail);
         if(profileBox.isPresent()){
             User profile = profileBox.get();
@@ -98,13 +115,14 @@ public class UserController {
 
     //DONE: POST /api/profile/update (takes in profile fields to update user account)
 
-    @PostMapping("/api/profile/update")
-    public ResponseEntity<String> updateProfile(@RequestBody UserDto userDto) {
+    @PostMapping("/profile/update")
+    public ResponseEntity<String> updateProfile(@AuthenticationPrincipal String userEmail, @RequestBody UserDto userDto) {
         if (userService.updateProfile(userDto.getId(), userDto)) {
             return ResponseEntity.ok("User Profile successfully updated");
         }
         return ResponseEntity.ok("User Profile could not be updated or does not exist.");
     }
+    public record userResponse(long id, String email, List<String> roles) {}
 
 
 
