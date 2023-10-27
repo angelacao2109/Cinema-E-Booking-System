@@ -67,7 +67,7 @@ public class User implements UserDetails {
 
 
     //https://www.javaguides.net/2018/10/user-registration-module-using-springboot-springmvc-springsecurity-hibernate5-thymeleaf-mysql.html ideas from here <--
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name="user_roles",
             joinColumns={@JoinColumn(name="user_id", referencedColumnName="ID")},

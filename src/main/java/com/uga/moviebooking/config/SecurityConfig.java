@@ -4,9 +4,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -16,7 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,12 +24,17 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig  {
 
     private CustomUserDetailsService userDetailsService;
+    private JwtTokenFilter jwtTokenFilter;
+    private UnauthorizedAuthEntry unauthorizedAuthEntry;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    @Autowired
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtTokenFilter jwtTokenFilter, UnauthorizedAuthEntry unauthorizedAuthEntry) {
         this.userDetailsService = userDetailsService;
+        this.jwtTokenFilter = jwtTokenFilter;
+        this.unauthorizedAuthEntry = unauthorizedAuthEntry;
     }
 
     @Bean
@@ -75,12 +80,13 @@ public class SecurityConfig {
 //                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).formLogin(form -> form.disable());
 //        http.authorizeHttpRequests(request -> request.requestMatchers("/api/**")
 //                .permitAll().anyRequest().authenticated()); // IF APi/** permit all ELSE authorized only
-        http.authorizeHttpRequests(req -> req.requestMatchers("/api/**").permitAll().anyRequest().authenticated())
-            .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.authorizeHttpRequests(req -> req.requestMatchers("/api/auth/*").permitAll()
+                .requestMatchers("/api/**").authenticated());
 
-        http.authenticationProvider(authenticationProvider());
-
+        http.exceptionHandling(auth -> auth.authenticationEntryPoint(unauthorizedAuthEntry))
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+            .authenticationProvider(authenticationProvider());
         return http.build();
     }
 

@@ -1,31 +1,17 @@
 package com.uga.moviebooking.controller;
 
-import com.uga.moviebooking.model.dto.LoginDto;
 import com.uga.moviebooking.model.dto.RegisterDto;
 import com.uga.moviebooking.model.dto.UserDto;
-import com.uga.moviebooking.model.role.Role;
 import com.uga.moviebooking.model.role.RoleRepository;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
 import com.uga.moviebooking.model.user.UserService;
-import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.codec.binary.Base64;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -50,6 +36,7 @@ public class AdminController {
         user.setLastname(register.getLastName());
         user.setEmail(register.getEmail());
         user.setPassword(register.getPassword());
+        user.setPhoneNumber("3030");
 
         long id = userService.registerUser(user);
         user.getRoles().add(roleRepository.findByName("ROLE_ADMIN"));
