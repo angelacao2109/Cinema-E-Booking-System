@@ -1,7 +1,10 @@
 package com.uga.moviebooking.model.user;
 
+import com.uga.moviebooking.model.dto.PaymentAddressDto;
 import com.uga.moviebooking.model.dto.PromotionDto;
 import com.uga.moviebooking.model.dto.UserDto;
+import com.uga.moviebooking.model.payment.PaymentAddress;
+import com.uga.moviebooking.model.payment.PaymentCard;
 import com.uga.moviebooking.model.promotion.Promotion;
 import com.uga.moviebooking.model.role.Role;
 import com.uga.moviebooking.model.role.RoleRepository;
@@ -193,15 +196,62 @@ public class UserService {
                user.setLastname(userDto.getLastname());
             }
 
-            if(!user.getEmail().equals(userDto.getEmail())){
+           /*if(!user.getEmail().equals(userDto.getEmail())){
                 user.setEmail(userDto.getEmail());
+            } Not sure if needed bc users arent allowed to edit their emails*/
+
+            if(!user.getPhoneNumber().equals(userDto.getPhoneNumber())){
+                user.setPhoneNumber(userDto.getPhoneNumber());
             }
+            // Update payment card information
+            Set<PaymentCard> updatedPaymentCards = userDto.getPaymentCards();
+            if (updatedPaymentCards != null) {
+                user.setPaymentCards(updatedPaymentCards);
+            }
+
 
            userRepository.save(user);
             return true;
         }
         return false;
     }
+
+    public boolean updatePassword(String email, String currentPassword, String newPassword) {
+        Optional<User> userBox = userRepository.findByEmail(email);
+
+        if (userBox.isPresent()) {
+            User user = userBox.get();
+
+            // Check if the provided current password matches the user's current password
+            if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+                return false; // Current password is incorrect
+            }
+
+            // Update the password
+            user.setPassword(passwordEncoder.encode(newPassword));
+
+            userRepository.save(user);
+            return true;
+        }
+        return false; // User not found
+    }
+
+    public boolean updatePaymentAddress(String email, PaymentAddressDto updatedAddressDto) {
+        Optional<User> userBox = userRepository.findByEmail(email);
+
+        if (userBox.isPresent()) {
+            User user = userBox.get();
+
+            PaymentAddress updatedAddress = new PaymentAddress(updatedAddressDto);
+            user.setPaymentAddress(updatedAddress);
+
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+
 
 
 
