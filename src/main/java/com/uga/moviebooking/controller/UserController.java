@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequestMapping("/api/user")
@@ -105,14 +106,20 @@ public class UserController {
         return ResponseEntity.ok("User Profile could not be updated or does not exist.");
     }
 
+
+
     @PostMapping("/api/profile/update-password")
-    public ResponseEntity<String> updatePassword(@RequestParam String email, @RequestBody String currentPassword, @RequestBody String newPassword) {
+    public ResponseEntity<String> updatePassword(@RequestParam String email, @RequestBody Map<String, String> passwordData) {
+        String currentPassword = passwordData.get("currentPassword");
+        String newPassword = passwordData.get("newPassword");
+
         if (userService.updatePassword(email, currentPassword, newPassword)) {
             return ResponseEntity.ok("Password updated successfully");
         } else {
             return ResponseEntity.ok("Password update failed. Please check your current password.");
         }
     }
+
 
     @PostMapping("/api/profile/update-payment-address")
     public ResponseEntity<String> updatePaymentAddress(@RequestParam String email, @RequestBody PaymentAddressDto updatedAddressDto) {
