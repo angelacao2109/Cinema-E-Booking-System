@@ -1,5 +1,7 @@
 package com.uga.moviebooking.controller;
 
+import com.uga.moviebooking.model.dto.PaymentAddressDto;
+import com.uga.moviebooking.model.dto.PromotionDto;
 import com.uga.moviebooking.model.dto.UserDto;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
@@ -120,4 +122,25 @@ public class UserController {
         return ResponseEntity.ok("User Profile could not be updated or does not exist.");
     }
     public record userResponse(long id, String email, List<String> roles) {}
+
+    @PostMapping("/api/profile/update-password")
+    public ResponseEntity<String> updatePassword(@RequestParam String email, @RequestBody String currentPassword, @RequestBody String newPassword) {
+        if (userService.updatePassword(email, currentPassword, newPassword)) {
+            return ResponseEntity.ok("Password updated successfully");
+        } else {
+            return ResponseEntity.ok("Password update failed. Please check your current password.");
+        }
+    }
+
+    @PostMapping("/api/profile/update-payment-address")
+    public ResponseEntity<String> updatePaymentAddress(@RequestParam String email, @RequestBody PaymentAddressDto updatedAddressDto) {
+        if (userService.updatePaymentAddress(email, updatedAddressDto)) {
+            return ResponseEntity.ok("Payment address updated successfully");
+        } else {
+            return ResponseEntity.ok("Payment address update failed.");
+        }
+    }
+
+
+
 }
