@@ -22,6 +22,7 @@ import AdminRoutes from './components/AdminPage/AdminNav/AdminRoutes';
 import { Movie} from "./components/types";
 import RegistrationConfirmation from './components/RegistrationConfirmation/RegistrationConfirmation';
 import ResetPasswordPostLink from './components/ResetPasswordPostLink/ResetPasswordPostLink';
+import VerifyEmail from './components/VerifyEmail/VerifyEmail';
 function App() {
   console.log(moviesData);
 
@@ -57,8 +58,7 @@ function App() {
           <Route path="/register" element={<Registration />} />
           <Route  path="/confirm" element={<RegistrationConfirmation/>} />
           <Route path="/signin" element={<SignIn setIsLoggedIn={setIsLoggedIn} onSuccessfulLogin={setLoggedInUserEmail} />} />
-
-
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/forgot-password" element={<ResetPasswordForm />} />
           <Route path="/change-password" element={<ResetPasswordPostLink />} />  
           <Route path="/edit-profile" element={<EditProfile userEmail={loggedInUserEmail} />} />

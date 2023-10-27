@@ -1,6 +1,8 @@
 import React from 'react';
 import './Confirmation.css';
 
+// TODO AUTH
+
 const Confirmation: React.FC = () => {
     const Cancellation = () => {
       // Intentionally left blank

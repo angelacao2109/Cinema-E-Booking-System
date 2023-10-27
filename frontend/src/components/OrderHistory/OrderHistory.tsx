@@ -1,6 +1,8 @@
 import React from "react";
 import "./OrderHistory.css";
 
+// TODO AUTH
+
 const OrderHistory: React.FC = () => {
   const orders = [
     {

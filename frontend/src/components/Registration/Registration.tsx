@@ -32,7 +32,27 @@ function Registration() {
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/register", formData);
+      const response = await axios.post("http://localhost:8080/api/auth/register", {
+        "firstName": formData.firstName, //REQUIRED!
+        "lastName": formData.lastName, //REQUIRED!
+        "email": formData.email, //REQUIRED!
+        "password": formData.password, //REQUIRED!
+        "phoneNumber": formData.phone, //REQUIRED!
+        "promotionEnrolled": formData.subscribeOffers,  //REQUIRED!
+        "paymentCard": { //OPTIONAL!
+            "firstName": formData.nameOnCard, //OPTIONAL!
+            "lastName": formData.nameOnCard, //OPTIONAL!
+            "expDate": formData.expirationDate, //OPTIONAL!
+            "cardNumber": formData.cardNumber, //OPTIONAL!
+            "cvv": formData.cvc //OPTIONAL!
+        },
+        "paymentAddress": {  //OPTIONAL!
+            "address": formData.address, //OPTIONAL!
+            "city": formData.city, //OPTIONAL!
+            "state": formData.state, //OPTIONAL!
+            "zipCode": formData.zipCode //OPTIONAL!
+        }
+    });
       if (response.status === 200) {
         alert("Registration Successful");
         navigate("/confirm");

@@ -108,7 +108,7 @@ public class UserService {
 
         content = content.replace("[[name]]", user.getFirstname());
         //encode URL so it doesn't absolutely break
-        String verifyURL = siteURL + verificationPath + "?code=" + URLEncoder.encode(user.getVerificationCode(),StandardCharsets.UTF_8);
+        String verifyURL = "http://localhost:5173" + "/verify-email"  + "?code=" + URLEncoder.encode(user.getVerificationCode(),StandardCharsets.UTF_8);
 
         content = content.replace("[[URL]]", verifyURL);
 

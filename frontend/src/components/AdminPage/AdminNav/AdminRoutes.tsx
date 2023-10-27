@@ -6,6 +6,8 @@ import EditMovies from '../EditMovies/EditMovies';
 import EditPromo from '../EditPromo/EditPromo';
 import EditUser from '../EditUser/EditUser';
 
+// TODO ADD ADMIN AUTH
+
 const AdminRoutes = () => {
     return (
         <Routes>

@@ -14,12 +14,13 @@ const SignInForm: React.FC<{ setIsLoggedIn: (value: boolean) => void; onSuccessf
     setLoading(true);
     try {
     
-      const response = await axios.post("http://localhost:8080/api/login", {
-        email,
-        password,
-        rememberMe,
+      const response = await axios.post("http://localhost:8080/api/auth/login", {
+        "email":email,
+        "password":password,
       });
       if (response.data.success) {
+        const token = response.data.token;
+        document.cookie = `authToken=${token}; max-age=86400; path=/`;
         setFeedbackMessage("Successfully signed in.");
         setIsLoggedIn(true);
         onSuccessfulLogin(email); 

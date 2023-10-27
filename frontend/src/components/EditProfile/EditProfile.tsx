@@ -6,6 +6,11 @@ import axios from "axios";
 function EditProfile({ userEmail }: { userEmail: string | null }) {
   const navigate = useNavigate();
 
+  const authToken = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("authToken="))
+  ?.split("=")[1];
+
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -44,15 +49,13 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     }
 
     try {
-        const response = await axios.post("/api/update-profile", profileData);
+        const response = await axios.post("http://localhost:8080/api/api/user/api/profile", profileData);
         console.log(response.data);
     } catch (error) {
         console.error("Error updating profile:", error);
     }
   };
 
-  
-  
 
   return (
     <>
