@@ -18,9 +18,10 @@ const SignInForm: React.FC<{ setIsLoggedIn: (value: boolean) => void; onSuccessf
         "email":email,
         "password":password,
       });
-      if (response.data.success) {
+      if (response.status == 200) {
         const token = response.data.token;
         document.cookie = `authToken=${token}; max-age=86400; path=/`;
+        document.cookie = `userEmail=${email}; max-age=86400; path=/`;
         setFeedbackMessage("Successfully signed in.");
         setIsLoggedIn(true);
         onSuccessfulLogin(email); 
