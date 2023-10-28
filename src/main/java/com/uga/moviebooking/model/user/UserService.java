@@ -1,6 +1,7 @@
 package com.uga.moviebooking.model.user;
 
 import com.uga.moviebooking.model.dto.PaymentAddressDto;
+import com.uga.moviebooking.model.dto.PaymentCardDto;
 import com.uga.moviebooking.model.dto.PromotionDto;
 import com.uga.moviebooking.model.dto.UserDto;
 import com.uga.moviebooking.model.payment.PaymentAddress;
@@ -262,9 +263,29 @@ public class UserService {
     public boolean isTaken(String email) {
         return userRepository.existsByEmail(email);
     }
+//
+public boolean updateCardInfo(String userEmail, PaymentCardDto cardInfoDto) {
+    Optional<User> userOptional = userRepository.findByEmail(userEmail);
+    if (userOptional.isPresent()) {
+        User user = userOptional.get();
 
+        // Convert the DTO to the entity
+        PaymentCard card = new PaymentCard(cardInfoDto);
 
+        // Modify the existing set instead of replacing it
+        Set<PaymentCard> existingCards = user.getPaymentCards();
+        if (existingCards == null) {
+            existingCards = new HashSet<>();
+            user.setPaymentCards(existingCards);
+        }
+        existingCards.clear(); 
+        existingCards.add(card); 
 
+        userRepository.save(user);
+        return true;
+    }
+    return false;
+}
 
 
 }

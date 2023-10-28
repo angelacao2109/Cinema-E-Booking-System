@@ -32,21 +32,22 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
       });
   
       const [cardInfo, setCardInfo] = useState({
+        firstName: '',
+        lastName: '',
           cardNumber: '',
-          nameOnCard: '',
-          expirationDate: '',
-          cvc: ''
+          expDate: '',
+          cvv: ''
       });
   
       const updatePassword = async () => {
           try {
-              const response = await axios.post('http://localhost:8080/api/user/api/profile/update-password', {
-                "email":email,
-                "currentPassword":passwordData.currentPassword,
-                "newPassword":passwordData.newPassword},
-                {
-                  headers: {
-                      'Authorization': `Bearer ${authToken}`
+            const response = await axios.post(`http://localhost:8080/api/user/profile/update-password?email=${email}`,  {
+                    "currentPassword":passwordData.currentPassword,
+                    "newPassword":passwordData.newPassword},
+                  {headers: {
+                    'Authorization': authToken,
+                    'Content-Type':'application/json',		
+                    "Referrer-Policy":'unsafe_url'
                   }});
               console.log(response.data);
           } catch (error) {
@@ -55,7 +56,12 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
       };
       const updatePersonalInfo = async () => {
           try {
-              const response = await axios.post('http://localhost:8080/api/update-personal-info', personalInfo);
+              const response = await axios.post(`http://localhost:8080/api/user/profile/update-payment-address?email=${email}`, personalInfo,
+              {headers: {
+                'Authorization': authToken,
+                'Content-Type':'application/json',		
+                "Referrer-Policy":'unsafe_url'
+              }});
               console.log(response.data);
           } catch (error) {
               console.error("Error updating personal info:", error);
@@ -63,7 +69,12 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
       };
       const updateCardInfo = async () => {
           try {
-              const response = await axios.post('http://localhost:8080/api/update-card-info', cardInfo);
+              const response = await axios.post('http://localhost:8080/api/user/profile/update-card-info', cardInfo,
+              {headers: {
+                'Authorization': authToken,
+                'Content-Type':'application/json',		
+                "Referrer-Policy":'unsafe_url'
+              }});
               console.log(response.data);
           } catch (error) {
               console.error("Error updating card info:", error);
@@ -119,7 +130,7 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
                   
   
                   <div className='profile-form-items'>
-                      <div className="section-title">Change Personal Information</div>
+                      <div className="section-title">Change Billing Information</div>
                       <div className="form-section">
                       <div className="input-group">
                           <label className="profile-form-label">First Name</label>
@@ -187,6 +198,24 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
                       <div className="section-title">Change Card Information</div>
                       <div className="form-section">
                       <div className="input-group">
+                        <label className="profile-form-label">First Name</label> 
+                        <input 
+            className="profile-form-input" 
+            type='text'
+            value={cardInfo.firstName}
+            onChange={(e) => setCardInfo(prev => ({ ...prev, firstName: e.target.value }))}
+        />
+        </div>
+        <div className="input-group">
+                        <label className="profile-form-label">Last Name</label> 
+                        <input 
+            className="profile-form-input" 
+            type='text'
+            value={cardInfo.lastName}
+            onChange={(e) => setCardInfo(prev => ({ ...prev, lastName: e.target.value }))}
+        />
+        </div>
+                      <div className="input-group">
                           <label className="profile-form-label">Card Number</label> 
                           <input 
               className="profile-form-input" 
@@ -196,30 +225,21 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
           />
           </div>
           <div className="input-group">
-                          <label className="profile-form-label">Name on Card</label> 
-                          <input 
-              className="profile-form-input" 
-              type='text'
-              value={cardInfo.nameOnCard}
-              onChange={(e) => setCardInfo(prev => ({ ...prev, nameOnCard: e.target.value }))}
-          />
-          </div>
-          <div className="input-group">
                           <label className="profile-form-label">Expiration Date</label> 
                           <input 
               className="profile-form-input" 
               type='month'
-              value={cardInfo.expirationDate}
-              onChange={(e) => setCardInfo(prev => ({ ...prev, expirationDate: e.target.value }))}
+              value={cardInfo.expDate}
+              onChange={(e) => setCardInfo(prev => ({ ...prev, expDate: e.target.value }))}
           />
           </div>
           <div className="input-group">
-                          <label className="profile-form-label">CVC</label> 
+                          <label className="profile-form-label">CVV</label> 
                           <input 
               className="profile-form-input" 
               type='text'
-              value={cardInfo.cvc}
-              onChange={(e) => setCardInfo(prev => ({ ...prev, cvc: e.target.value }))}
+              value={cardInfo.cvv}
+              onChange={(e) => setCardInfo(prev => ({ ...prev, cvv: e.target.value }))}
           />
           </div>
           

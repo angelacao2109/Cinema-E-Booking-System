@@ -34,20 +34,37 @@ function App() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
+  
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2 && parts[1]) {
+        return parts[1].split(';')[0];
+    }
+    return null;
+}
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(getCookie('authToken') !== null);
+
+  useEffect(() => {
+      setIsLoggedIn(getCookie('authToken') !== null);
+  }, []);
+  
   const [loggedInUserEmail, setLoggedInUserEmail] = useState<string | null>(null);
 
     return (
       <Router>
         <div>
         <NavBar 
-         isLoggedIn={isLoggedIn}
-          movieData={moviesData} 
-          searchQuery={searchQuery} 
-          onSearchChange={setSearchQuery}
-          onSearchResultsChange={setSearchResults}
-        />
+  isLoggedIn={isLoggedIn}
+  setIsLoggedIn={setIsLoggedIn}
+  movieData={moviesData} 
+  searchQuery={searchQuery} 
+  onSearchChange={setSearchQuery}
+  onSearchResultsChange={setSearchResults}
+/>
+
          
           <Routes>
           <Route path="/" element={<MovieList searchResults={searchResults} />} />

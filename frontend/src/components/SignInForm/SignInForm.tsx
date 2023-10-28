@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./SignInForm.css";
+import { useNavigate } from "react-router-dom";
 
 const SignInForm: React.FC<{ setIsLoggedIn: (value: boolean) => void; onSuccessfulLogin: (email: string) => void; }> = ({ setIsLoggedIn, onSuccessfulLogin }) => {
+  const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -25,26 +27,38 @@ const SignInForm: React.FC<{ setIsLoggedIn: (value: boolean) => void; onSuccessf
         setFeedbackMessage("Successfully signed in.");
         setIsLoggedIn(true);
         onSuccessfulLogin(email); 
+        navigate("/"); 
 
       } else {
-        setFeedbackMessage(
-          "Error signing in. Please check your credentials and try again."
-        );
-      }
-    } catch (error) {
-      setFeedbackMessage(
-        "Error signing in. Please check your connection and try again."
-      );
-    } finally {
-      setLoading(false);
+        setFeedbackMessage("Error signing in. Please check your credentials and try again.");
     }
-  };
+  } catch (error: any) {
+    if (error && "response" in error && error.response) {
+      switch (error.response.status) {
+        case 401:
+          setFeedbackMessage("Wrong password or email.");
+          break;
+        case 404:
+          setFeedbackMessage("User does not exist.");
+          break;
+        default:
+          setFeedbackMessage("Error signing in. Please try again.");
+      }
+    } else {
+      setFeedbackMessage("Error signing in. Please check your connection and try again.");
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="centerContainer">
       <div className="modalContent">
         <h2>Sign In</h2>
-        {feedbackMessage && <p>{feedbackMessage}</p>}
+       
+        {feedbackMessage && <p className="feedbackMessage">{feedbackMessage}</p>}
+            
         <form onSubmit={handleSubmit}>
           <input
             type="email"

@@ -32,7 +32,6 @@ public class PromotionController {
         this.userRepository = userRepository;
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<String> addPromotion(@RequestBody PromotionDto promo) {
@@ -40,7 +39,6 @@ public class PromotionController {
         return ResponseEntity.ok("Promotion ID " + id + " Created!");
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/delete")
     public ResponseEntity<String> deletePromotion(@RequestBody PromotionDto promo) {
@@ -50,7 +48,6 @@ public class PromotionController {
         return ResponseEntity.ok("Promotion could not be removed or does not exist.");
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/update")
     public ResponseEntity<String> updatePromotion(@RequestBody PromotionDto promo) {
@@ -60,7 +57,6 @@ public class PromotionController {
         return ResponseEntity.ok("Promotion could not be updated or does not exist.");
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/getpromotion")
     public ResponseEntity<Promotion> getPromotion(@RequestBody long ID) {
         Promotion promotion = promotionService.retrievePromotion(ID);
@@ -73,7 +69,6 @@ public class PromotionController {
     }
 
     //may need to check this method
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/getActivePromotions")
     public ResponseEntity<List<Promotion>> activePromotions() {
         Date day = new Date(System.currentTimeMillis());
@@ -86,7 +81,6 @@ public class PromotionController {
     }
 
     //Send promo via email endpoint
-    @CrossOrigin(origins = "http://localhost:5173")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/send-promotion-email")
     public ResponseEntity<String> sendPromotionEmail(@RequestBody long ID) {

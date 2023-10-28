@@ -4,6 +4,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   BrowserRouter as Router,
   Routes,
@@ -20,15 +21,32 @@ import { AdminNavBar, AdminRoutes } from "../AdminPage/AdminNav/AdminNavBar";
 import { Movie} from "../types";
 type NavBarProps = {
   movieData: any[];
+  isLoggedIn: boolean;
+  setIsLoggedIn: (loggedIn: boolean) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  onSearchResultsChange: (results: Movie[]) => void;
 };
 
-function NavBar({ isLoggedIn, movieData, searchQuery, onSearchChange, onSearchResultsChange }: NavBarProps & { isLoggedIn: boolean, searchQuery: string, onSearchChange: (query: string) => void, onSearchResultsChange: (results: Movie[]) => void }) {
- 
+
+function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchChange, onSearchResultsChange }: NavBarProps) {
   
+  const navigate = useNavigate();
+
   const [rememberMe, setRememberMe] = useState(false);
   const [registerForPromotions, setRegisterForPromotions] = useState(false);
   const [moviesPlaying, setMoviesPlaying] = useState<any[]>([]);
   const [moviesComingSoon, setMoviesComingSoon] = useState<any[]>([]);
+  const userEmail = document.cookie.split("; ").find((row) => row.startsWith("userEmail="))?.split("=")[1];
+
+  const handleLogout = () => {
+    document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "userEmail=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    setIsLoggedIn(false);
+    navigate("/signin");
+  };
+  
+
   const fetchMovies = (
     endpoint: string,
     setMovies: React.Dispatch<React.SetStateAction<any[]>>
@@ -98,6 +116,14 @@ function NavBar({ isLoggedIn, movieData, searchQuery, onSearchChange, onSearchRe
         <Link to="/select-ticket" className="link">
           Select Ticket
         </Link>
+        <div className="welcomeLogoutGroup">
+        <div className="welcomeSection">
+        <span>Welcome</span>
+        <span>{userEmail}</span>
+        </div>
+        
+        <button className="logoutButton" onClick={handleLogout}>Logout</button>
+</div>
         </>
          ) : (
           

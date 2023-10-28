@@ -30,6 +30,11 @@ type MovieListProps = {
   searchResults: Movie[];
 };
 
+const authToken = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("authToken="))
+  ?.split("=")[1];
+
 const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
   const navigate = useNavigate();
   const [movieData, setMovieData] = useState<Movie[]>([]);
@@ -42,8 +47,12 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios({method:"get",url:"http://localhost:8080/api/movie/homepage"}
-          
+        const response = await axios({method:"get",url:"http://localhost:8080/api/movie/homepage",
+        headers: {
+          'Authorization': authToken,
+          'Content-Type':'application/json',		
+          "Referrer-Policy":'unsafe_url'
+        }}
         );
         setMovieData(response.data);
       } catch (error) {

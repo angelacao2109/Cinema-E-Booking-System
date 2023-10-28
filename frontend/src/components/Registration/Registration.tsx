@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Registration.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Registration() {
   const navigate = useNavigate();
@@ -371,7 +372,7 @@ function Registration() {
               </button>
             </div>
             <div className="signIn">
-              Already have an account? <a href="#SIGNIN">Sign In</a>
+            Already have an account? <Link to="/signin">Sign In</Link>
             </div>
           </div>
 

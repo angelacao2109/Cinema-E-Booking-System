@@ -1,14 +1,18 @@
 package com.uga.moviebooking.controller;
 
 import com.uga.moviebooking.model.dto.PaymentAddressDto;
+import com.uga.moviebooking.model.dto.PaymentCardDto;
 import com.uga.moviebooking.model.dto.PromotionDto;
 import com.uga.moviebooking.model.dto.UserDto;
+import com.uga.moviebooking.model.payment.PaymentCard;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
 import com.uga.moviebooking.model.user.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -126,13 +130,11 @@ public class UserController {
     }
     public record userResponse(long id, String email, List<String> roles) {}
 
-
-
-    @PostMapping("/api/profile/update-password")
-    public ResponseEntity<String> updatePassword(@RequestParam String email, @RequestBody Map<String, String> passwordData) {
+    @PostMapping("/profile/update-password")
+    public ResponseEntity<String> updatePassword(@RequestParam String email,
+            @RequestBody Map<String, String> passwordData) {
         String currentPassword = passwordData.get("currentPassword");
         String newPassword = passwordData.get("newPassword");
-
         if (userService.updatePassword(email, currentPassword, newPassword)) {
             return ResponseEntity.ok("Password updated successfully");
         } else {
@@ -140,16 +142,28 @@ public class UserController {
         }
     }
 
-
-    @PostMapping("/api/profile/update-payment-address")
+    @PostMapping("/profile/update-payment-address")
     public ResponseEntity<String> updatePaymentAddress(@RequestParam String email, @RequestBody PaymentAddressDto updatedAddressDto) {
         if (userService.updatePaymentAddress(email, updatedAddressDto)) {
             return ResponseEntity.ok("Payment address updated successfully");
         } else {
             return ResponseEntity.ok("Payment address update failed.");
         }
-    }
 
+    }
+    //
+    @PostMapping("/profile/update-card-info")
+public ResponseEntity<String> updateCardInfo(@AuthenticationPrincipal String userEmail,
+        @RequestBody PaymentCardDto cardInfoDto) {
+    if (userService.updateCardInfo(userEmail, cardInfoDto)) {
+        return ResponseEntity.ok("Card information updated successfully");
+    } else {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Card information update failed.");
+    }
+}
 
 
 }
+
+
