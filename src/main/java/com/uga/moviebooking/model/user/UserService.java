@@ -120,13 +120,15 @@ public class UserService {
 
     public boolean verify(String verificationCode) {
         User user = userRepository.findByVerificationCode(verificationCode);
-
-        if (user == null || user.isEnabled()) { //maybe not work
+   
+        if (user == null || user.isEnabled()) { 
+         
             return false;
         } else {
             user.setVerificationCode(null);
             user.setEnabled(true);
             userRepository.save(user);
+        
             return true;
         }
     }

@@ -11,7 +11,7 @@ function VerifyEmail(props) {
 
     useEffect(() => {
         // Extract the token from the URL
-        const token = new URLSearchParams(location.search).get("token");
+        const token = new URLSearchParams(location.search).get("code");
     
         // Send a request to the backend to verify the token
         axios.get('http://localhost:8080/api/auth/verify?code='+token)

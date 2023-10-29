@@ -56,7 +56,7 @@ function Registration() {
     });
       if (response.status === 200) {
         alert("Registration Successful");
-        navigate("/confirm");
+        navigate("/signin");
       }
     } catch (error) {
       console.error("Error registering:", error);
@@ -231,7 +231,7 @@ function Registration() {
             />
           </div>
           <div className="Phone">
-            <label className="form-label">Phone Number </label>
+            <label className="form-label">Phone Number * </label>
             <input
               className="form-input"
               type="tel"
