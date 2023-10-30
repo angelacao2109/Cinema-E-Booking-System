@@ -14,5 +14,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     Optional<List<Movie>> findByTitleLike(String title);
 
+   
+    
     Page<Movie> findAll(Pageable pageable);
 }

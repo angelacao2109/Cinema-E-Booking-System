@@ -12,5 +12,6 @@ export type Movie = {
     trailerPicture: string;
     trailerVideoUrl: string;
     trailer: string;
-  
+   
   };
+

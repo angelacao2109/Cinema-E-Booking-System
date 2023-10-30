@@ -9,11 +9,16 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(
+    uniqueConstraints=
+        @UniqueConstraint(columnNames={"theatre_id", "showtime"})
+)
 public class Showtime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date showtime;
 
@@ -28,4 +33,35 @@ public class Showtime {
     @OneToOne
     @JoinColumn(name = "movie_id")
     Movie movie;
+
+    public Date getShowtime() {
+        return this.showtime;
+    }
+    
+    public Theatre getTheatre() {
+        return this.theatre;
+    }
+    
+    public Long getId() {
+        return this.id;
+    }
+    
+    public List<Booking> getBookings() {
+        return this.bookings;
+    }
+    
+    public Movie getMovie() {
+        return this.movie;
+    }
+     public void setShowtime(Date showtime) {
+        this.showtime = showtime;
+    }
+
+    public void setTheatre(Theatre theatre) {
+        this.theatre = theatre;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
 }

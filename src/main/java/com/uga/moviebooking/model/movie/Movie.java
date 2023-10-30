@@ -1,9 +1,9 @@
 package com.uga.moviebooking.model.movie;
 
+import com.uga.moviebooking.model.show.Showtime;
 import com.uga.moviebooking.model.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.Data;
 
 import java.util.List;
 
@@ -50,4 +50,8 @@ public class Movie {
 
     @Column(nullable = false)
     private String trailerVideoUrl;
+     
+    //maybe for showtimes 
+    @OneToMany(mappedBy = "movie")
+    private List<Showtime> showtimes;
 }

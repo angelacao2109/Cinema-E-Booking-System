@@ -90,7 +90,6 @@ public class LoginController {
     @GetMapping("/verify")
     public ResponseEntity<String> verifyUser(@Param("code") String code, HttpServletResponse res) {
         if (userService.verify(code)) {
-
             return new ResponseEntity<>("Verification Success! Redirecting to homepage...", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Verification Failed... Please try again", HttpStatus.NOT_FOUND);

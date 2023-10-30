@@ -5,7 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +25,7 @@ public class MovieService {
     public List<Movie> searchByTitle(String title) {
         return movieRepository.findByTitleLike(title).orElse(null);
     }
+     
 
     public Movie createMovie(MovieDto mov) {
         Movie movie = new Movie();
@@ -57,5 +62,13 @@ public class MovieService {
          return Optional.of(page.getContent());
     }
 
+    public Optional<List<Movie>> getFrontpageMoviesWithShowtimes() {
+        Page<Movie> page = movieRepository.findAll(PageRequest.of(0, 50, Sort.by(Sort.Order.asc("id"))));
+        
+        return Optional.of(page.getContent());
+    }
 
+    
+    
+    
 }

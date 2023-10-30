@@ -38,7 +38,12 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
           expDate: '',
           cvv: ''
       });
-  
+
+      const [optOutPromo, setOptOutPromo] = useState(false);
+
+      const handleOptOutPromo = () => {
+        setOptOutPromo(!optOutPromo);
+      }
       const updatePassword = async () => {
           try {
             const response = await axios.post(`http://localhost:8080/api/user/profile/update-password?email=${email}`,  {
@@ -249,11 +254,18 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
                   </div>
   
                   <div className='profile-footer'>
-                      <button className='profile-footer-button' onClick={() => navigate("/")}>HOME PAGE</button>
-                  </div>
-              </div>
-          </>
-      );
-  }
+                  <button 
+                        className='profile-footer-button' 
+                        onClick={handleOptOutPromo}
+                    >
+                        {optOutPromo ? "Opt-In Promo" : "Opt-Out Promo"}
+                    </button>
+                      <button className='profile-footer-button' onClick={() => navigate("/")}>Home Page</button>
+                   </div>
+            </div>
+        </>
+    );
+}
+
   
   export default EditProfile;

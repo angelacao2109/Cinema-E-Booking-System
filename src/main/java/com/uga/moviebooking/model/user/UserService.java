@@ -73,16 +73,22 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        //Maybe can generate random base 64 string
         Random random = ThreadLocalRandom.current();
-        byte[] r = new byte[64];
-        random.nextBytes(r);
-        String randomCode =  Base64.encodeBase64String(r);
+        StringBuilder randomCodeBuilder = new StringBuilder();
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (int i = 0; i < 64; i++) {
+            char randomChar = characters.charAt(random.nextInt(characters.length()));
+            randomCodeBuilder.append(randomChar);
+        }
+
+        String randomCode = randomCodeBuilder.toString();
+
         user.setVerificationCode(randomCode);
-        user.setEnabled(false);
+        //user.setEnabled(false);
 
         Set<Role> roles = new HashSet<>();
-        Collections.addAll(roles,roleRepository.findByName("ROLE_USER"));
+        Collections.addAll(roles, roleRepository.findByName("ROLE_USER"));
         user.setRoles(roles);
         userRepository.save(user);
         sendVerificationEmail(user, siteURL);
@@ -109,7 +115,7 @@ public class UserService {
 
         content = content.replace("[[name]]", user.getFirstname());
         //encode URL so it doesn't absolutely break
-        String verifyURL = "http://localhost:5173" + "/verify-email"  + "?code=" + URLEncoder.encode(user.getVerificationCode(),StandardCharsets.UTF_8);
+        String verifyURL = "http://localhost:5173" + "/verify-email"  + "?code=" + user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyURL);
 
@@ -120,15 +126,16 @@ public class UserService {
 
     public boolean verify(String verificationCode) {
         User user = userRepository.findByVerificationCode(verificationCode);
-   
-        if (user == null || user.isEnabled()) { 
-         
+        System.out.println(verificationCode);
+        if (user == null || user.isEnabled()) {
+            System.out.println("User Not Found");
+            System.out.println(user);
             return false;
         } else {
+            System.out.println("Verified");
             user.setVerificationCode(null);
             user.setEnabled(true);
             userRepository.save(user);
-        
             return true;
         }
     }
