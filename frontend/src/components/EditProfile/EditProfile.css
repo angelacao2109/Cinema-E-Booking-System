@@ -118,3 +118,20 @@
     transition: background-color 0.3s ease, color 0.3s ease;
     border: none;
 }
+.promo-label {
+    color: white;
+    margin-left: 20px;  
+    display: inline-flex;
+    align-items: center;
+}
+
+.promo-label input {
+    margin-right: 5px; 
+}
+
+.message-container {
+    color: red; /* or any color you prefer */
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0;
+}

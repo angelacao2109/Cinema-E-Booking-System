@@ -44,6 +44,8 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
       const handleOptOutPromo = () => {
         setOptOutPromo(!optOutPromo);
       }
+      const [message, setMessage] = useState("");
+
       const updatePassword = async () => {
           try {
             const response = await axios.post(`http://localhost:8080/api/user/profile/update-password?email=${email}`,  {
@@ -54,9 +56,11 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
                     'Content-Type':'application/json',		
                     "Referrer-Policy":'unsafe_url'
                   }});
-              console.log(response.data);
+                  console.log(response.data);
+                  setMessage("Password updated successfully!");
           } catch (error) {
-              console.error("Error updating password:", error);
+            console.error("Error updating password:", error);
+            setMessage("Error updating password. Please try again.");
           }
       };
       const updatePersonalInfo = async () => {
@@ -68,8 +72,10 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
                 "Referrer-Policy":'unsafe_url'
               }});
               console.log(response.data);
+              setMessage("Personal info updated successfully!");
           } catch (error) {
-              console.error("Error updating personal info:", error);
+            console.error("Error updating personal info:", error);
+            setMessage("Error updating personal info. Please try again.");
           }
       };
       const updateCardInfo = async () => {
@@ -81,8 +87,10 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
                 "Referrer-Policy":'unsafe_url'
               }});
               console.log(response.data);
+              setMessage("Card info updated successfully!");
           } catch (error) {
               console.error("Error updating card info:", error);
+              setMessage("Error updating card info. Please try again.");
           }
       };
       return (
@@ -251,15 +259,39 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
           <div className="form-section-button">
                <button className='save-button' onClick={updateCardInfo}>SAVE</button></div>
                   </div>
+                  <div className='profile-form-items'>
+    <div className="section-title">Promo Preferences</div>
+    <div className="input-group">
+        <label className="profile-form-label">Opt-In Promo:</label>
+        <label className="promo-label">
+            <input 
+                type="radio" 
+                name="optOutPromo" 
+                value="yes" 
+                checked={optOutPromo} 
+                onChange={handleOptOutPromo} 
+            />
+            Yes
+        </label>
+        <label className="promo-label">
+            <input 
+                type="radio" 
+                name="optOutPromo" 
+                value="no" 
+                checked={!optOutPromo} 
+                onChange={handleOptOutPromo} 
+            />
+            No
+        </label>
+    </div>
+</div>
                   </div>
+                  <div className="message-container">
+                    {message}
+                </div>
   
                   <div className='profile-footer'>
-                  <button 
-                        className='profile-footer-button' 
-                        onClick={handleOptOutPromo}
-                    >
-                        {optOutPromo ? "Opt-In Promo" : "Opt-Out Promo"}
-                    </button>
+                  
                       <button className='profile-footer-button' onClick={() => navigate("/")}>Home Page</button>
                    </div>
             </div>

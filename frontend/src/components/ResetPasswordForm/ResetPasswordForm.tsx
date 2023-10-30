@@ -30,7 +30,8 @@ const ResetPasswordForm: React.FC = () => {
     <div className="centerContainer">
       <div className="modalContent">
         <h2>Reset Password</h2>
-        {feedbackMessage && <p>{feedbackMessage}</p>}
+        {feedbackMessage && <p className="feedback-message">{feedbackMessage}</p>}
+
         <form onSubmit={handleSubmit}>
           <input
             type="email"

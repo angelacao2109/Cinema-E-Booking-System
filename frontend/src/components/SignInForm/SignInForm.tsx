@@ -3,7 +3,13 @@ import axios from "axios";
 import "./SignInForm.css";
 import { useNavigate } from "react-router-dom";
 
-const SignInForm: React.FC<{ setIsLoggedIn: (value: boolean) => void; onSuccessfulLogin: (email: string) => void; }> = ({ setIsLoggedIn, onSuccessfulLogin }) => {
+type SignInFormProps = {
+  setIsLoggedIn: (value: boolean) => void;
+  onSuccessfulLogin: (email: string) => void;
+  refetchMovies: () => void;
+};
+
+const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogin, refetchMovies }) => {
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +33,7 @@ const SignInForm: React.FC<{ setIsLoggedIn: (value: boolean) => void; onSuccessf
         setFeedbackMessage("Successfully signed in.");
         setIsLoggedIn(true);
         onSuccessfulLogin(email); 
+        refetchMovies(); 
         navigate("/"); 
 
       } else {

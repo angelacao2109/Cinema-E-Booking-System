@@ -80,8 +80,9 @@ public class SecurityConfig  {
 //                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).formLogin(form -> form.disable());
 //        http.authorizeHttpRequests(request -> request.requestMatchers("/api/**")
 //                .permitAll().anyRequest().authenticated()); // IF APi/** permit all ELSE authorized only
-        http.authorizeHttpRequests(req -> req.requestMatchers("/api/auth/*").permitAll()
-                .requestMatchers("/api/**").authenticated());
+        http.authorizeHttpRequests(req -> req
+            .requestMatchers("/api/auth/*", "/api/user/reset-password-email", "/api/user/reset-password").permitAll()
+            .requestMatchers("/api/**").authenticated());
 
         http.exceptionHandling(auth -> auth.authenticationEntryPoint(unauthorizedAuthEntry))
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -89,6 +90,5 @@ public class SecurityConfig  {
             .authenticationProvider(authenticationProvider());
         return http.build();
     }
-
 
 }

@@ -51,7 +51,14 @@ function App() {
   }, []);
   
   const [loggedInUserEmail, setLoggedInUserEmail] = useState<string | null>(null);
+  
+  const [shouldRefetch, setShouldRefetch] = useState(false);
 
+  const refetchMovies = () => {
+    setShouldRefetch(prevState => !prevState);
+  };
+  
+  
     return (
       <Router>
         <div>
@@ -73,7 +80,9 @@ function App() {
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/register" element={<Registration />} />
    
-          <Route path="/signin" element={<SignIn setIsLoggedIn={setIsLoggedIn} onSuccessfulLogin={setLoggedInUserEmail} />} />
+          <Route path="/signin" element={<SignIn setIsLoggedIn={setIsLoggedIn} onSuccessfulLogin={setLoggedInUserEmail} refetchMovies={refetchMovies} />} />
+
+
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/forgot-password" element={<ResetPasswordForm />} />
           <Route path="/change-password" element={<ResetPasswordPostLink />} />  

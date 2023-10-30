@@ -142,15 +142,15 @@ public class UserService {
         }
     }
 
-    public void resetSetUpUserPassword(User user, String siteURL) throws UnsupportedEncodingException, MessagingException {
+    public void resetSetUpUserPassword(User user) throws UnsupportedEncodingException, MessagingException {
 
         String resetToken = generateResetToken(); //make the token
         savePasswordResetToken(user,resetToken, Duration.ofHours(1)); //save the token in the database with the user
-        sendPasswordResetEmail(user, siteURL, resetToken); //send the reset link to them
+        sendPasswordResetEmail(user, resetToken); //send the reset link to them
 
 
     }
-    private void sendPasswordResetEmail(User user, String siteURL, String resetToken) throws MessagingException, UnsupportedEncodingException {
+    private void sendPasswordResetEmail(User user, String resetToken) throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
         String fromAddress = "cinema.ebooking.movies.us@gmail.com";
         String senderName = "Cinema Ebooking";

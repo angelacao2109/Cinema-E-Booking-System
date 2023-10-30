@@ -55,14 +55,14 @@ public class UserController {
                 .map(item -> item.getAuthority()).toList();
         return ResponseEntity.ok().body(new userResponse(user.getId(), user.getEmail(),roles));
     }
-
+    
     @PostMapping("/reset-password-email")
-    public ResponseEntity<String> sendResetEmail(HttpServletRequest request, @RequestParam("email") String userEmail) throws UnsupportedEncodingException, MessagingException { //need to change thse parameters
+    public ResponseEntity<String> sendResetEmail(@RequestParam("email") String userEmail) throws UnsupportedEncodingException, MessagingException { //need to change thse parameters
         User user = userRepository.findByEmail(userEmail).orElse(null);
         if (user == null) {
             return ResponseEntity.ok("Password reset unsucessful because user not found.");
         }
-        userService.resetSetUpUserPassword(user, getSiteURL(request));
+        userService.resetSetUpUserPassword(user);
 
 
         return ResponseEntity.ok("Password reset successfully.");
