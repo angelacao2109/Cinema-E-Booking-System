@@ -127,13 +127,15 @@ public class UserService {
     public boolean verify(String verificationCode) {
         User user = userRepository.findByVerificationCode(verificationCode);
         System.out.println(verificationCode);
-        if (user == null || user.isEnabled()) {
+        if(user == null) {
             System.out.println("User Not Found");
-            System.out.println(user);
-            return false;
+        }
+        if (user.isAccountNonLocked()) {
+            System.out.println("User Not Found");
+            return true;
         } else {
             System.out.println("Verified");
-            user.setVerificationCode(null);
+//            user.setVerificationCode(null);
             user.setEnabled(true);
             userRepository.save(user);
             return true;
