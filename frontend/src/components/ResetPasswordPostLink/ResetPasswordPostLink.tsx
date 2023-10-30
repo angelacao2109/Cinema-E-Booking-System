@@ -24,9 +24,9 @@ const ResetPasswordPostLink: React.FC = () => {
       const response = await axios.post(
         "http://localhost:8080/api/user/reset-password?token="+token,
         {
-          "newPassword":password,
+          password
         })
-      if (response.data.success) {
+      if (response.status==200) {
         setFeedbackMessage("Password changed successfully.");
       } else {
         setFeedbackMessage("Error changing password. Please try again.");

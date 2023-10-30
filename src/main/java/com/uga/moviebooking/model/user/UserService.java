@@ -238,7 +238,6 @@ public class UserService {
 
     public boolean updatePassword(String email, String currentPassword, String newPassword) {
         Optional<User> userBox = userRepository.findByEmail(email);
-
         if (userBox.isPresent()) {
             User user = userBox.get();
 

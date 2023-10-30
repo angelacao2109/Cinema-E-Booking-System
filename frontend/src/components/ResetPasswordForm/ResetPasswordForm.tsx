@@ -12,7 +12,7 @@ const ResetPasswordForm: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.post("http://localhost:8080/api/user/reset-password-email?email="+email);
-      if (response.data.success) {
+      if (response.status == 200) {
         setFeedbackMessage("Reset link sent to your email.");
       } else {
         setFeedbackMessage("Error sending reset link. Please try again.");

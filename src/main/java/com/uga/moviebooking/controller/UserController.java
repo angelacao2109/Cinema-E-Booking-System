@@ -1,5 +1,6 @@
 package com.uga.moviebooking.controller;
 
+import com.uga.moviebooking.model.dto.PasswordDto;
 import com.uga.moviebooking.model.dto.PaymentAddressDto;
 import com.uga.moviebooking.model.dto.PaymentCardDto;
 import com.uga.moviebooking.model.dto.PromotionDto;
@@ -11,6 +12,7 @@ import com.uga.moviebooking.model.user.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.jose4j.json.internal.json_simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,22 +85,20 @@ public class UserController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam("token") String token, @RequestBody  String newPassword){
+    public ResponseEntity<String> resetPassword(@RequestParam("token") String token, @RequestBody PasswordDto passwordDto) {
         User resetUser = userRepository.findByPasswordResetToken(token);
-
+        System.out.println("Got Here!!!!!!!");
         if(resetUser == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token has expired.");
         }
-
-        resetUser.setPassword(passwordEncoder.encode(newPassword));
-
+        System.out.println(passwordDto.getPassword());
+    resetUser.setPassword(passwordEncoder.encode(passwordDto.getPassword()));
+    
         resetUser.setPasswordResetToken(null);
         resetUser.setResetTokenExpiry(null);
         userRepository.save(resetUser);
 
         return ResponseEntity.ok("Password reset successfully.");
-
-
     }
 
 
