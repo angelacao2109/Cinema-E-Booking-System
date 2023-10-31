@@ -20,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +34,16 @@ public class LoginController {
     private final UserRepository userRepository;
     private final UserService userService;
     private final JWTUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public LoginController(AuthenticationManager authenticationManager, UserRepository userRepository, JWTUtil jwtUtil, UserService userService) {
+    public LoginController(AuthenticationManager authenticationManager, UserRepository userRepository, JWTUtil jwtUtil, UserService userService, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.userService = userService;
         this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
@@ -65,7 +68,9 @@ public class LoginController {
         }
         User user = new User(register);
         if(register.getPaymentCard() != null) {
+
             PaymentCard card = new PaymentCard(register.getPaymentCard());
+            card.setCardNumber(passwordEncoder.encode(card.getCardNumber()));
             user.getPaymentCards().add(card);
         }
         if(register.getPaymentAddress() != null) {

@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -82,7 +83,7 @@ public class SecurityConfig  {
 //                .permitAll().anyRequest().authenticated()); // IF APi/** permit all ELSE authorized only
         http.authorizeHttpRequests(req -> req
             .requestMatchers("/api/auth/*", "/api/user/reset-password-email", "/api/user/reset-password").permitAll()
-            .requestMatchers("/api/**").authenticated());
+            .requestMatchers(HttpMethod.GET,"/api/movie/**").permitAll().requestMatchers("/api/**").authenticated());
 
         http.exceptionHandling(auth -> auth.authenticationEntryPoint(unauthorizedAuthEntry))
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -90,5 +91,6 @@ public class SecurityConfig  {
             .authenticationProvider(authenticationProvider());
         return http.build();
     }
+
 
 }

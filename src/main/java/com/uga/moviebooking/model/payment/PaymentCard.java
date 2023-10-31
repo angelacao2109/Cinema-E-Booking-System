@@ -2,7 +2,9 @@ package com.uga.moviebooking.model.payment;
 
 import com.uga.moviebooking.model.dto.PaymentCardDto;
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 public class PaymentCard {
     public PaymentCard(PaymentCardDto card) {
