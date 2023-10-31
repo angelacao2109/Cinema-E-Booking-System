@@ -152,17 +152,27 @@ public class UserController {
 
     }
     //
-    @PostMapping("/profile/update-card-info")
-public ResponseEntity<String> updateCardInfo(@AuthenticationPrincipal String userEmail,
-        @RequestBody PaymentCardDto cardInfoDto) {
-    if (userService.updateCardInfo(userEmail, cardInfoDto)) {
-        return ResponseEntity.ok("Card information updated successfully");
-    } else {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Card information update failed.");
+    @PostMapping("/profile/card")
+    public ResponseEntity<String> addCard(@AuthenticationPrincipal String userEmail,
+            @RequestBody PaymentCardDto cardInfoDto) {
+        if (userService.addCard(userEmail, cardInfoDto)) {
+            return ResponseEntity.ok("Card information added successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Card information update failed.");
+        }
     }
-}
 
+    @DeleteMapping("/profile/card")
+    public ResponseEntity<String> removeCard(@AuthenticationPrincipal String userEmail,
+                                                 @RequestBody PaymentCardDto cardInfoDto) {
+        if (userService.removeCard(userEmail, cardInfoDto)) {
+            return ResponseEntity.ok("Card information removed successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Card information update failed.");
+        }
+    }
 
 }
 

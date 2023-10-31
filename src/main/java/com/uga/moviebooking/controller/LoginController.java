@@ -67,17 +67,13 @@ public class LoginController {
             return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }
         User user = new User(register);
+        long id = userService.registerUser(user, getSiteURL(request));
         if(register.getPaymentCard() != null) {
-
-            PaymentCard card = new PaymentCard(register.getPaymentCard());
-            card.setCardNumber(passwordEncoder.encode(card.getCardNumber()));
-            user.getPaymentCards().add(card);
+            userService.addCard(register.getEmail(), register.getPaymentCard());
         }
         if(register.getPaymentAddress() != null) {
-            PaymentAddress address = new PaymentAddress(register.getPaymentAddress());
-            user.setPaymentAddress(address);
+            userService.updatePaymentAddress(register.getEmail(),register.getPaymentAddress());
         }
-        long id = userService.registerUser(user, getSiteURL(request));
         return new ResponseEntity<>("User id " + id + " successfully registered",HttpStatus.OK);
     }
 

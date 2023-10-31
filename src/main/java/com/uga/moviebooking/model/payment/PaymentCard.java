@@ -27,7 +27,7 @@ public class PaymentCard {
     @Column(nullable = false)
     private String lastname;
 
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false)
     private String cardNumber;
 
     @Column(nullable = false, length = 3)

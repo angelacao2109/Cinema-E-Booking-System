@@ -203,13 +203,11 @@ public class UserService {
     }
 
     public boolean updateProfile(Long Id, UserDto userDto){
-        Optional<User> userProfileBox = userRepository.findById(Id);
-
-        if(userProfileBox.isPresent()){
-            User user = userProfileBox.get();
+        User user = userRepository.findById(Id).orElse(null);
+        if(user == null)
+            return false;
             if(!user.getFirstname().equals(userDto.getFirstname())){
                user.setFirstname(userDto.getFirstname());
-
             }
 
             if(!user.getLastname().equals(userDto.getLastname())){
@@ -228,12 +226,8 @@ public class UserService {
             if (updatedPaymentCards != null) {
                 user.setPaymentCards(updatedPaymentCards);
             }
-
-
            userRepository.save(user);
             return true;
-        }
-        return false;
     }
 
     public boolean updatePassword(String email, String currentPassword, String newPassword) {
@@ -256,28 +250,23 @@ public class UserService {
     }
 
     public boolean updatePaymentAddress(String email, PaymentAddressDto updatedAddressDto) {
-        Optional<User> userBox = userRepository.findByEmail(email);
-
-        if (userBox.isPresent()) {
-            User user = userBox.get();
-
-            PaymentAddress updatedAddress = new PaymentAddress(updatedAddressDto);
-            user.setPaymentAddress(updatedAddress);
-
-            userRepository.save(user);
-            return true;
-        }
-        return false;
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null)
+            return false;
+        PaymentAddress updatedAddress = new PaymentAddress(updatedAddressDto);
+        user.setPaymentAddress(updatedAddress);
+        userRepository.save(user);
+        return true;
     }
 
     public boolean isTaken(String email) {
         return userRepository.existsByEmail(email);
     }
 //
-public boolean updateCardInfo(String userEmail, PaymentCardDto cardInfoDto) {
-    Optional<User> userOptional = userRepository.findByEmail(userEmail);
-    if (userOptional.isPresent()) {
-        User user = userOptional.get();
+    public boolean updateCardInfo(String userEmail, PaymentCardDto cardInfoDto) {
+        User user = userRepository.findByEmail(userEmail).orElse(null);
+        if (user == null)
+            return false;
 
         // Convert the DTO to the entity
         PaymentCard card = new PaymentCard(cardInfoDto);
@@ -288,14 +277,40 @@ public boolean updateCardInfo(String userEmail, PaymentCardDto cardInfoDto) {
             existingCards = new HashSet<>();
             user.setPaymentCards(existingCards);
         }
-        existingCards.clear(); 
-        existingCards.add(card); 
+        existingCards.clear();
+        existingCards.add(card);
 
         userRepository.save(user);
         return true;
     }
-    return false;
-}
+
+    public boolean addCard(String userEmail, PaymentCardDto cardInfoDto) {
+        User user = userRepository.findByEmail(userEmail).orElse(null);
+        if (user == null)
+            return false;
+
+        if(user.getPaymentCards().size() >= 3)
+            return false;
+        PaymentCard card = new PaymentCard(cardInfoDto);
+        String lastFour = card.getCardNumber().substring(12);
+        card.setCardNumber(lastFour + ":" + passwordEncoder.encode(card.getCardNumber()));
+
+        user.getPaymentCards().add(card);
+        userRepository.save(user);
+        return true;
+    }
+
+    public boolean removeCard(String userEmail, PaymentCardDto cardInfoDto) {
+        User user = userRepository.findByEmail(userEmail).orElse(null);
+        if (user == null)
+            return false;
+        PaymentCard card = new PaymentCard(cardInfoDto);
+        if (user.getPaymentCards().remove(card)) {
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
 
 
 }
