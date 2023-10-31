@@ -12,6 +12,21 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     expDate: string;
     CVV: string;
 }
+
+const [cards, setCards] = useState<Card[]>([
+  { firstname: '', lastname: '', cardNumber: '', expDate: '', CVV: '' }
+]);
+
+const addCard = () => {
+  setCards([...cards, { firstname: '', lastname: '', cardNumber: '', expDate: '', CVV: '' }]);
+}
+
+const deleteCard = (index: number) => {
+  const newCards = [...cards];
+  newCards.splice(index, 1);
+  setCards(newCards);
+};
+
   const authToken = document.cookie
     .split("; ")
     .find((row) => row.startsWith("authToken="))
@@ -139,7 +154,7 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
   };
   const updateCardInfo = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/user/profile/update-card-info', cardInfo,
+      const response = await axios.post('http://localhost:8080/api/user/profile/update-card-info', { cards },
         {
           headers: {
             'Authorization': authToken,
@@ -267,60 +282,104 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
           </div>
         </div>
 
+      
 
         <div className='profile-form-items'>
-          <div className="section-title">Change Card Information</div>
-          <div className="form-section">
+    <div className="section-title">Change Card Information</div>
+    {cards.map((card, index) => (
+        <div key={index} style={{border: '1px solid #ccc', padding: '10px', position: 'relative', marginBottom: '10px'}}>
+            {/* First Name */}
             <div className="input-group">
-              <label className="profile-form-label">First Name</label>
-              <input
-                className="profile-form-input"
-                type='text'
-                value={cardInfo.firstName}
-                onChange={(e) => setCardInfo(prev => ({ ...prev, firstName: e.target.value }))}
-              />
-            </div>
-            <div className="input-group">
-              <label className="profile-form-label">Last Name</label>
-              <input
-                className="profile-form-input"
-                type='text'
-                value={cardInfo.lastName}
-                onChange={(e) => setCardInfo(prev => ({ ...prev, lastName: e.target.value }))}
-              />
-            </div>
-            <div className="input-group">
-              <label className="profile-form-label">Card Number</label>
-              <input
-                className="profile-form-input"
-                type='text'
-                value={cardInfo.cardNumber}
-                onChange={(e) => setCardInfo(prev => ({ ...prev, cardNumber: e.target.value }))}
-              />
-            </div>
-            <div className="input-group">
-              <label className="profile-form-label">Expiration Date</label>
-              <input
-                className="profile-form-input"
-                type='month'
-                value={cardInfo.expDate}
-                onChange={(e) => setCardInfo(prev => ({ ...prev, expDate: e.target.value }))}
-              />
-            </div>
-            <div className="input-group">
-              <label className="profile-form-label">CVV</label>
-              <input
-                className="profile-form-input"
-                type='text'
-                value={cardInfo.cvv}
-                onChange={(e) => setCardInfo(prev => ({ ...prev, cvv: e.target.value }))}
-              />
+                <label className="profile-form-label">First Name</label>
+                <input
+                    className="profile-form-input"
+                    type='text'
+                    value={card.firstname}
+                    placeholder="First Name"
+                    onChange={(e) => {
+                        const newCards = [...cards];
+                        newCards[index].firstname = e.target.value;
+                        setCards(newCards);
+                    }}
+                />
             </div>
 
-            <div className="form-section-button">
-              <button className='save-button' onClick={updateCardInfo}>SAVE</button></div>
-          </div>
-          <div className='profile-form-items'>
+            {/* Last Name */}
+            <div className="input-group">
+                <label className="profile-form-label">Last Name</label>
+                <input
+                    className="profile-form-input"
+                    type='text'
+                    value={card.lastname}
+                    placeholder="Last Name"
+                    onChange={(e) => {
+                        const newCards = [...cards];
+                        newCards[index].lastname = e.target.value;
+                        setCards(newCards);
+                    }}
+                />
+            </div>
+
+            {/* Card Number */}
+            <div className="input-group">
+                <label className="profile-form-label">Card Number</label>
+                <input
+                    className="profile-form-input"
+                    type='text'
+                    value={card.cardNumber}
+                    placeholder="Card Number"
+                    onChange={(e) => {
+                        const newCards = [...cards];
+                        newCards[index].cardNumber = e.target.value;
+                        setCards(newCards);
+                    }}
+                />
+            </div>
+
+            {/* Expiration Date */}
+            <div className="input-group">
+                <label className="profile-form-label">Expiration Date</label>
+                <input
+                    className="profile-form-input"
+                    type='month'
+                    value={card.expDate}
+                    placeholder="Expiration Date"
+                    onChange={(e) => {
+                        const newCards = [...cards];
+                        newCards[index].expDate = e.target.value;
+                        setCards(newCards);
+                    }}
+                />
+            </div>
+
+            {/* CVV */}
+            <div className="input-group">
+                <label className="profile-form-label">CVV</label>
+                <input
+                    className="profile-form-input"
+                    type='text'
+                    value={card.CVV}
+                    placeholder="CVV"
+                    onChange={(e) => {
+                      const newCards = [...cards];
+                      newCards[index].CVV = e.target.value;
+                      setCards(newCards);
+                  }}
+              />
+            </div>
+            <button className="delete-card-button" onClick={() => deleteCard(index)}>Delete Card</button>
+        </div>
+        
+    ))}
+
+    <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '10px'}}>
+        {cards.length < 3 && <button onClick={addCard}>Add Card</button>}
+        <button onClick={updateCardInfo}>Save Card Info</button>
+    </div>
+</div>
+
+
+<div className='profile-form-items'>
             <div className="section-title">Promo Preferences</div>
             <div className="input-group">
               <label className="profile-form-label">Opt-In Promo:</label>
@@ -346,19 +405,17 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
               </label>
             </div>
           </div>
-        </div>
+
         <div className="message-container">
           {message}
         </div>
 
         <div className='profile-footer'>
-
           <button className='profile-footer-button' onClick={() => navigate("/")}>Home Page</button>
         </div>
       </div>
     </>
   );
 }
-
 
 export default EditProfile;
