@@ -1,6 +1,8 @@
 package com.uga.moviebooking.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.uga.moviebooking.model.dto.PaymentAddressDto;
+import com.uga.moviebooking.model.dto.PaymentCardDto;
 import com.uga.moviebooking.model.dto.RegisterDto;
 import com.uga.moviebooking.model.dto.UserDto;
 import com.uga.moviebooking.model.payment.PaymentAddress;
@@ -32,6 +34,14 @@ public class User implements UserDetails {
         this.enabled = false;
         this.paymentCards = new HashSet<>();
     }
+
+    public Profile getProfile() {
+        PaymentAddressDto address = new PaymentAddressDto(this.paymentAddress);
+         return new Profile(this.firstname, this.lastname, this.email, this.phoneNumber, this.promotionEnrolled,
+                this.paymentCards, address);
+    }
+    private record Profile(String firstName, String lastName, String email, String phoneNumber, boolean promotionEnrolled,
+                           Set<PaymentCard> paymentCards, PaymentAddressDto paymentAddress){};
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // auto-incrementing id value

@@ -109,14 +109,12 @@ public class UserController {
    // DONE: GET /api/profile (returns profile fields)
 
     @GetMapping("/profile")
-    public ResponseEntity<User> getProfile(@AuthenticationPrincipal String userEmail){
-        Optional<User> profileBox = userRepository.findByEmail(userEmail);
-        if(profileBox.isPresent()){
-            User profile = profileBox.get();
-            return ResponseEntity.ok(profile);
-        }else{
+    public ResponseEntity<?> getProfile(@AuthenticationPrincipal String userEmail){
+        User user = userRepository.findByEmail(userEmail).orElse(null);
+
+        if(user == null)
             return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(user.getProfile());
     }
 
     //DONE: POST /api/profile/update (takes in profile fields to update user account)
