@@ -7,6 +7,7 @@ type SignInFormProps = {
   setIsLoggedIn: (value: boolean) => void;
   onSuccessfulLogin: (email: string) => void;
   refetchMovies: () => void;
+  setIsAdmin: (isAdmin: boolean) => void;
 };
 
 const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogin, refetchMovies }) => {
@@ -16,6 +17,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,7 +37,10 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
         onSuccessfulLogin(email); 
         refetchMovies(); 
         navigate("/"); 
-
+        if (email === "admin@admin.com" && password === "password") {
+          setIsAdmin(true);
+       }
+       
       } else {
         setFeedbackMessage("Error signing in. Please check your credentials and try again.");
     }

@@ -158,3 +158,12 @@
 .form a:hover {
     color: #850717;
 }
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    padding: 10px;
+    border: 1px solid red;
+    margin-bottom: 20px;
+  }
+  
