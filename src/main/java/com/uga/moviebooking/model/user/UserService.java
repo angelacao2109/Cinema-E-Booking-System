@@ -202,32 +202,22 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean updateProfile(Long Id, UserDto userDto){
-        User user = userRepository.findById(Id).orElse(null);
+    //Only handles stuff like phone number,
+    public boolean updateProfile(String email, UserDto userDto){
+        User user = userRepository.findByEmail(email).orElse(null);
         if(user == null)
             return false;
-            if(!user.getFirstname().equals(userDto.getFirstname())){
-               user.setFirstname(userDto.getFirstname());
-            }
-
-            if(!user.getLastname().equals(userDto.getLastname())){
-               user.setLastname(userDto.getLastname());
-            }
-
-           /*if(!user.getEmail().equals(userDto.getEmail())){
-                user.setEmail(userDto.getEmail());
-            } Not sure if needed bc users arent allowed to edit their emails*/
-
-            if(!user.getPhoneNumber().equals(userDto.getPhoneNumber())){
-                user.setPhoneNumber(userDto.getPhoneNumber());
-            }
-            // Update payment card information
-            Set<PaymentCard> updatedPaymentCards = userDto.getPaymentCards();
-            if (updatedPaymentCards != null) {
-                user.setPaymentCards(updatedPaymentCards);
-            }
-           userRepository.save(user);
-            return true;
+        if(!user.getFirstname().equals(userDto.getFirstname())){
+           user.setFirstname(userDto.getFirstname());
+        }
+        if(!user.getLastname().equals(userDto.getLastname())){
+           user.setLastname(userDto.getLastname());
+        }
+        if(!user.getPhoneNumber().equals(userDto.getPhoneNumber())){
+            user.setPhoneNumber(userDto.getPhoneNumber());
+        }
+        userRepository.save(user);
+        return true;
     }
 
     public boolean updatePassword(String email, String currentPassword, String newPassword) {
@@ -311,6 +301,5 @@ public class UserService {
         }
         return false;
     }
-
 
 }

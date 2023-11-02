@@ -42,7 +42,7 @@ public class MovieController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<String> addMovie(@RequestBody MovieDto mov) {
         long id = movieService.createMovie(mov).getId();
         return ResponseEntity.ok("Movie ID " + id + " Created!");
@@ -51,7 +51,7 @@ public class MovieController {
     //Needed delete
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/delete")
+    @DeleteMapping()
     public ResponseEntity<String> deleteMovie(@RequestBody long id) {
         String title = movieService.deleteMovie(id);
         if(title != null){
