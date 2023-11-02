@@ -26,11 +26,12 @@ type NavBarProps = {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onSearchResultsChange: (results: Movie[]) => void;
+  isAdmin: boolean; 
 };
 
 
-function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchChange, onSearchResultsChange }: NavBarProps) {
-  
+function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchChange, onSearchResultsChange, isAdmin }: NavBarProps) {
+
   const navigate = useNavigate();
 
   const [rememberMe, setRememberMe] = useState(false);
@@ -103,10 +104,13 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
           Movies Coming Soon
         </Link>
         {isLoggedIn ? (
-                    <>
-        <Link to="/admin" className="link">
-          Admin
-        </Link>
+        isAdmin ? (
+          <>
+      <Link to="/admin" className="link">Admin</Link>
+    </>
+  ) : (
+    <>
+        
         <Link to="/edit-profile" className="link">
           Edit Profile
         </Link>
@@ -125,6 +129,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
         <button className="logoutButton" onClick={handleLogout}>Logout</button>
 </div>
         </>
+  )
          ) : (
           
         <div className="accountSection">

@@ -5,6 +5,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 function Registration() {
+ 
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
@@ -24,11 +26,22 @@ function Registration() {
     subscribeOffers: false,
     agreeTerms: false,
   });
+
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setErrorMessage(""); // Clear any previous error messages
+  
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.phone) {
+      console.log("Missing required fields"); // Debugging log
+      setErrorMessage("Please fill in all required fields.");
+      return;
+    }
+    
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      console.log("Passwords mismatch"); // Debugging log
+      setErrorMessage("Passwords do not match!");
       return;
     }
 
@@ -116,6 +129,8 @@ function Registration() {
   };
 
   return (
+    <div className="registration-container">
+    {errorMessage && <div className="error-message">{errorMessage}</div>} 
     <form onSubmit={handleSubmit}>
       <div className="form">
         <div className="header">Registration for Club Access!</div>
@@ -384,6 +399,7 @@ function Registration() {
         </div>
       </div>
     </form>
+    </div>
   );
 }
 

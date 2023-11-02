@@ -57,7 +57,15 @@ function App() {
   const refetchMovies = () => {
     setShouldRefetch(prevState => !prevState);
   };
-  
+
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const foundEmail = document.cookie.split("; ").find((row) => row.startsWith("userEmail="))?.split("=")[1];
+    setUserEmail(foundEmail ?? null);
+}, [isLoggedIn]);
   
     return (
       <Router>
@@ -69,6 +77,7 @@ function App() {
   searchQuery={searchQuery} 
   onSearchChange={setSearchQuery}
   onSearchResultsChange={setSearchResults}
+  isAdmin={userEmail === "admin@admin.com"} 
 />
 
          
@@ -80,7 +89,7 @@ function App() {
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/register" element={<Registration />} />
    
-          <Route path="/signin" element={<SignIn setIsLoggedIn={setIsLoggedIn} onSuccessfulLogin={setLoggedInUserEmail} refetchMovies={refetchMovies} />} />
+          <Route path="/signin" element={<SignIn setIsAdmin={setIsAdmin} setIsLoggedIn={setIsLoggedIn} onSuccessfulLogin={setLoggedInUserEmail} refetchMovies={refetchMovies} />} />
 
 
           <Route path="/verify-email" element={<VerifyEmail />} />

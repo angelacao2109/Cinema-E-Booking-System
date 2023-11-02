@@ -34,7 +34,7 @@ public class MovieBookingApplication implements CommandLineRunner{
 		admin.setFirstname("Admin");
 		admin.setLastname("Account");
 		admin.setPhoneNumber("4040000000");
-		admin.setEmail("admin@gmail.com");
+		admin.setEmail("admin@admin.com");
 		admin.setPassword("password");
 		userService.registerAdmin(admin);
 	}

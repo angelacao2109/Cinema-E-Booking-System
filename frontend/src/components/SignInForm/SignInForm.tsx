@@ -7,6 +7,7 @@ type SignInFormProps = {
   setIsLoggedIn: (value: boolean) => void;
   onSuccessfulLogin: (email: string) => void;
   refetchMovies: () => void;
+  setIsAdmin: (isAdmin: boolean) => void;
 };
 
 const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogin, refetchMovies }) => {
@@ -16,6 +17,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,9 +35,17 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
         setFeedbackMessage("Successfully signed in.");
         setIsLoggedIn(true);
         onSuccessfulLogin(email); 
+        const admin_response = await axios.get('http://localhost:8080/api/user',          
+          {headers: {
+            'Authorization': token
+        }});
+        if (response.status == 200){
+          if (admin_response.data.roles == "Admin"){
+            setIsAdmin(true)
+          }
+        }
         refetchMovies(); 
         navigate("/"); 
-
       } else {
         setFeedbackMessage("Error signing in. Please check your credentials and try again.");
     }
@@ -45,9 +55,12 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
         case 401:
           setFeedbackMessage("Wrong password or email.");
           break;
-        case 404:
-          setFeedbackMessage("User does not exist.");
-          break;
+          case 409:
+            setFeedbackMessage("Account not verified. Please verify your email before logging in.");
+            break;
+            case 404:
+              setFeedbackMessage("User does not exist.");
+              break;
         default:
           setFeedbackMessage("Error signing in. Please try again.");
       }
