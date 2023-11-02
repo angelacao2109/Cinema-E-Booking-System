@@ -17,4 +17,8 @@ public class PaymentAddressDto {
         this.zipCode = address.getZipCode();
 
     }
+
+    public PaymentAddressDto() {
+
+    }
 }
