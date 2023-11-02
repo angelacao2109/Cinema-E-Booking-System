@@ -107,6 +107,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
         isAdmin ? (
           <>
       <Link to="/admin" className="link">Admin</Link>
+      <button className="logoutButton" onClick={handleLogout}> Logout</button>
     </>
   ) : (
     <>
@@ -127,6 +128,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
         </div>
         
         <button className="logoutButton" onClick={handleLogout}>Logout</button>
+       
 </div>
         </>
   )
