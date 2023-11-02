@@ -150,7 +150,7 @@ public class UserController {
 
     }
     //
-    @PostMapping("/profile/card")
+    @PostMapping("/profile/card/add")
     public ResponseEntity<String> addCard(@AuthenticationPrincipal String userEmail,
             @RequestBody PaymentCardDto cardInfoDto) {
         if (userService.addCard(userEmail, cardInfoDto)) {
@@ -161,7 +161,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/profile/card")
+    @DeleteMapping("/profile/card/delete")
     public ResponseEntity<String> removeCard(@AuthenticationPrincipal String userEmail,
                                                  @RequestBody PaymentCardDto cardInfoDto) {
         if (userService.removeCard(userEmail, cardInfoDto)) {

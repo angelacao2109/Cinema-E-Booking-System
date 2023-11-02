@@ -35,12 +35,17 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
         setFeedbackMessage("Successfully signed in.");
         setIsLoggedIn(true);
         onSuccessfulLogin(email); 
+        const admin_response = await axios.get('http://localhost:8080/api/user',          
+          {headers: {
+            'Authorization': token
+        }});
+        if (response.status == 200){
+          if (admin_response.data.roles == "Admin"){
+            setIsAdmin(true)
+          }
+        }
         refetchMovies(); 
         navigate("/"); 
-        if (email === "admin@admin.com" && password === "password") {
-          setIsAdmin(true);
-       }
-       
       } else {
         setFeedbackMessage("Error signing in. Please check your credentials and try again.");
     }
@@ -50,9 +55,12 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
         case 401:
           setFeedbackMessage("Wrong password or email.");
           break;
-        case 404:
-          setFeedbackMessage("User does not exist.");
-          break;
+          case 409:
+            setFeedbackMessage("Account not verified. Please verify your email before logging in.");
+            break;
+            case 404:
+              setFeedbackMessage("User does not exist.");
+              break;
         default:
           setFeedbackMessage("Error signing in. Please try again.");
       }

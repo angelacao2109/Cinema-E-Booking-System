@@ -18,7 +18,7 @@ import java.util.Optional;
 public class AdminController {
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
 
-    //add new administartors
+    //add new administrators
     RoleRepository roleRepository;
     UserRepository userRepository;
     UserService userService;
