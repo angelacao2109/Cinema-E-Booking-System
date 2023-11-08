@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, Routes, Route } from "react-router-dom";
+import { Outlet, Routes, Route, useNavigate, } from "react-router-dom";
 import { Nav, NavLink, Bars, NavMenu, NavBtn } from "./AdminNavElements";
 
 import EditMovies from "../EditMovies/EditMovies";
@@ -12,8 +12,18 @@ const navLinks = [
   { to: "/admin/editpromo", label: "Promotions" },
   { to: "/admin/edituser", label: "Users" },
 ];
-
 const AdminNavBar = () => {
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  const handleLogout = () => {
+  
+    navigate('/login'); 
+  };
+
   return (
     <>
       <Nav>
@@ -24,9 +34,13 @@ const AdminNavBar = () => {
               {link.label}
             </NavLink>
           ))}
+          
         </NavMenu>
         <NavBtn>
+        <button onClick={handleBack}>Back</button>
+          
           <NavLink to="/admin/profile">Profile</NavLink>
+          <button onClick={handleLogout}>Logout</button>
         </NavBtn>
       </Nav>
       <Outlet />
