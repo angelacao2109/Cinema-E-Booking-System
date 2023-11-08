@@ -16,7 +16,7 @@ import EditProfile from "../EditProfile/EditProfile";
 import EditMovies from "../AdminPage/EditMovies/EditMovies.jsx";
 import EditPromo from "../AdminPage/EditPromo/EditPromo";
 import EditUser from "../AdminPage/EditUser/EditUser";
-import Dash from "../AdminPage/Dash/Dash";
+
 import { AdminNavBar, AdminRoutes } from "../AdminPage/AdminNav/AdminNavBar";
 import { Movie} from "../types";
 type NavBarProps = {
@@ -107,6 +107,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
         isAdmin ? (
           <>
       <Link to="/admin" className="link">Admin</Link>
+      <button className="logoutButton" onClick={handleLogout}> Logout</button>
     </>
   ) : (
     <>
@@ -127,6 +128,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
         </div>
         
         <button className="logoutButton" onClick={handleLogout}>Logout</button>
+       
 </div>
         </>
   )

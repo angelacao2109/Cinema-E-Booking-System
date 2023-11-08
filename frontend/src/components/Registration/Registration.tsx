@@ -45,28 +45,37 @@ function Registration() {
       return;
     }
 
+    const payload: any = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      phoneNumber: formData.phone,
+      promotionEnrolled: formData.subscribeOffers
+    };
+
+    if (formData.cardNumber || formData.nameOnCard || formData.expirationDate || formData.cvc) {
+      payload.paymentCard = {
+        firstName: formData.nameOnCard,
+        lastName: formData.nameOnCard,
+        expDate: formData.expirationDate,
+        cardNumber: formData.cardNumber,
+        cvv: formData.cvc
+      };
+    }
+
+    if (formData.address || formData.city || formData.state || formData.zipCode) {
+      payload.paymentAddress = {
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        zipCode: formData.zipCode
+      };
+    }
+
+
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/register", {
-        "firstName": formData.firstName, //REQUIRED!
-        "lastName": formData.lastName, //REQUIRED!
-        "email": formData.email, //REQUIRED!
-        "password": formData.password, //REQUIRED!
-        "phoneNumber": formData.phone, //REQUIRED!
-        "promotionEnrolled": formData.subscribeOffers,  //REQUIRED!
-        "paymentCard": { //OPTIONAL!
-            "firstName": formData.nameOnCard, //OPTIONAL!
-            "lastName": formData.nameOnCard, //OPTIONAL!
-            "expDate": formData.expirationDate, //OPTIONAL!
-            "cardNumber": formData.cardNumber, //OPTIONAL!
-            "cvv": formData.cvc //OPTIONAL!
-        },
-        "paymentAddress": {  //OPTIONAL!
-            "address": formData.address, //OPTIONAL!
-            "city": formData.city, //OPTIONAL!
-            "state": formData.state, //OPTIONAL!
-            "zipCode": formData.zipCode //OPTIONAL!
-        }
-    });
+      const response = await axios.post("http://localhost:8080/api/auth/register", payload);
       if (response.status === 200) {
         alert("Registration Successful");
         navigate("/signin");
@@ -76,7 +85,6 @@ function Registration() {
       alert("Error during registration. Please try again.");
     }
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({

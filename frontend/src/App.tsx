@@ -13,7 +13,6 @@ import SelectTicket from './components/SelectTicket/SelectTicket';
 import Checkout from './components/Checkout/Checkout';
 import Confirmation from './components/Confirmation/Confirmation';
 import OrderHistory from './components/OrderHistory/OrderHistory';
-import Dash from './components/AdminPage/Dash/Dash';
 import EditMovies from './components/AdminPage/EditMovies/EditMovies';
 import EditPromo from './components/AdminPage/EditPromo/EditPromo';
 import EditUser from './components/AdminPage/EditUser/EditUser';
