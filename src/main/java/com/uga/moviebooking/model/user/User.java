@@ -36,7 +36,9 @@ public class User implements UserDetails {
     }
 
     public Profile getProfile() {
-        PaymentAddressDto address = new PaymentAddressDto(this.paymentAddress);
+        PaymentAddressDto address = null;
+        if(this.paymentAddress != null)
+            address = new PaymentAddressDto(this.paymentAddress);
          return new Profile(this.firstname, this.lastname, this.email, this.phoneNumber, this.promotionEnrolled,
                 this.paymentCards, address);
     }

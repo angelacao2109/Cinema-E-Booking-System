@@ -11,6 +11,8 @@ public class PaymentAddressDto {
     private String zipCode;
 
     public PaymentAddressDto(PaymentAddress address) {
+        if(address == null)
+            return;
         this.address = address.getAddress();
         this.city = address.getCity();
         this.state = address.getState();
