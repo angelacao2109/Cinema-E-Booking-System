@@ -27,15 +27,20 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
   };
 
   const deleteCard = (index: number) => {
+    // Assuming you want to call the API to delete the card
+    const cardToDelete = cards[index];
+    removeCardInfo(cardToDelete); // Make sure this function is properly implemented to call your API
+
+    // Then update the state to remove the card from the UI
     const newCards = [...cards];
-    const newIsCardSaved = [...isCardSaved];
-
     newCards.splice(index, 1);
-    newIsCardSaved.splice(index, 1);
-
     setCards(newCards);
+
+    const newIsCardSaved = [...isCardSaved];
+    newIsCardSaved.splice(index, 1);
     setIsCardSaved(newIsCardSaved);
   };
+
 
   const authToken = document.cookie
     .split("; ")
@@ -62,6 +67,7 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     city: "",
     state: "",
     zipCode: "",
+    phoneNumber: "",
   });
 
   const [cardInfo, setCardInfo] = useState({
@@ -71,7 +77,6 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     expDate: "",
     cvv: "",
   });
-
   const [optOutPromo, setOptOutPromo] = useState(false);
 
   const handleOptOutPromo = () => {
@@ -79,11 +84,13 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
   };
   const [message, setMessage] = useState("");
 
+
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/user/profile?=${email}`,
+          `http://localhost:8080/api/user/profile?email=${email}`,
           {
             headers: {
               Authorization: authToken,
@@ -96,36 +103,39 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
 
         // Set personal information
         setPersonalInfo({
-          firstName: userData.firstname || "",
-          lastName: userData.lastname || "",
+          firstName: userData?.firstName || "",
+          lastName: userData?.lastName || "",
           address: userData.paymentAddress?.address || "",
           city: userData.paymentAddress?.city || "",
           state: userData.paymentAddress?.state || "",
           zipCode: userData.paymentAddress?.zipCode || "",
+          phoneNumber: userData?.phonenumber || "",
+
         });
 
-        const card = userData.paymentCards
-          ? (Array.from(userData.paymentCards)[0] as Card)
-          : null;
-        if (card) {
-          setCardInfo({
-            firstName: card.firstname,
-            lastName: card.lastname,
-            cardNumber: card.cardNumber,
-            expDate: card.expDate,
-            cvv: card.CVV,
-          });
-        }
+        // Set the cards from the response, only showing the first 4 digits of the card number
+        const fetchedCards = userData.paymentCards.map(card => ({
+          firstname: card.firstname,
+          lastname: card.lastname,
+          cardNumber: card.cardNumber.slice(0, 4), // only first 4 digits for display
+          expDate: card.expDate,
+          CVV: '' // For security reasons, we do not display CVV
+        }));
+        setCards(fetchedCards);
 
-        // Set promotion preference
-        setOptOutPromo(userData.promotionEnrolled);
+        // Initialize isCardSaved for the fetched cards
+        setIsCardSaved(fetchedCards.map(() => true));
+
+
+
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
     };
 
     fetchUserProfile();
-  }, []); // Empty dependency array ensures this useEffect runs only once when the component mounts
+  }, [email, authToken]); // Add email and authToken as dependencies if they are expected to change over time
+
 
   const updatePassword = async () => {
     try {
@@ -151,17 +161,25 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     }
   };
   const updatePersonalInfo = async () => {
+
     try {
-      const response = await axios.post(
-        `http://localhost:8080/api/user/profile/update-payment-address?email=${email}`,
-        personalInfo,
-        {
-          headers: {
-            Authorization: authToken,
-            "Content-Type": "application/json",
-            "Referrer-Policy": "unsafe_url",
-          },
+      const response = await axios.post(`http://localhost:8080/api/user/profile/update?email=${email}`, {
+        firstname: personalInfo.firstName,
+        lastname: personalInfo.lastName,
+        phoneNumber: personalInfo.phoneNumber,
+        paymentAddress: {
+          address: personalInfo.address,
+          city: personalInfo.city,
+          state: personalInfo.state,
+          zipCode: personalInfo.zipCode,
         }
+      }, {
+        headers: {
+          Authorization: authToken,
+          "Content-Type": "application/json",
+          "Referrer-Policy": "unsafe_url",
+        },
+      }
       );
       console.log(response.data);
       setMessage("Personal info updated successfully!");
@@ -193,6 +211,7 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
   }
 
   const saveCardInfo = async (index: number) => {
+    const cardData = index >= 0 ? cards[index] : cardInfo;
     const authToken = document.cookie
       .split("; ")
       .find((row) => row.startsWith("authToken="))
@@ -201,13 +220,17 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     try {
       const card = cards[index];
       const response = await axios.post(
-        "`http://localhost:8080/api/user/profile/card/add",
-        card,
+        "http://localhost:8080/api/user/profile/card/add",
+        {
+          cvv: card.CVV,
+          firstName: card.firstname,
+          lastName: card.lastname,
+          cardNumber: card.cardNumber,
+          expDate: card.expDate
+        },
         {
           headers: {
             Authorization: authToken,
-            "Content-Type": "application/json",
-            "Referrer-Policy": "unsafe_url",
           },
         }
       );
@@ -254,7 +277,7 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     }
   };
 
-  // Update your deleteCard function to use removeCard
+
 
   return (
     <>
@@ -403,6 +426,18 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
                 }
               />
             </div>
+            <div className="input-group">
+              <label className="profile-form-label">Phone Number</label>
+              <input
+                className="profile-form-input"
+                type="text"
+                value={personalInfo.phoneNumber}
+                onChange={(e) => setPersonalInfo((prev) => ({
+                  ...prev,
+                  phoneNumber: e.target.value,
+                }))}
+              />
+            </div>
 
             <div className="form-section-button">
               <button className="save-button" onClick={updatePersonalInfo}>
@@ -414,117 +449,106 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
 
         <div className="profile-form-items">
           <div className="section-title">Change Card Information</div>
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              style={{
-                border: "1px solid #ccc",
-                padding: "10px",
-                position: "relative",
-                marginBottom: "10px",
-              }}
-            >
-              {/* First Name */}
-              <div className="input-group">
-                <label className="profile-form-label">First Name</label>
-                <input
-                  className="profile-form-input"
-                  type="text"
-                  value={card.firstname}
-                  placeholder="First Name"
-                  onChange={(e) => {
-                    const newCards = [...cards];
-                    newCards[index].firstname = e.target.value;
-                    setCards(newCards);
-                  }}
-                />
-              </div>
-
-              {/* Last Name */}
-              <div className="input-group">
-                <label className="profile-form-label">Last Name</label>
-                <input
-                  className="profile-form-input"
-                  type="text"
-                  value={card.lastname}
-                  placeholder="Last Name"
-                  onChange={(e) => {
-                    const newCards = [...cards];
-                    newCards[index].lastname = e.target.value;
-                    setCards(newCards);
-                  }}
-                />
-              </div>
-
-              {/* Card Number */}
-              <div className="input-group">
-                <label className="profile-form-label">Card Number</label>
-                <input
-                  className="profile-form-input"
-                  type="text"
-                  value={card.cardNumber}
-                  placeholder="Card Number"
-                  onChange={(e) => {
-                    const newCards = [...cards];
-                    newCards[index].cardNumber = e.target.value;
-                    setCards(newCards);
-                  }}
-                />
-              </div>
-
-              {/* Expiration Date */}
-              <div className="input-group">
-                <label className="profile-form-label">Expiration Date</label>
-                <input
-                  className="profile-form-input"
-                  type="month"
-                  value={card.expDate}
-                  placeholder="Expiration Date"
-                  onChange={(e) => {
-                    const newCards = [...cards];
-                    newCards[index].expDate = e.target.value;
-                    setCards(newCards);
-                  }}
-                />
-              </div>
-
-              {/* CVV */}
-              <div className="input-group">
-                <label className="profile-form-label">CVV</label>
-                <input
-                  className="profile-form-input"
-                  type="text"
-                  value={card.CVV}
-                  placeholder="CVV"
-                  onChange={(e) => {
-                    const newCards = [...cards];
-                    newCards[index].CVV = e.target.value;
-                    setCards(newCards);
-                  }}
-                />
-              </div>
-              <button
-                className="card-action-button"
-                onClick={() =>
-                  isCardSaved[index] ? deleteCard(index) : saveCardInfo(index)
-                }
+          {
+            // Display existing cards
+            cards.map((card, index) => (
+              <div
+                key={index}
+                style={{
+                  border: "1px solid #ccc",
+                  padding: "10px",
+                  position: "relative",
+                  marginBottom: "10px",
+                }}
               >
-                {isCardSaved[index] ? "Delete Card" : "Save Card Info"}
-              </button>
-            </div>
-          ))}
+                {/* Card Name */}
+                <div className="input-group">
+                  <label className="profile-form-label">Name on card:</label>
+                  <span className="profile-form-text">{card.firstname} {card.lastname}</span>
+                </div>
 
-          {cards.length < 3 && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-start",
-                marginTop: "10px",
-              }}
-            >
-              <button onClick={addCard}>Add Card</button>
-            </div>
-          )}
+                {/* Card Number */}
+                <div className="input-group">
+                  <label className="profile-form-label">Card Number:</label>
+                  <span className="profile-form-text">{card.cardNumber} **** **** ****</span>
+                </div>
+
+                {/* Delete Card Button */}
+                {isCardSaved[index] && (
+                  <button
+                    className="card-action-button"
+                    onClick={() => deleteCard(index)}
+                  >
+                    Delete Card
+                  </button>
+                )}
+              </div>
+            ))
+          }
+
+          {
+            // Add Card Section
+            cards.length < 3 && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                  marginTop: "10px",
+                  border: "1px solid #ccc",
+                  padding: "10px"
+                }}
+              >
+                <div className="input-group">
+                  <label className="profile-form-label">First Name</label>
+                  <input
+                    className="profile-form-input"
+                    type="text"
+                    value={cardInfo.firstName}
+                    onChange={(e) => setCardInfo({ ...cardInfo, firstName: e.target.value })}
+                  />
+                </div>
+                <div className="input-group">
+                  <label className="profile-form-label">Last Name</label>
+                  <input
+                    className="profile-form-input"
+                    type="text"
+                    value={cardInfo.lastName}
+                    onChange={(e) => setCardInfo({ ...cardInfo, lastName: e.target.value })}
+                  />
+                </div>
+                <div className="input-group">
+                  <label className="profile-form-label">Card Number</label>
+                  <input
+                    className="profile-form-input"
+                    type="text"
+                    value={cardInfo.cardNumber}
+                    onChange={(e) => setCardInfo({ ...cardInfo, cardNumber: e.target.value })}
+                  />
+                </div>
+                <div className="input-group">
+                  <label className="profile-form-label">Expiration Date</label>
+                  <input
+                    className="profile-form-input"
+                    type="month"
+                    value={cardInfo.expDate}
+                    onChange={(e) => setCardInfo({ ...cardInfo, expDate: e.target.value })}
+                  />
+                </div>
+                <div className="input-group">
+                  <label className="profile-form-label">CVV</label>
+                  <input
+                    className="profile-form-input"
+                    type="text"
+                    value={cardInfo.cvv}
+                    onChange={(e) => setCardInfo({ ...cardInfo, cvv: e.target.value })}
+                  />
+                </div>
+                <button onClick={() => saveCardInfo(-1)}>Save New Card</button>
+              </div>
+            )
+          }
+
         </div>
 
         <div className="profile-form-items">

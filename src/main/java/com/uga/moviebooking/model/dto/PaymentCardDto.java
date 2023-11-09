@@ -9,6 +9,4 @@ public class PaymentCardDto {
     private String expDate;
     private String cardNumber;
     private String cvv;
-
-
 }
