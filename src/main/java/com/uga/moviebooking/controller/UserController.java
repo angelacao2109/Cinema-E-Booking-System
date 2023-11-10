@@ -7,6 +7,7 @@ import com.uga.moviebooking.model.dto.UserDto;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
 import com.uga.moviebooking.model.user.UserService;
+import com.uga.moviebooking.utils.ControllerUtils;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
@@ -54,7 +57,7 @@ public class UserController {
     public ResponseEntity<String> sendResetEmail(@RequestParam("email") String userEmail) throws UnsupportedEncodingException, MessagingException { //need to change thse parameters
         User user = userRepository.findByEmail(userEmail).orElse(null);
         if (user == null) {
-            return ResponseEntity.ok("Password reset unsucessful because user not found.");
+            return ResponseEntity.ok("Password reset unsuccessful because user not found.");
         }
         userService.resetSetUpUserPassword(user);
 
@@ -73,7 +76,7 @@ public class UserController {
         if (resetUser.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token has expired.");
         }
-        return ResponseEntity.ok("Token has been validated sucessfully.");
+        return ResponseEntity.ok("Token has been validated successfully.");
     }
 
     @PostMapping("/reset-password")
@@ -111,7 +114,7 @@ public class UserController {
 
     //DONE: POST /api/profile/update (takes in profile fields to update user account)
 
-    @PostMapping("/profile/update")
+    @PostMapping("/profile")
     public ResponseEntity<String> updateProfile(@AuthenticationPrincipal String userEmail, @RequestBody UserDto userDto) {
         if (userService.updateProfile(userEmail, userDto)) {
             return ResponseEntity.ok("User Profile successfully updated");
@@ -120,8 +123,8 @@ public class UserController {
     }
     public record userResponse(long id, String email, List<String> roles) {}
 
-    @PostMapping("/profile/update-password")
-    public ResponseEntity<String> updatePassword(@RequestParam String email,
+    @PostMapping("/profile/password")
+    public ResponseEntity<String> updatePassword(@AuthenticationPrincipal String email,
             @RequestBody Map<String, String> passwordData) {
         String currentPassword = passwordData.get("currentPassword");
         String newPassword = passwordData.get("newPassword");
@@ -133,7 +136,10 @@ public class UserController {
     }
 
     @PostMapping("/profile/address")
-    public ResponseEntity<String> updatePaymentAddress(@RequestParam String email, @RequestBody PaymentAddressDto updatedAddressDto) {
+    public ResponseEntity<?> updatePaymentAddress(@AuthenticationPrincipal String email, @Validated @RequestBody PaymentAddressDto updatedAddressDto, BindingResult bind) {
+        if(bind.hasErrors()) {
+            return ControllerUtils.validationErrorResponse(bind);
+        }
         if (userService.updatePaymentAddress(email, updatedAddressDto)) {
             return ResponseEntity.ok("Payment address updated successfully");
         } else {
@@ -141,10 +147,12 @@ public class UserController {
         }
 
     }
-    //
-    @PostMapping("/profile/card/add")
-    public ResponseEntity<String> addCard(@AuthenticationPrincipal String userEmail,
-            @RequestBody PaymentCardDto cardInfoDto) {
+
+    @PostMapping("/profile/card")
+    public ResponseEntity<?> addCard(@AuthenticationPrincipal String userEmail,
+            @Validated @RequestBody PaymentCardDto cardInfoDto, BindingResult bind) {
+        if(bind.hasErrors())
+            return ControllerUtils.validationErrorResponse(bind);
         if (userService.addCard(userEmail, cardInfoDto)) {
             return ResponseEntity.ok("Card information added successfully");
         } else {
@@ -152,13 +160,13 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/profile/card/delete")
-    public ResponseEntity<String> removeCard(@AuthenticationPrincipal String userEmail,
-                                                 @RequestBody PaymentCardDto cardInfoDto) {
-        if (userService.removeCard(userEmail, cardInfoDto)) {
+    @DeleteMapping("/profile/card")
+    public ResponseEntity<?> removeCard(@AuthenticationPrincipal String userEmail,
+                                                 @RequestParam Long cardID) {
+        if (userService.removeCard(userEmail, cardID)) {
             return ResponseEntity.ok("Card information removed successfully");
         } else {
-            return ResponseEntity.badRequest().body("Card information update failed.");
+            return ResponseEntity.notFound().build();
         }
     }
 

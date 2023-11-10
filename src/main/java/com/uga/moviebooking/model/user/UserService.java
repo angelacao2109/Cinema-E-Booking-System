@@ -2,16 +2,14 @@ package com.uga.moviebooking.model.user;
 
 import com.uga.moviebooking.model.dto.PaymentAddressDto;
 import com.uga.moviebooking.model.dto.PaymentCardDto;
-import com.uga.moviebooking.model.dto.PromotionDto;
 import com.uga.moviebooking.model.dto.UserDto;
 import com.uga.moviebooking.model.payment.PaymentAddress;
 import com.uga.moviebooking.model.payment.PaymentCard;
-import com.uga.moviebooking.model.promotion.Promotion;
+import com.uga.moviebooking.model.payment.PaymentCardRepository;
 import com.uga.moviebooking.model.role.Role;
 import com.uga.moviebooking.model.role.RoleRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -30,20 +28,24 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class UserService {
 
-    private String verificationPath = "/api/auth/verify";
-    private String resetPasswordPath = "/api/user/reset";
-    private String resetTokenPath = "/api/auth/resetToken";
+    private final String verificationPath = "/api/auth/verify";
+    private final String resetPasswordPath = "/api/user/reset";
+    private final String resetTokenPath = "/api/auth/resetToken";
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private RoleRepository roleRepository;
-    private JavaMailSender mailSender;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private final JavaMailSender mailSender;
+    private final PaymentCardRepository cardRepository;
+
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, JavaMailSender mailSender) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, JavaMailSender mailSender,
+                       PaymentCardRepository paymentCardRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.mailSender = mailSender;
+        this.cardRepository = paymentCardRepository;
     }
 
     public Long registerUser(User user) {
@@ -207,15 +209,14 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElse(null);
         if(user == null)
             return false;
-        if(!user.getFirstname().equals(userDto.getFirstname())){
-           user.setFirstname(userDto.getFirstname());
-        }
-        if(!user.getLastname().equals(userDto.getLastname())){
-           user.setLastname(userDto.getLastname());
-        }
-        if(!user.getPhoneNumber().equals(userDto.getPhoneNumber())){
+        if(!user.getFirstname().equals(userDto.getFirstName()))
+           user.setFirstname(userDto.getFirstName());
+        if(!user.getLastname().equals(userDto.getLastName()))
+           user.setLastname(userDto.getLastName());
+        if(!user.getPhoneNumber().equals(userDto.getPhoneNumber()))
             user.setPhoneNumber(userDto.getPhoneNumber());
-        }
+        if(user.isPromotionEnrolled() != userDto.isPromotionEnrolled())
+            user.setPromotionEnrolled(userDto.isPromotionEnrolled());
         userRepository.save(user);
         return true;
     }
@@ -252,7 +253,8 @@ public class UserService {
     public boolean isTaken(String email) {
         return userRepository.existsByEmail(email);
     }
-//
+
+    //modifying cards are iffy, as the credit card number is encrypted, are we required to do this?
     public boolean updateCardInfo(String userEmail, PaymentCardDto cardInfoDto) {
         User user = userRepository.findByEmail(userEmail).orElse(null);
         if (user == null)
@@ -290,11 +292,11 @@ public class UserService {
         return true;
     }
 
-    public boolean removeCard(String userEmail, PaymentCardDto cardInfoDto) {
+    public boolean removeCard(String userEmail, Long cardId) {
         User user = userRepository.findByEmail(userEmail).orElse(null);
-        if (user == null)
+        PaymentCard card = cardRepository.findById(cardId).orElse(null);
+        if(card == null || user == null)
             return false;
-        PaymentCard card = new PaymentCard(cardInfoDto);
         if (user.getPaymentCards().remove(card)) {
             userRepository.save(user);
             return true;

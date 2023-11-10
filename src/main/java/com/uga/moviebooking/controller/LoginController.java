@@ -4,8 +4,6 @@ import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.config.JWTUtil;
 import com.uga.moviebooking.model.dto.LoginDto;
 import com.uga.moviebooking.model.dto.RegisterDto;
-import com.uga.moviebooking.model.payment.PaymentAddress;
-import com.uga.moviebooking.model.payment.PaymentCard;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
 import com.uga.moviebooking.model.user.UserService;
@@ -50,7 +48,7 @@ public class LoginController {
     public ResponseEntity<?> login(@Validated @RequestBody LoginDto login, BindingResult bindingResult,
                                         HttpServletRequest request, HttpServletResponse response) {
         if(bindingResult.hasErrors()) {
-            throw new AppException("Invalid request");
+            throw new AppException("Invalid request body!");
         }
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(),login.getPassword()));
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

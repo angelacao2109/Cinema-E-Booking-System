@@ -69,8 +69,8 @@ public class AdminController {
             User existingUser = userBox.get();
 
             // Update the user's properties
-            existingUser.setFirstname(updatedUser.getFirstname());
-            existingUser.setLastname(updatedUser.getLastname());
+            existingUser.setFirstname(updatedUser.getFirstName());
+            existingUser.setLastname(updatedUser.getLastName());
             existingUser.setEmail(updatedUser.getEmail());
             //should admin update their passwords too?
 

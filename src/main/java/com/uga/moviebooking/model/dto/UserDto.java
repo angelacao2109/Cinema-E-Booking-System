@@ -6,7 +6,6 @@ import com.uga.moviebooking.model.payment.PaymentCard;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -15,11 +14,12 @@ import java.util.Set;
 
 public class UserDto {
     private Long id;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private String phoneNumber;
+    private boolean promotionEnrolled;
     private Set<PaymentCard> paymentCards;
     private PaymentAddress paymentAddress;
 }
