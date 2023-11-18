@@ -10,10 +10,11 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     cardNumber: string;
     expDate: string;
     CVV: string;
+    cardID: number;
   }
 
   const [cards, setCards] = useState<Card[]>([
-    { firstname: "", lastname: "", cardNumber: "", expDate: "", CVV: "" },
+    { firstname: "", lastname: "", cardNumber: "", expDate: "", CVV: "", cardID: -1 },
   ]);
 
   const [isCardSaved, setIsCardSaved] = useState<boolean[]>([]);
@@ -21,7 +22,7 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
   const addCard = () => {
     setCards([
       ...cards,
-      { firstname: "", lastname: "", cardNumber: "", expDate: "", CVV: "" },
+      { firstname: "", lastname: "", cardNumber: "", expDate: "", CVV: "", cardID: -1 },
     ]);
     setIsCardSaved([...isCardSaved, false]);
   };
@@ -113,13 +114,15 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
 
         });
 
+        console.log(userData.paymentCards)
         // Set the cards from the response, only showing the first 4 digits of the card number
         const fetchedCards = userData.paymentCards.map(card => ({
+          cardID: card.id,
           firstname: card.firstname,
           lastname: card.lastname,
           cardNumber: card.cardNumber.slice(0, 4), // only first 4 digits for display
           expDate: card.expDate,
-          CVV: '' // For security reasons, we do not display CVV
+          CVV: '', // For security reasons, we do not display CVV
         }));
         setCards(fetchedCards);
 
@@ -140,7 +143,7 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
   const updatePassword = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/user/profile/update-password?email=${email}`,
+        `http://localhost:8080/api/user/profile/password?email=${email}`,
         {
           currentPassword: passwordData.currentPassword,
           newPassword: passwordData.newPassword,
@@ -160,55 +163,48 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
       setMessage("Error updating password. Please try again.");
     }
   };
+
   const updatePersonalInfo = async () => {
 
     try {
-      const response = await axios.post(`http://localhost:8080/api/user/profile/update?email=${email}`, {
-        firstname: personalInfo.firstName,
-        lastname: personalInfo.lastName,
+      const response = await axios.post(`http://localhost:8080/api/user/profile?email=${email}`, {
+        firstName: personalInfo.firstName,
+        lastName: personalInfo.lastName,
         phoneNumber: personalInfo.phoneNumber,
-        paymentAddress: {
-          address: personalInfo.address,
-          city: personalInfo.city,
-          state: personalInfo.state,
-          zipCode: personalInfo.zipCode,
-        }
+        promotionEnrolled: "True"
       }, {
         headers: {
           Authorization: authToken,
           "Content-Type": "application/json",
           "Referrer-Policy": "unsafe_url",
         },
-      }
-      );
+      });
       console.log(response.data);
       setMessage("Personal info updated successfully!");
     } catch (error) {
       console.error("Error updating personal info:", error);
       setMessage("Error updating personal info. Please try again.");
     }
-  };
-
-  async function updateCardInfo() {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/user/profile/update-card-info",
-        { cards },
+      const response = await axios.post(`http://localhost:8080/api/user/profile/address?email=${email}`,
         {
-          headers: {
-            Authorization: authToken,
-            "Content-Type": "application/json",
-            "Referrer-Policy": "unsafe_url",
-          },
+          address: personalInfo.address,
+          city: personalInfo.city,
+          state: personalInfo.state,
+          zipCode: personalInfo.zipCode
+        }, {
+        headers: {
+          Authorization: authToken,
+          "Content-Type": "application/json",
+          "Referrer-Policy": "unsafe_url",
         }
-      );
+      });
       console.log(response.data);
-      setMessage("Card info updated successfully!");
     } catch (error) {
-      console.error("Error updating card info:", error);
-      setMessage("Error updating card info. Please try again.");
+      console.error("Error updating personal info:", error);
+      setMessage("Error updating personal info. Please try again.");
     }
-  }
+  };
 
   const saveCardInfo = async (index: number) => {
     const cardData = index >= 0 ? cards[index] : cardInfo;
@@ -219,14 +215,13 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
 
     try {
       const card = cards[index];
-      const response = await axios.post(
-        "http://localhost:8080/api/user/profile/card/add",
+      const response = await axios.post(`http://localhost:8080/api/user/profile/card?email=${email}`,
         {
-          cvv: card.CVV,
-          firstName: card.firstname,
-          lastName: card.lastname,
-          cardNumber: card.cardNumber,
-          expDate: card.expDate
+          cvv: cardInfo.cvv,
+          firstName: cardInfo.firstName,
+          lastName: cardInfo.lastName,
+          cardNumber: cardInfo.cardNumber,
+          expDate: cardInfo.expDate
         },
         {
           headers: {
@@ -240,20 +235,17 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
         newIsCardSaved[index] = true;
         setIsCardSaved(newIsCardSaved);
       } else {
-        // Handle any other response
       }
     } catch (error) {
       console.error("Error saving card info:", error);
-      // Handle error, e.g., by showing a message to the user
     }
   };
 
   const removeCardInfo = async (card: Card) => {
+    console.log(card)
     try {
-      const response = await axios.delete(
-        "http://localhost:8080/api/user/profile/card/delete",
+      const response = await axios.delete(`http://localhost:8080/api/user/profile/card?cardID=${card.cardID}`,
         {
-          data: card,
           headers: {
             Authorization: authToken,
             "Content-Type": "application/json",
@@ -263,16 +255,12 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
       );
 
       if (response.status === 200) {
-        // Handle successful card deletion
         setMessage("Card deleted successfully!");
-        // You may want to update the state to remove the card from the UI here
       } else {
-        // Handle any other response
         setMessage("Failed to delete the card.");
       }
     } catch (error) {
       console.error("Error deleting card info:", error);
-      // Handle error, e.g., by showing a message to the user
       setMessage("Error deleting card info. Please try again.");
     }
   };
@@ -530,11 +518,20 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
                   <label className="profile-form-label">Expiration Date</label>
                   <input
                     className="profile-form-input"
-                    type="month"
+                    type="text"
+                    placeholder="mmYY"
                     value={cardInfo.expDate}
-                    onChange={(e) => setCardInfo({ ...cardInfo, expDate: e.target.value })}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const formattedValue = value
+                        .replace(/[^0-9]/g, '')  // Remove non-numeric characters
+                        .substring(0, 4);       // Limit length to 4 characters
+                      setCardInfo({ ...cardInfo, expDate: formattedValue });
+                    }}
                   />
                 </div>
+
+
                 <div className="input-group">
                   <label className="profile-form-label">CVV</label>
                   <input

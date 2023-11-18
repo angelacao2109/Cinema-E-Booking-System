@@ -6,23 +6,25 @@
     display: flex;
     align-items: center;
     background-color: #ECECEC;
+    border-radius: 20px;
+    overflow: hidden;
 }
 
-
 input {
-    flex: 1;           
-    border: 1px solid #ccc;
+    flex: 1;
+    border: none; /* Remove the border since the parent has one */
     padding: 10px;
-    border-radius: 4px 0 0 4px;  
+    margin: 0;
+    border-radius: 20px 0 0 20px; 
     color: #1D1D1D;
+    height: 100%;
 }
 
 .searchIcon {
     display: flex;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-left: none;        
-    border-radius: 0 4px 4px 0;  
+  
+  
     background-color: #CF291D;
     color: #ECECEC;
 }
