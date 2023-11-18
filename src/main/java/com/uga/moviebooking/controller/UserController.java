@@ -1,6 +1,5 @@
 package com.uga.moviebooking.controller;
 
-import com.uga.moviebooking.model.dto.PasswordDto;
 import com.uga.moviebooking.model.dto.PaymentAddressDto;
 import com.uga.moviebooking.model.dto.PaymentCardDto;
 import com.uga.moviebooking.model.dto.UserDto;
@@ -53,49 +52,6 @@ public class UserController {
         return ResponseEntity.ok().body(new userResponse(user.getId(), user.getEmail(),roles));
     }
     
-    @PostMapping("/reset-password-email")
-    public ResponseEntity<String> sendResetEmail(@RequestParam("email") String userEmail) throws UnsupportedEncodingException, MessagingException { //need to change thse parameters
-        User user = userRepository.findByEmail(userEmail).orElse(null);
-        if (user == null) {
-            return ResponseEntity.ok("Password reset unsuccessful because user not found.");
-        }
-        userService.resetSetUpUserPassword(user);
-
-
-        return ResponseEntity.ok("Password reset successfully.");
-    }
-
-    @PostMapping("/reset-password-verify")
-    public ResponseEntity<String> verifyResetToken(@RequestParam("token") String token){
-        User resetUser = userRepository.findByPasswordResetToken(token);
-        if(resetUser == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No such token exists.");
-        }
-
-        // Check if the token has not expired
-        if (resetUser.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token has expired.");
-        }
-        return ResponseEntity.ok("Token has been validated successfully.");
-    }
-
-    @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam("token") String token, @RequestBody PasswordDto passwordDto) {
-        User resetUser = userRepository.findByPasswordResetToken(token);
-        System.out.println("Got Here!!!!!!!");
-        if(resetUser == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token has expired.");
-        }
-        System.out.println(passwordDto.getPassword());
-    resetUser.setPassword(passwordEncoder.encode(passwordDto.getPassword()));
-    
-        resetUser.setPasswordResetToken(null);
-        resetUser.setResetTokenExpiry(null);
-        userRepository.save(resetUser);
-
-        return ResponseEntity.ok("Password reset successfully.");
-    }
-
 
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
@@ -169,6 +125,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+    public record PasswordDto(String password) {}
 
 }
 

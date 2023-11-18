@@ -24,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -42,6 +43,49 @@ public class LoginController {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
+    }
+
+
+    @PostMapping("/reset-password-email")
+    public ResponseEntity<String> sendResetEmail(@RequestParam("email") String userEmail) throws UnsupportedEncodingException, MessagingException { //need to change thse parameters
+        User user = userRepository.findByEmail(userEmail).orElse(null);
+        if (user == null) {
+            return ResponseEntity.ok("Password reset unsuccessful because user not found.");
+        }
+        userService.resetSetUpUserPassword(user);
+
+
+        return ResponseEntity.ok("Password reset successfully.");
+    }
+
+    @PostMapping("/reset-password-verify")
+    public ResponseEntity<String> verifyResetToken(@RequestParam("token") String token){
+        User resetUser = userRepository.findByPasswordResetToken(token);
+        if(resetUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No such token exists.");
+        }
+
+        // Check if the token has not expired
+        if (resetUser.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token has expired.");
+        }
+        return ResponseEntity.ok("Token has been validated successfully.");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody String token, @RequestBody String password) {
+        System.out.println(" " + token + " " + password);
+        User resetUser = userRepository.findByPasswordResetToken(token);
+        if(resetUser == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token has expired.");
+        }
+        resetUser.setPassword(passwordEncoder.encode(password));
+
+        resetUser.setPasswordResetToken(null);
+        resetUser.setResetTokenExpiry(null);
+        userRepository.save(resetUser);
+
+        return ResponseEntity.ok("Password reset successfully.");
     }
 
     @PostMapping("/login")

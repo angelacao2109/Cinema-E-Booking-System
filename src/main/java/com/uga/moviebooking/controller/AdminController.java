@@ -87,15 +87,12 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/disableUser")
     public ResponseEntity<String> disableUser(@RequestBody String email) {
-        Optional<User> userBox =  userRepository.findByEmail(email);
-        User user;
-        if(userBox.isPresent()){
-            user = userBox.get();
-            user.setEnabled(false);
-            userRepository.save(user);
-            return new ResponseEntity<>("User" + user.getId() + "  successfully disabled ",HttpStatus.OK);
-        }
-        return ResponseEntity.notFound().build();
+        User user =  userRepository.findByEmail(email).orElse(null);
+        if(user == null)
+            return ResponseEntity.notFound().build();
+        user.setEnabled(false);
+        userRepository.save(user);
+        return new ResponseEntity<>("User" + user.getId() + "  successfully disabled ",HttpStatus.OK);
 
     }
    //enable user
@@ -113,5 +110,4 @@ public class AdminController {
         return ResponseEntity.notFound().build();
 
     }
-
 }

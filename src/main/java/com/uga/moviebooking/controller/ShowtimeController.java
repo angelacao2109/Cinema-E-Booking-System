@@ -20,10 +20,10 @@ public class ShowtimeController {
     }
 
     @GetMapping("/movie/{movieTitle}")
-public ResponseEntity<List<Showtime>> getShowtimesForMovie(@PathVariable String movieTitle) {
-    List<Showtime> showtimes = showtimeService.getShowtimesForMovie(movieTitle);
-    return ResponseEntity.ok(showtimes);
-}
+        public ResponseEntity<List<Showtime>> getShowtimesForMovie(@PathVariable String movieTitle) {
+        List<Showtime> showtimes = showtimeService.getShowtimesForMovie(movieTitle);
+        return ResponseEntity.ok(showtimes);
+    }
 
 
 }
