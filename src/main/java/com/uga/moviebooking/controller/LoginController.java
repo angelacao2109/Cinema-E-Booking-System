@@ -73,13 +73,12 @@ public class LoginController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody String token, @RequestBody String password) {
-        System.out.println(" " + token + " " + password);
-        User resetUser = userRepository.findByPasswordResetToken(token);
+    public ResponseEntity<String> resetPassword(@RequestBody passwordDto passwordDto) {
+        User resetUser = userRepository.findByPasswordResetToken(passwordDto.token);
         if(resetUser == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token has expired.");
         }
-        resetUser.setPassword(passwordEncoder.encode(password));
+        resetUser.setPassword(passwordEncoder.encode(passwordDto.password));
 
         resetUser.setPasswordResetToken(null);
         resetUser.setResetTokenExpiry(null);
@@ -140,4 +139,5 @@ public class LoginController {
     }
 
     public record loginResponse(String token, String message) {}
+    public record passwordDto(String token, String password) { }
 }
