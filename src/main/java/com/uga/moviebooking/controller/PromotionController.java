@@ -40,7 +40,7 @@ public class PromotionController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<String> deletePromotion(@RequestBody PromotionDto promo) {
         if (promotionService.removePromotion(promo.getId())) {
             return ResponseEntity.ok("Promotion successfully removed");
@@ -49,7 +49,7 @@ public class PromotionController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<String> updatePromotion(@RequestBody PromotionDto promo) {
         if (promotionService.updatePromotion(promo.getId(), promo)) {
             return ResponseEntity.ok("Promotion successfully updated");
@@ -57,7 +57,7 @@ public class PromotionController {
         return ResponseEntity.ok("Promotion could not be updated or does not exist.");
     }
 
-    @GetMapping("/getpromotion")
+    @GetMapping("/promotion")
     public ResponseEntity<Promotion> getPromotion(@RequestBody long ID) {
         Promotion promotion = promotionService.retrievePromotion(ID);
         if (promotion != null) {
@@ -68,8 +68,8 @@ public class PromotionController {
 
     }
 
-    //may need to check this method
-    @GetMapping("/getActivePromotions")
+
+    @GetMapping("/all")
     public ResponseEntity<List<Promotion>> activePromotions() {
         Date day = new Date(System.currentTimeMillis());
         List<Promotion> list = promotionService.findActivePromotions(day);
@@ -81,7 +81,7 @@ public class PromotionController {
     }
 
     //Send promo via email endpoint
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/send-promotion-email")
     public ResponseEntity<String> sendPromotionEmail(@RequestBody long ID) {
         // Validate admin permissions.

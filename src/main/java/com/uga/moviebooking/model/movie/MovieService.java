@@ -39,6 +39,8 @@ public class MovieService {
         movie.setRating(mov.getRating());
         movie.setTrailerPictureUrl(mov.getTrailerPictureUrl());
         movie.setTrailerVideoUrl(mov.getTrailerVideoUrl());
+        movie.setStatus(mov.getMovieStatus());
+        movie.setReleaseDate(mov.getReleaseDate());
         return movieRepository.save(movie);
     }
 
@@ -66,6 +68,15 @@ public class MovieService {
         Page<Movie> page = movieRepository.findAll(PageRequest.of(0, 50, Sort.by(Sort.Order.asc("id"))));
         
         return Optional.of(page.getContent());
+    }
+
+    public Optional<List<Movie>> getCurrentlyShowingMovies() {
+        return Optional.of(movieRepository.findByStatus(MovieStatus.CURRENTLY_SHOWING));
+    }
+
+    public Optional<List<Movie>> getComingSoonMovies() {
+        return Optional.of(movieRepository.findByStatus(MovieStatus.COMING_SOON));
+
     }
 
     

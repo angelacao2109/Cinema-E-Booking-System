@@ -17,4 +17,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
    
     
     Page<Movie> findAll(Pageable pageable);
+
+    List<Movie> findByStatus(MovieStatus status);
 }

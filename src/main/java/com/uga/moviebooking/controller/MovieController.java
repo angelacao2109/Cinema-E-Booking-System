@@ -9,7 +9,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @EnableMethodSecurity
 @RequestMapping("/api/movie")
@@ -32,17 +34,33 @@ public class MovieController {
         return ResponseEntity.ok(movieList);
     }
 
-    @GetMapping("/homepage")
+    /*@GetMapping("/homepage")
     public ResponseEntity<List<Movie>> getTopMovies() {
         List<Movie> movieList = movieService.getFrontpageMovies().orElse(null);
         if(movieList == null)
             return ResponseEntity.notFound().build();
         //get now playing movies + coming soon movies!
         return ResponseEntity.ok(movieList);
+    }*/
+
+    @GetMapping("/homepage")
+    public ResponseEntity<Map<String, List<Movie>>> getTopMovies() {
+        List<Movie> currentlyShowingMovies = movieService.getCurrentlyShowingMovies().orElse(null);
+        List<Movie> comingSoonMovies = movieService.getComingSoonMovies().orElse(null);
+
+        if (currentlyShowingMovies == null || comingSoonMovies == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Map<String, List<Movie>> response = new HashMap<>();
+        response.put("currentlyShowing", currentlyShowingMovies);
+        response.put("comingSoon", comingSoonMovies);
+
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping()
+    @PostMapping("/add")
     public ResponseEntity<String> addMovie(@RequestBody MovieDto mov) {
         long id = movieService.createMovie(mov).getId();
         return ResponseEntity.ok("Movie ID " + id + " Created!");

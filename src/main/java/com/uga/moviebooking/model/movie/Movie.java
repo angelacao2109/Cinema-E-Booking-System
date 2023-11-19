@@ -5,6 +5,7 @@ import com.uga.moviebooking.model.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -54,4 +55,15 @@ public class Movie {
     //maybe for showtimes 
     @OneToMany(mappedBy = "movie")
     private List<Showtime> showtimes;
+
+    //maybe for movie home page endpoint
+    @Column()
+    private LocalDate releaseDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MovieStatus status;
+
 }
+
+

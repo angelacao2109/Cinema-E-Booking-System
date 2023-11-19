@@ -70,6 +70,28 @@ public class UserService {
         return admin.getId();
     }
 
+    //was having issues running this part of the code using the original method, so I am leaving my version here just in case
+   /* public Long registerAdmin(User admin) {
+        String email = admin.getEmail();
+
+        // Check if a user with the same email already exists
+        if (userRepository.existsByEmail(email)) {
+            // handle this case according to our application's requirements.
+            // For example, throw an exception or return a specific value indicating the conflict.
+            // For now, I'll throw an IllegalArgumentException as an example.
+            throw new IllegalArgumentException("User with email " + email + " already exists.");
+        }
+
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+        Set<Role> roles = new HashSet<>();
+        Collections.addAll(roles, roleRepository.findByName("ROLE_USER"), roleRepository.findByName("ROLE_ADMIN"));
+        admin.setRoles(roles);
+        admin.setEnabled(true);
+        userRepository.save(admin);
+        return admin.getId();
+    }*/
+
+
     //https://www.codejava.net/frameworks/spring-boot/email-verification-example
     public Long registerUser(User user, String siteURL) throws UnsupportedEncodingException, MessagingException {
 

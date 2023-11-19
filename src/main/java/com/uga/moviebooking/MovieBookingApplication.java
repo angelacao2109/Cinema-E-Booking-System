@@ -28,15 +28,17 @@ public class MovieBookingApplication implements CommandLineRunner{
 			roleRepository.save(new Role("ROLE_USER"));
 		if(roleRepository.findByName("ROLE_ADMIN") == null)
 			roleRepository.save(new Role("ROLE_ADMIN"));
-		if(userService.isTaken("admin"))
+		if(userService.isTaken("admin@admin.com")) {
 			return;
-		User admin = new User();
-		admin.setFirstname("Admin");
-		admin.setLastname("Account");
-		admin.setPhoneNumber("4040000000");
-		admin.setEmail("admin@admin.com");
-		admin.setPassword("password");
-		userService.registerAdmin(admin);
+		}else {
+			User admin = new User();
+			admin.setFirstname("Admin");
+			admin.setLastname("Account");
+			admin.setPhoneNumber("4040000000");
+			admin.setEmail("admin@admin.com");
+			admin.setPassword("password");
+			userService.registerAdmin(admin);
+		}
 	}
 }
 

@@ -1,8 +1,10 @@
 package com.uga.moviebooking.model.dto;
 
+import com.uga.moviebooking.model.movie.MovieStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -28,4 +30,8 @@ public class MovieDto {
     private String trailerPictureUrl;
 
     private String trailerVideoUrl;
+
+    private MovieStatus movieStatus;
+
+    private LocalDate releaseDate;
 }
