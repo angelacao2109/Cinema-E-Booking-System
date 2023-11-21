@@ -26,23 +26,75 @@ function Registration() {
     subscribeOffers: false,
     agreeTerms: false,
   });
-
+  const [showModal, setShowModal] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+
+  function Modal({ message, onClose }) {
+    console.log("Rendering Modal with message:", message);
+    return (
+      <div className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={onClose}>&times;</span>
+          <p>{message}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setErrorMessage(""); // Reset error message
+  };
+
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrorMessage(""); // Clear any previous error messages
+    //setErrorMessage(""); 
+   // setShowModal(false);
   
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.phone) {
-      console.log("Missing required fields"); // Debugging log
-      setErrorMessage("Please fill in all required fields.");
+    let missingFields: string[] = []; 
+  if (!formData.firstName) missingFields.push("First Name");
+  if (!formData.lastName) missingFields.push("Last Name");
+  if (!formData.email) missingFields.push("Email");
+  if (!formData.password) missingFields.push("Password");
+  if (!formData.phone) missingFields.push("Phone Number");
+
+  if (missingFields.length > 0) {
+    const missingFieldsMessage = "Please fill in the following required fields: " + missingFields.join(", ");
+    console.log("Missing fields:", missingFieldsMessage); // Debugging log
+    setErrorMessage(missingFieldsMessage);
+    setShowModal(true);
+    console.log("States after update:", { errorMessage, showModal }); // Debugging log
+    //return;
+  } else {
+    // If no fields are missing, continue with other validations
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match!");
+      setShowModal(true);
       return;
     }
+  }
+  
     
     if (formData.password !== formData.confirmPassword) {
       console.log("Passwords mismatch"); // Debugging log
       setErrorMessage("Passwords do not match!");
+      setShowModal(true);
       return;
+    }
+
+    if (formData.cardNumber && formData.cardNumber.length !== 16) {
+      setErrorMessage("Card number must be 16 digits.");
+      setShowModal(true);
+      return;
+    }
+  
+    if (formData.cvc && formData.cvc.length !== 3) {
+      setErrorMessage("CVC must be 3 digits.");
+      setShowModal(true);
+      return;
+    
     }
 
     const payload: any = {
@@ -135,10 +187,12 @@ function Registration() {
       });
     }
   };
+  console.log("Rendering with:", { errorMessage, showModal });
 
   return (
     <div className="registration-container">
-    {errorMessage && <div className="error-message">{errorMessage}</div>} 
+      {errorMessage && <div className="error-message">{errorMessage}</div>} 
+      {showModal && <Modal message={errorMessage} onClose={handleCloseModal} />}
     <form onSubmit={handleSubmit}>
       <div className="form">
         <div className="header">Registration for Club Access!</div>
@@ -221,7 +275,7 @@ function Registration() {
             />
           </div>
           <div className="City">
-            <label className="form-label">City </label>
+            <label className="form-label">City</label>
             <input
               className="form-input"
               type="text"
@@ -251,6 +305,7 @@ function Registration() {
               name="zipCode"
               value={formData.zipCode}
               onChange={handleChange}
+              maxLength={5}
             />
           </div>
           <div className="Phone">
@@ -277,6 +332,7 @@ function Registration() {
               name="cardNumber"
               value={formData.cardNumber}
               onChange={handleChange}
+              maxLength={16}
             />
           </div>
           <div className="name">
@@ -310,6 +366,7 @@ function Registration() {
               name="cvc"
               value={formData.cvc}
               onChange={handleChange}
+              maxLength={3}
             />
           </div>
           <hr className="hr" />
@@ -374,18 +431,7 @@ function Registration() {
               />
             </div>
 
-            <div className="checkbox-container">
-              <label className="checkbox-label">
-                I agree to the <a href="#TERMS">Terms and Conditions</a>
-              </label>
-              <input
-                className="checkbox"
-                type="checkbox"
-                name="agreeTerms"
-                checked={formData.agreeTerms}
-                onChange={handleCheckboxChange}
-              />
-            </div>
+          
           </div>
 
           <div className="footer">

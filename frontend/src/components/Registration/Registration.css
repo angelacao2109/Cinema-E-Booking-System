@@ -167,3 +167,42 @@
     margin-bottom: 20px;
   }
   
+  .modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6); /* Dimmed background */
+  }
+  
+  .modal-content {
+    background-color: #1D1D1D;
+    margin: 15% auto; /* Center the modal */
+    padding: 20px;
+    border: 1px solid #CF291D;
+    border-radius: 5px;
+    width: 50%; /* You can adjust this based on your preference */
+    color: #ECECEC;
+  }
+  
+  .close {
+    color: #CF291D;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close:hover {
+    color: #850717;
+  }
+  
+  .modal p {
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  

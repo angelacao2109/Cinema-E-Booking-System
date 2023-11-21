@@ -4,11 +4,13 @@
 
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate; /* Change to separate to enable border spacing */
+    border-spacing: 10px; 
 }
 
 table, th, td {
     border: 1px solid black;
+    background-color: white;
 }
 
 th, td {
@@ -18,4 +20,24 @@ th, td {
 
 th {
     background-color: #f2f2f2;
+}
+
+button {
+    margin: 5px; /* Adds space around each button */
+    padding: 5px 10px; 
+}
+
+.action-cell {
+    text-align: right; 
+
+    
+}
+
+.right-aligned-table {
+    width: 100%;
+    
+}
+
+.table-container {
+    width: 100%; 
 }
