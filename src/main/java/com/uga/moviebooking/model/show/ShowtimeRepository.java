@@ -15,9 +15,13 @@ import java.util.List;
 public interface ShowtimeRepository extends JpaRepository<Showtime, Long> {
 
 
-List<Showtime> findByShowtimeAndTheatre(LocalTime showtime, Theatre theatre);
+    List<Showtime> findByShowtimeAndTheatre(LocalTime showtime, Theatre theatre);
     @Query("select s from Showtime s where s.movie.title = ?1")
     List<Showtime> findByMovieTitle(String movieTitle);
+
+
+    @Query("select s from Showtime s where s.movie.id = ?1")
+    List<Showtime> findByMovieID(long movieID);
 
 
 

@@ -2,6 +2,7 @@ package com.uga.moviebooking.model.show;
 
 import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.model.booking.Booking;
+import com.uga.moviebooking.model.booking.ticket.Ticket;
 import com.uga.moviebooking.model.booking.ticket.TicketRepository;
 import com.uga.moviebooking.model.theatre.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,14 @@ import java.util.*;
 @Service
 public class ShowtimeService {
 
+    private final ShowtimeRepository showtimeRepository;
+    private final TicketRepository ticketRepository;
+
     @Autowired
-    private ShowtimeRepository showtimeRepository;
-    @Autowired
-    private TicketRepository ticketRepository;
+    public ShowtimeService(ShowtimeRepository showtimeRepository, TicketRepository ticketRepository) {
+        this.showtimeRepository = showtimeRepository;
+        this.ticketRepository = ticketRepository;
+    }
 
     public Showtime createShowtime(Showtime showtime) {
 
@@ -67,9 +72,8 @@ public class ShowtimeService {
 //            currentShowtime = calendar.getTime();
         }
     }
-    public List<Showtime> getShowtimesForMovie(String movieTitle) {
-        // Logic to fetch showtimes for a specific movie by title.
-        return showtimeRepository.findByMovieTitle(movieTitle);
+    public List<Showtime> getShowtimesForMovie(long movieID) {
+        return showtimeRepository.findByMovieID(movieID);
     }
 
 
@@ -77,19 +81,12 @@ public class ShowtimeService {
         return showtimeRepository.findById(showtimeID).orElse(null);
     }
 
-    public List<Seat> getTakenSeats(long showtimeID) {
-        Showtime showtime = showtimeRepository.findById(showtimeID).orElse(null);
-        if(showtime == null)
-            throw new AppException("Invalid showtimeID");
-        List<Booking> bookings = showtime.getBookings();
-        List<Seat> seatsTaken = new ArrayList<>();
-        for(Booking b : bookings) {
-            b.getTickets().forEach(ticket -> seatsTaken.add(ticket.getSeat()));
-        }
-        return seatsTaken;
+    public List<Ticket> getTakenSeats(long showtimeID) {
+        List<Ticket> list = ticketRepository.getBookedSeats();
+        return list;
     }
 
-    public boolean isSeatAvailable(long showtimeID, int row, int col) {
+    public boolean isSeatBooked(long showtimeID, int row, int col) {
         return ticketRepository.isBooked(showtimeID, row, col);
     }
 }

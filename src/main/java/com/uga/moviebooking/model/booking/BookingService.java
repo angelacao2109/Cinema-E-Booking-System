@@ -31,11 +31,12 @@ public class BookingService {
 
     @Autowired
     public BookingService(BookingRepository bookingRepository, ShowtimeService showtimeService
-            , UserService userService, TheatreService theatreService) {
+            , UserService userService, TheatreService theatreService, TicketTypeRepository ticketTypeRepository) {
        this.bookingRepository = bookingRepository;
        this.showtimeService = showtimeService;
        this.userService = userService;
        this.theatreService = theatreService;
+       this.ticketTypeRepository = ticketTypeRepository;
     }
 
     public void createBooking(String userEmail, BookingDto bookingDto) throws AppException {
@@ -81,7 +82,7 @@ public class BookingService {
         long price = type.getCost();
         int seatCol = ticketDto.getSeatCol();
         int seatRow = ticketDto.getSeatRow();
-        if(!showtimeService.isSeatAvailable(showtime.getId(), seatRow, seatCol)) {
+        if(showtimeService.isSeatBooked(showtime.getId(), seatRow, seatCol)) {
             throw new AppException("One or more of the seats is already booked!");
         }
         Seat seat = theatreService.getSeat(showtime.getTheatre().getId(),seatCol,seatRow);

@@ -1,5 +1,6 @@
 package com.uga.moviebooking.controller;
 
+import com.uga.moviebooking.model.booking.ticket.Ticket;
 import com.uga.moviebooking.model.show.Showtime;
 import com.uga.moviebooking.model.show.ShowtimeService;
 import com.uga.moviebooking.model.theatre.Seat;
@@ -21,15 +22,17 @@ public class ShowtimeController {
         this.showtimeService = showtimeService;
     }
 
-    @GetMapping("/movie/{movieTitle}")
-        public ResponseEntity<List<Showtime>> getShowtimesForMovie(@PathVariable String movieTitle) {
-        List<Showtime> showtimes = showtimeService.getShowtimesForMovie(movieTitle);
-        return ResponseEntity.ok(showtimes);
+    @GetMapping("/movie")
+    public ResponseEntity<?> getShowtimesForMovie(@RequestParam("movieID") long movieID) {
+        List<Showtime> showtimes = showtimeService.getShowtimesForMovie(movieID);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("showtimes", showtimes);
+        return ResponseEntity.ok(map);
     }
 
     @GetMapping("/seats")
     public ResponseEntity<?> getTakenSeatsForShowtime(@RequestParam("showtimeID") int showtimeID) {
-        List<Seat> seats = showtimeService.getTakenSeats(showtimeID);
+        List<Ticket> seats = showtimeService.getTakenSeats(showtimeID);
         HashMap<String, Object> map = new HashMap<>();
         map.put("seats taken", seats);
         return ResponseEntity.ok(map);
