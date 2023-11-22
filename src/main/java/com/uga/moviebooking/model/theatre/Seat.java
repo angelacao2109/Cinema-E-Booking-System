@@ -1,7 +1,9 @@
 package com.uga.moviebooking.model.theatre;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 public class Seat {
     @Id
@@ -17,5 +19,15 @@ public class Seat {
 
     @Column(nullable = false)
     private Integer seat_col;
+
+    public Seat() {
+
+    }
+
+    public Seat(int row, int col, Theatre theatre) {
+        this.theatre = theatre;
+        this.seat_row = row;
+        this.seat_col = col;
+    }
 
 }

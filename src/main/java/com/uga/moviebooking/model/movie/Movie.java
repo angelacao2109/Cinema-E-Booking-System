@@ -52,9 +52,6 @@ public class Movie {
     @Column(nullable = false)
     private String trailerVideoUrl;
      
-    //maybe for showtimes 
-    @OneToMany(mappedBy = "movie")
-    private List<Showtime> showtimes;
 
     //maybe for movie home page endpoint
     @Column()

@@ -66,7 +66,7 @@ public class User implements UserDetails {
     @Column(name = "verification_code", length = 128)
     private String verificationCode;
 
-    @Column(name = "password_reset_token ", length = 128)
+    @Column(name = "password_reset_token", length = 128)
     private String passwordResetToken;
 
     @Column (name = "reset_token_expiry")
@@ -87,6 +87,7 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
     private Set<PaymentCard> paymentCards;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

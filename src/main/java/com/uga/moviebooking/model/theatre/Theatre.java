@@ -2,9 +2,11 @@ package com.uga.moviebooking.model.theatre;
 
 import com.uga.moviebooking.model.show.Showtime;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 @Entity
 public class Theatre {
     @Id
@@ -12,12 +14,28 @@ public class Theatre {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private int number;
 
     @Column(nullable = false)
     private int numberOfSeats;
 
+    @Column(nullable = false)
+    private int numRows;
+
+    @Column(nullable = false)
+    private int numCols;
+
     @OneToMany(mappedBy = "theatre")
     List<Showtime> showtime;
+
+    public Theatre() {
+
+    }
+    public Theatre(int number, int numRows, int numCols) {
+       this.number = number;
+       this.numRows = numRows;
+       this.numCols = numCols;
+       this.numberOfSeats = numRows * numCols;
+    }
 
 }

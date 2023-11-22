@@ -75,7 +75,7 @@ public class LoginController {
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestBody passwordDto passwordDto) {
         User resetUser = userRepository.findByPasswordResetToken(passwordDto.token);
-        if(resetUser == null){
+        if(resetUser == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token has expired.");
         }
         resetUser.setPassword(passwordEncoder.encode(passwordDto.password));

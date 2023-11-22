@@ -1,5 +1,6 @@
 package com.uga.moviebooking.model.user;
 
+import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.model.dto.PaymentAddressDto;
 import com.uga.moviebooking.model.dto.PaymentCardDto;
 import com.uga.moviebooking.model.dto.UserDto;
@@ -46,6 +47,10 @@ public class UserService {
         this.roleRepository = roleRepository;
         this.mailSender = mailSender;
         this.cardRepository = paymentCardRepository;
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     public Long registerUser(User user) {
@@ -298,6 +303,26 @@ public class UserService {
         return true;
     }
 
+    public PaymentCard getCard(String userEmail, Long cardID) {
+        User user = userRepository.findByEmail(userEmail).orElse(null);
+        PaymentCard card = cardRepository.findById(cardID).orElse(null);
+        if(card == null || user == null)
+            return null;
+        if( user.getPaymentCards().contains(card) ) {
+            return card;
+        }
+        return null;
+    }
+
+    public boolean hasCards(String userEmail) {
+        User user = userRepository.findByEmail(userEmail).orElse(null);
+        if(user == null)
+            throw new AppException("Could not find user", 404);
+        if(user.getPaymentCards().size() > 0)
+            return true;
+        return false;
+    }
+
     public boolean addCard(String userEmail, PaymentCardDto cardInfoDto) {
         User user = userRepository.findByEmail(userEmail).orElse(null);
         if (user == null)
@@ -314,9 +339,9 @@ public class UserService {
         return true;
     }
 
-    public boolean removeCard(String userEmail, Long cardId) {
+    public boolean removeCard(String userEmail, Long cardID) {
         User user = userRepository.findByEmail(userEmail).orElse(null);
-        PaymentCard card = cardRepository.findById(cardId).orElse(null);
+        PaymentCard card = cardRepository.findById(cardID).orElse(null);
         if(card == null || user == null)
             return false;
         if (user.getPaymentCards().remove(card)) {
