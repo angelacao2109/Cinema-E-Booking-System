@@ -41,6 +41,7 @@ public class BookingService {
     public void createBooking(String userEmail, BookingDto bookingDto) throws AppException {
         Showtime showtime = showtimeService.findById(bookingDto.getShowtimeID());
         User user = userService.findByEmail(userEmail);
+        System.out.println("reached");
         if(user == null)
             throw new AppException("user not found", 404);
         if(showtime == null)
