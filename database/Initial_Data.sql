@@ -18,7 +18,3 @@ INSERT INTO movies (cast, category, director, producer, title, trailer_picture_u
      ('Denzel Washington, Dakota Fanning, Eugenio Mastrandrea','Action','Antoine Fuqua','Richard, Wenk, Michael Sloan, Richard Lindheim','The Equalizer 3','https://static.wikia.nocookie.net/viacom4633/images/8/82/The_Equalizer_film.png','https://www.youtube.com/watch?v=19ikl8vy4zs','R'),
 
      ('Jason Statham, 50 Cent, Megan Fox','Action','Scott Waugh','Kurt Wimmer, Tad Daggerhart, Max Adams','Expend4bles','https://static.wikia.nocookie.net/filmguide/images/e/ee/Expendables_4_official_poster.jpg','https://www.youtube.com/watch?v=DhlaBO-SwVE','R');
-
-INSERT INTO role (name) VALUES
-                            ('ROLE_USER'),
-                            ('ROLE_ADMIN');
