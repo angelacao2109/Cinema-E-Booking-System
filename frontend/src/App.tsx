@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar/NavBar';
 import MovieList from './components/MovieList/MovieList'; 
 import moviesData from './movies-2020s.json';
-import {BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import SeatSelection from './components/SeatSelection/SeatSelection';
 import Registration from './components/Registration/Registration';
 import SignIn from './components/SignIn/SignIn'; 
@@ -14,17 +14,19 @@ import Checkout from './components/Checkout/Checkout';
 import Confirmation from './components/Confirmation/Confirmation';
 import OrderHistory from './components/OrderHistory/OrderHistory';
 import EditMovies from './components/AdminPage/EditMovies/EditMovies';
-import EditPromo from './components/AdminPage/EditPromo/EditPromo';
+import EditPromo from './components/AdminPage/Promotions/EditPromo';
 import EditUser from './components/AdminPage/EditUser/EditUser';
-import { AdminNavBar } from './components/AdminPage/AdminNav/AdminNavBar';
+import AdminNavBar from './components/AdminPage/AdminNav/AdminNavBar';
 import AdminRoutes from './components/AdminPage/AdminNav/AdminRoutes';
 import { Movie} from "./components/types";
 import ResetPasswordPostLink from './components/ResetPasswordPostLink/ResetPasswordPostLink';
 import VerifyEmail from './components/VerifyEmail/VerifyEmail';
+
 function App() {
   console.log(moviesData);
 
   const [ticketCount, setTicketCount] = useState<number>(0);
+
 
   const handleTicketChange = (count: number) => {
     setTicketCount(count);
@@ -66,21 +68,54 @@ function App() {
     setUserEmail(foundEmail ?? null);
 }, [isLoggedIn]);
   
-    return (
-      <Router>
-        <div>
-        <NavBar 
-  isLoggedIn={isLoggedIn}
-  setIsLoggedIn={setIsLoggedIn}
-  movieData={moviesData} 
-  searchQuery={searchQuery} 
-  onSearchChange={setSearchQuery}
-  onSearchResultsChange={setSearchResults}
-  isAdmin={userEmail === "admin@admin.com"} 
-/>
 
-         
+return (
+  <Router>
+    <div>
+      <NavBar
+        isLoggedIn={isLoggedIn}
+        setIsLoggedIn={setIsLoggedIn}
+        movieData={moviesData}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onSearchResultsChange={setSearchResults}
+        isAdmin={userEmail === "admin@admin.com"}
+      />
+      <AppRoutes
+          isAdminPath={location.pathname.startsWith("/admin")}
+          searchResults={searchResults}
+          handleTicketChange={handleTicketChange}
+          ticketCount={ticketCount}
+          setIsAdmin={setIsAdmin}
+          setIsLoggedIn={setIsLoggedIn}
+          setLoggedInUserEmail={setLoggedInUserEmail}
+          refetchMovies={refetchMovies}
+          loggedInUserEmail={loggedInUserEmail}
+        />
+      </div>
+    </Router>
+  );
+}
+
+const AppRoutes = ({
+  isAdminPath,
+  searchResults,
+  handleTicketChange,
+  ticketCount,
+  setIsAdmin,
+  setIsLoggedIn,
+  setLoggedInUserEmail,
+  refetchMovies,
+  loggedInUserEmail
+}) => {
+
+  return (
           <Routes>
+          {isAdminPath ? (
+          <Route path="/admin/*" element={<AdminRoutes />} />
+
+          ) : (
+            <>
           <Route path="/" element={<MovieList searchResults={searchResults} />} />
           <Route path="/select-ticket" element={<SelectTicket onTicketChange={handleTicketChange} />} />
           <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} />} />
@@ -96,12 +131,11 @@ function App() {
           <Route path="/change-password" element={<ResetPasswordPostLink />} />  
           <Route path="/edit-profile" element={<EditProfile userEmail={loggedInUserEmail} />} />
           <Route path="/orderhistory" element={<OrderHistory />} /> 
-          <Route path="/admin/*" element={<AdminRoutes />} />
-        </Routes>
-      </div>
-    </Router>
+          </>
+      )}
+    </Routes>
   );
-}
+};
 
 export default App;
 

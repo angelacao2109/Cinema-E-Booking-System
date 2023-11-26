@@ -19,14 +19,14 @@ interface Card {
 }
 
 const authToken = document.cookie
-.split("; ")
-.find((row) => row.startsWith("authToken="))
-?.split("=")[1];
+  .split("; ")
+  .find((row) => row.startsWith("authToken="))
+  ?.split("=")[1];
 
 const email = document.cookie
-.split("; ")
-.find((row) => row.startsWith("userEmail="))
-?.split("=")[1];
+  .split("; ")
+  .find((row) => row.startsWith("userEmail="))
+  ?.split("=")[1];
 
 const Checkout: React.FC = () => {
 
@@ -38,7 +38,7 @@ const Checkout: React.FC = () => {
     cvv: ''
   });
   const [addNewCard, setAddNewCard] = useState(false);
-  
+
 
   const fetchUserCards = async () => {
     try {
@@ -67,7 +67,7 @@ const Checkout: React.FC = () => {
     lastName: '',
     Email: '',
     Address: '',
-    PromoCode:'',
+    PromoCode: '',
     CreditCardNumber: '',
     ExpiryDate: '',
     CVV: ''
@@ -75,7 +75,7 @@ const Checkout: React.FC = () => {
 
   const location = useLocation();
   const { selectedSeats, ticketCounts } = location.state || { selectedSeats: [], ticketCounts: { kids: 0, adult: 0, senior: 0 } };
-  
+
   // Calculate the total based on ticket counts and their prices
   let total = 0;
   for (let ticketType in ticketCounts) {
@@ -115,48 +115,52 @@ const Checkout: React.FC = () => {
           <InputField label="Email:" name="email" value={userData.Email} onChange={handleChange} />
         </div>
         <div className="payment-method-selection">
-  <h2>Select Payment Method</h2>
-  {userCards.length > 0 && (
-    userCards.map((card, index) => (
-      <div key={index}>
-        <input 
-          type="radio" 
-          id={`card-${index}`} 
-          name="selectedCard" 
-          value={card.cardID}
-          onChange={() => setAddNewCard(false)}
-        />
-        <label htmlFor={`card-${index}`}>
-          {`**** **** **** ${card.cardNumber.slice(-4)} (Expires: ${card.expDate})`}
-        </label>
-      </div>
-    ))
-  )}
+          <h2>Select Payment Method</h2>
+          {userCards.length > 0 && (
+            userCards.map((card, index) => (
+              <div key={index}>
+                <input
+                  type="radio"
+                  id={`card-${index}`}
+                  name="selectedCard"
+                  value={card.cardID}
+                  onChange={() => setAddNewCard(false)}
+                />
+                <label htmlFor={`card-${index}`}>
+                  {`**** **** **** ${card.cardNumber.slice(0,4)} (Expires: ${card.expDate})`}
+                </label>
+              </div>
+            ))
+          )}
 
-  <div>
-    <input 
-      type="radio" 
-      id="new-card-option" 
-      name="selectedCard" 
-      value="newCard"
-      onChange={() => setAddNewCard(true)}
-    />
-    <label htmlFor="new-card-option">Use a different card</label>
-  </div>
-</div>
-</div>
-{addNewCard && (
-  <div className="new-card-info">
-    <InputField label="Card Number:" name="cardNumber" value={newCard.cardNumber} onChange={(e) => setNewCard({...newCard, cardNumber: e.target.value})} />
-    <InputField label="Expiry Date:" name="expDate" value={newCard.expDate} onChange={(e) => setNewCard({...newCard, expDate: e.target.value})} />
-    <InputField label="CVV:" name="cvv" value={newCard.cvv} onChange={(e) => setNewCard({...newCard, cvv: e.target.value})} />
-  </div>
-)}
+          <div>
+            <input
+              type="radio"
+              id="new-card-option"
+              name="selectedCard"
+              value="newCard"
+              onChange={() => setAddNewCard(true)}
+            />
+
+            <label htmlFor="new-card-option">Use a different card</label>
+          </div>
+          {addNewCard && (
+            <div className="new-card-info">
+              <InputField label="Card Number:" name="cardNumber" value={newCard.cardNumber} onChange={(e) => setNewCard({ ...newCard, cardNumber: e.target.value })} />
+              <InputField label="Expiry Date:" name="expDate" value={newCard.expDate} onChange={(e) => setNewCard({ ...newCard, expDate: e.target.value })} />
+              <InputField label="CVV:" name="cvv" value={newCard.cvv} onChange={(e) => setNewCard({ ...newCard, cvv: e.target.value })} />
+            </div>
+          )}
+        </div>
+      </div>
+
+
+
 
 
       <div className="button-container">
-  <button type="submit">Submit</button>
-</div>
+        <button type="submit">Submit</button>
+      </div>
     </form>
   );
 };

@@ -14,10 +14,11 @@ import {
 } from "react-router-dom";
 import EditProfile from "../EditProfile/EditProfile";
 import EditMovies from "../AdminPage/EditMovies/EditMovies.jsx";
-import EditPromo from "../AdminPage/EditPromo/EditPromo";
+import EditPromo from "../AdminPage/Promotions/EditPromo";
 import EditUser from "../AdminPage/EditUser/EditUser";
 
-import { AdminNavBar, AdminRoutes } from "../AdminPage/AdminNav/AdminNavBar";
+import AdminNavBar from "../AdminPage/AdminNav/AdminNavBar";
+import AdminRoutes from "../AdminPage/AdminNav/AdminRoutes";
 import { Movie} from "../types";
 type NavBarProps = {
   movieData: any[];
@@ -81,9 +82,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
 
   const location = useLocation();
 
-  return location.pathname.startsWith("/admin") ? (
-    <AdminRoutes />
-  ) : (
+  return  (
     <nav className="navbar">
       <div className="leftLinks">
         <a href="/" className="link">
@@ -103,37 +102,31 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
         <Link to="/movies-coming-soon" className="link">
           Movies Coming Soon
         </Link>
-        {isLoggedIn ? (
-        isAdmin ? (
+
+        {isLoggedIn && isAdmin ? (
           <>
-      <Link to="/admin" className="link">Admin</Link>
-      <button className="logoutButton" onClick={handleLogout}> Logout</button>
-    </>
-  ) : (
-    <>
-        
-        <Link to="/edit-profile" className="link">
-          Edit Profile
-        </Link>
-        <Link to="/orderhistory" className="link">
-          Order History
-        </Link>
-        <Link to="/select-ticket" className="link">
-          Select Ticket
-        </Link>
-        <div className="welcomeLogoutGroup">
-        <div className="welcomeSection">
-        <span>Welcome</span>
-        <span>{userEmail}</span>
-        </div>
-        
-        <button className="logoutButton" onClick={handleLogout}>Logout</button>
-       
-</div>
+          <Link to="/admin" className="link">Admin</Link>
+          <button className="logoutButton" onClick={handleLogout}> Logout</button>
         </>
-  )
-         ) : (
-          
+
+      ) : (
+    <>
+      
+        <Link to="/edit-profile" className="link">Edit Profile</Link>
+        <Link to="/orderhistory" className="link">Order History</Link>
+        <Link to="/select-ticket" className="link">Select Ticket</Link>
+        <div className="welcomeLogoutGroup">
+          <div className="welcomeSection">
+            <span>Welcome</span>
+            <span>{userEmail}</span>
+          </div>
+          <button className="logoutButton" onClick={handleLogout}>Logout</button>
+        </div>
+      </>
+    
+  )}
+
+{!isLoggedIn && (
         <div className="accountSection">
           <span>Account</span>
           <div className="accountLinks">
