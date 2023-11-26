@@ -82,6 +82,52 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
 
   const location = useLocation();
 
+  const CommonLinks = () => (
+    <>
+      <Link to="/movies-playing" className="link">Movies Playing</Link>
+      <Link to="/movies-coming-soon" className="link">Movies Coming Soon</Link>
+    </>
+  );
+
+  const UserLinks = () => (
+    <>
+      <CommonLinks />
+      <Link to="/edit-profile" className="link">Edit Profile</Link>
+      <Link to="/orderhistory" className="link">Order History</Link>
+      <Link to="/select-ticket" className="link">Select Ticket</Link>
+      <div className="welcomeLogoutGroup">
+        <div className="welcomeSection">
+          <span>Welcome, {userEmail}</span>
+        </div>
+        <button className="logoutButton" onClick={handleLogout}>Logout</button>
+      </div>
+    </>
+  );
+
+  const AdminLinks = () => (
+    <>
+      <CommonLinks />
+      <Link to="/admin/moviespage" className="link">Admin</Link>
+      <div className="welcomeLogoutGroup">
+        <div className="welcomeSection">
+          <span>Welcome, {userEmail}</span>
+        </div>
+        <button className="logoutButton" onClick={handleLogout}>Logout</button>
+      </div>
+    </>
+  );
+
+  const GuestLinks = () => (
+    <div className="accountSection">
+      <span>Account</span>
+      <div className="accountLinks">
+        <Link to="/signin" className="accountLink">Sign In</Link>
+        <Link to="/register" className="accountLink">Join Now</Link>
+      </div>
+    </div>
+  );
+
+
   return  (
     <nav className="navbar">
       <div className="leftLinks">
@@ -96,49 +142,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
         />
       </div>
       <div className="rightLinks">
-        <Link to="/movies-playing" className="link">
-          Movies Playing
-        </Link>
-        <Link to="/movies-coming-soon" className="link">
-          Movies Coming Soon
-        </Link>
-
-        {isLoggedIn && isAdmin ? (
-          <>
-          <Link to="/admin" className="link">Admin</Link>
-          <button className="logoutButton" onClick={handleLogout}> Logout</button>
-        </>
-
-      ) : (
-    <>
-      
-        <Link to="/edit-profile" className="link">Edit Profile</Link>
-        <Link to="/orderhistory" className="link">Order History</Link>
-        <Link to="/select-ticket" className="link">Select Ticket</Link>
-        <div className="welcomeLogoutGroup">
-          <div className="welcomeSection">
-            <span>Welcome</span>
-            <span>{userEmail}</span>
-          </div>
-          <button className="logoutButton" onClick={handleLogout}>Logout</button>
-        </div>
-      </>
-    
-  )}
-
-{!isLoggedIn && (
-        <div className="accountSection">
-          <span>Account</span>
-          <div className="accountLinks">
-            <Link to="/signin" className="accountLink">
-              Sign In
-            </Link>
-            <Link to="/register" className="accountLink">
-              Join Now
-            </Link>
-          </div>
-        </div>
-         )}
+        {isLoggedIn ? (isAdmin ? <AdminLinks /> : <UserLinks />) : <GuestLinks />}
       </div>
     </nav>
   );

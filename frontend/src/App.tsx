@@ -112,7 +112,7 @@ const AppRoutes = ({
   return (
           <Routes>
           {isAdminPath ? (
-          <Route path="/admin/*" element={<AdminRoutes />} />
+         <Route path="/admin/*" element={<AdminRoutes />} />
 
           ) : (
             <>
