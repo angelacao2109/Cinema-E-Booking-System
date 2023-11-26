@@ -2,23 +2,27 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import './AdminNavbar.css';
 
+interface AdminNavBarProps {
+  onLogout: () => void;
+
+}
+
 const navLinks = [
   { to: "/admin/moviespage", label: "Movies" },
   { to: "/admin/promopage", label: "Promotions" },
   { to: "/admin/edituser", label: "Users" }, 
 ];
 
+const AdminNavBar: React.FC<AdminNavBarProps> = ({ onLogout }) => {
 
-const AdminNavBar = () => {
-  const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+  //const handleBack = () => {
+   // navigate(-1);
+ // };
 
-  const handleLogout = () => {
-    navigate('/login'); 
-  };
+  //const handleLogout = () => {
+  //  navigate('/login'); 
+ // };
 
   return (
     <nav className="navbar">
@@ -30,9 +34,9 @@ const AdminNavBar = () => {
         ))}
       </div>
       <div className="right-section">
-        <button onClick={handleBack} className="navbar-button">Back</button>
+      {/*   <button onClick={handleBack} className="navbar-button">Back</button> */}
         <Link to="/admin/profile" className="navbar-link">Profile</Link>
-        <button onClick={handleLogout} className="navbar-button">Logout</button>
+        <button onClick={onLogout} className="navbar-button">Logout</button>
       </div>
     </nav>
   );

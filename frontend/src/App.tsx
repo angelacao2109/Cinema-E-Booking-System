@@ -25,6 +25,16 @@ import VerifyEmail from './components/VerifyEmail/VerifyEmail';
 function App() {
   console.log(moviesData);
 
+  const logout = () => {
+  
+    document.cookie = 'authToken=; Max-Age=0';
+    document.cookie = 'userEmail=; Max-Age=0';
+    setIsLoggedIn(false);
+    setUserEmail(null);
+    setUserRole('guest');
+   
+  };
+
   const [ticketCount, setTicketCount] = useState<number>(0);
 
 
@@ -46,6 +56,8 @@ function App() {
 
 
   const [isLoggedIn, setIsLoggedIn] = useState(getCookie('authToken') !== null);
+
+  const [userRole, setUserRole] = useState('guest'); 
 
   useEffect(() => {
       setIsLoggedIn(getCookie('authToken') !== null);
@@ -72,7 +84,13 @@ function App() {
 return (
   <Router>
     <div>
-      <NavBar
+    {userEmail === "admin@admin.com" ? (
+       <AdminNavBar onLogout={logout} />
+     
+        ) : (
+
+      <NavBar 
+  
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
         movieData={moviesData}
@@ -81,6 +99,7 @@ return (
         onSearchResultsChange={setSearchResults}
         isAdmin={userEmail === "admin@admin.com"}
       />
+      )}
       <AppRoutes
           isAdminPath={location.pathname.startsWith("/admin")}
           searchResults={searchResults}
@@ -91,6 +110,7 @@ return (
           setLoggedInUserEmail={setLoggedInUserEmail}
           refetchMovies={refetchMovies}
           loggedInUserEmail={loggedInUserEmail}
+          onLogout={logout}
         />
       </div>
     </Router>
@@ -106,14 +126,15 @@ const AppRoutes = ({
   setIsLoggedIn,
   setLoggedInUserEmail,
   refetchMovies,
-  loggedInUserEmail
+  loggedInUserEmail,
+  onLogout
 }) => {
 
   return (
+    
           <Routes>
           {isAdminPath ? (
-         <Route path="/admin/*" element={<AdminRoutes />} />
-
+           <Route path="/admin/*" element={<AdminRoutes onLogout={onLogout} />} />
           ) : (
             <>
           <Route path="/" element={<MovieList searchResults={searchResults} />} />

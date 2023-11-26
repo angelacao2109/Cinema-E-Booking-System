@@ -50,7 +50,7 @@ const AddMovie: React.FC<AddMovieProps> = ({ onAddMovie }) => {
             const response = await axios.post("http://localhost:8080/api/movie/add", movieForm);
             if (response.status === 200 || response.status === 201) {
                 console.log(response.data);
-                navigate('/moviespage'); // Navigate to the movies page upon successful addition
+                navigate('/admin/moviespage');  // Navigate to the movies page upon successful addition
             } else {
                 console.error('Failed to add movie');
             }
@@ -62,7 +62,7 @@ const AddMovie: React.FC<AddMovieProps> = ({ onAddMovie }) => {
     return (
         <>
             <div className='link-container'>
-                <Link to='/moviespage' className='link-styles'>
+            <Link to='/admin/moviespage' className='link-styles'>
                     Exit Add Movie Page
                 </Link>
             </div>

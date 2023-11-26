@@ -15,20 +15,20 @@ const handleAddMovie = (movie) => { /* ... */ };
 const handleEditMovie = (movie) => { /* ... */ };
 const handleEditPromo = (promo) => { /* ... */ };
 
-const AdminRoutes = () => {
+const AdminRoutes = ({ onLogout }) => {
     return (
         <>
-            <AdminNavBar />
+            <AdminNavBar onLogout={onLogout} />
             <Routes>
                 
-            <Route path="/moviespage" element={<MoviesPage />} />
-                <Route path="/addmovie" element={<AddMovie onAddMovie={handleAddMovie} />} />
-                <Route path="/editmovie/:id" element={<EditMovie onEditMovie={handleEditMovie} />} />
-                <Route path="/movieinfo/:id" element={<MovieInfo />} />
-                <Route path="/promopage" element={<PromoPage />} />
-                <Route path="/addpromo" element={<AddPromo />} />
-                <Route path="/editpromo/:id" element={<EditPromo onEditPromo={handleEditPromo} />} />
-                <Route path="/edituser" element={<EditUser />} />
+            <Route path="moviespage" element={<MoviesPage />} />
+            <Route path="addmovie" element={<AddMovie onAddMovie={handleAddMovie} />} />
+                <Route path="editmovie/:id" element={<EditMovie onEditMovie={handleEditMovie} />} />
+                <Route path="movieinfo/:id" element={<MovieInfo />} />
+                <Route path="promopage" element={<PromoPage />} />
+                <Route path="addpromo" element={<AddPromo />} />
+                <Route path="editpromo/:id" element={<EditPromo onEditPromo={handleEditPromo} />} />
+                <Route path="edituser" element={<EditUser />} />
            
             </Routes>
         </>
