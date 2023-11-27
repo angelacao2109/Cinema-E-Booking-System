@@ -60,7 +60,7 @@ public class MovieController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<String> addMovie(@RequestBody MovieDto mov) {
         long id = movieService.createMovie(mov).getId();
         return ResponseEntity.ok("Movie ID " + id + " Created!");
