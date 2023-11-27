@@ -61,8 +61,9 @@ public class MovieController {
 
     @GetMapping()
     public ResponseEntity<?> getMovieById(@RequestParam long id) {
-
-
+        Movie movie = movieService.getMovie(id);
+        MovieDto resMovie = new MovieDto(movie);
+        return ResponseEntity.ok(resMovie);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

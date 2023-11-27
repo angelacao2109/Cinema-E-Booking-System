@@ -1,5 +1,6 @@
 package com.uga.moviebooking.model.dto;
 
+import com.uga.moviebooking.model.movie.Movie;
 import com.uga.moviebooking.model.movie.MovieStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,4 +35,19 @@ public class MovieDto {
     private MovieStatus movieStatus;
 
     private LocalDate releaseDate;
+
+    public MovieDto(Movie movie) {
+        this.title = movie.getTitle();
+        this.category = movie.getCategory();
+        this.cast = movie.getCast();
+        this.director = movie.getDirector();
+        this.producer = movie.getProducer();
+        this.synopsis = movie.getSynopsis();
+        this.reviews = movie.getReviews();
+        this.rating = movie.getRating();
+        this.trailerPictureUrl = movie.getTrailerPictureUrl();
+        this.trailerVideoUrl = movie.getTrailerVideoUrl();
+        this.movieStatus = movie.getStatus();
+        this.releaseDate = movie.getReleaseDate();
+    }
 }
