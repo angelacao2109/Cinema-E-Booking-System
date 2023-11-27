@@ -10,9 +10,11 @@ import java.util.List;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    @Query("SELECT case WHEN count(t) > 0 THEN true ELSE false END FROM Ticket t WHERE t.showtime.id = ?1 AND t.seat.seat_row = ?2 AND t.seat.seat_col = ?3")
-    boolean isBooked(long showtimeID, int seatRow, int seatCol);
+    @Query("SELECT case WHEN count(t) > 0 THEN true ELSE false END FROM Ticket t WHERE t.showtime.id = ?1 AND t.seat.id = ?2")
+    boolean isBooked(long showtimeID, long seatId);
 
-    @Query("SELECT t FROM Ticket t WHERE t.id = 1")
-    List<Ticket> getBookedSeats();
+    //return all taken seats given showtime id, (might have to use native query)
+    @Query("SELECT T.seat from Ticket T WHERE T.showtime.id = ?1")
+    List<Seat> findAllByShowtimeId(long showtimeID);
+
 }

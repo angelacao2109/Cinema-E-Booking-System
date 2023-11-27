@@ -7,10 +7,14 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "ticket")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private long price;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id")
@@ -20,7 +24,7 @@ public class Ticket {
     @JoinColumn(name = "seat_id")
     private Seat seat;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "showtime_id")
     private Showtime showtime;
 
@@ -32,5 +36,6 @@ public class Ticket {
         this.type = type;
         this.seat = seat;
         this.showtime = showtime;
+        this.price = cost;
     }
 }

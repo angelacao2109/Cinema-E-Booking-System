@@ -1,9 +1,8 @@
 package com.uga.moviebooking.model.show;
 
-import com.uga.moviebooking.AppException;
-import com.uga.moviebooking.model.booking.Booking;
 import com.uga.moviebooking.model.booking.ticket.Ticket;
 import com.uga.moviebooking.model.booking.ticket.TicketRepository;
+import com.uga.moviebooking.model.dto.SeatDto;
 import com.uga.moviebooking.model.theatre.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,12 +80,16 @@ public class ShowtimeService {
         return showtimeRepository.findById(showtimeID).orElse(null);
     }
 
-    public List<Ticket> getTakenSeats(long showtimeID) {
-        List<Ticket> list = ticketRepository.getBookedSeats();
-        return list;
+    public List<SeatDto> getTakenSeats(long showtimeID) {
+        List<Seat> booked = ticketRepository.findAllByShowtimeId(showtimeID);
+        List<SeatDto> seats = new ArrayList<>();
+        for(Seat s : booked) {
+           seats.add(new SeatDto(s.getSeat_col(),s.getSeat_row(), true));
+        }
+        return seats;
     }
 
-    public boolean isSeatBooked(long showtimeID, int row, int col) {
-        return ticketRepository.isBooked(showtimeID, row, col);
+    public boolean isSeatBooked(long showtimeId,long seatId) {
+        return ticketRepository.isBooked(showtimeId, seatId);
     }
 }

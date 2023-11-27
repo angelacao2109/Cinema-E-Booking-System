@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -21,7 +20,6 @@ public class Showtime {
     @Column(nullable = false)
     private LocalTime showtime;
 
-    //BIDIRECTIONAL!
     @ManyToOne
     @JoinColumn(name = "theatre_id")
     private Theatre theatre;

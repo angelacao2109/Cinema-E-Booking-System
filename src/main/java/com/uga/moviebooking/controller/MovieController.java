@@ -71,9 +71,9 @@ public class MovieController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping()
     public ResponseEntity<String> deleteMovie(@RequestBody long id) {
-        String title = movieService.deleteMovie(id);
-        if(title != null){
-            return ResponseEntity.ok("Movie " + title + " deleted.");
+        long archiveId = movieService.archiveMovie(id);
+        if(archiveId != 0){
+            return ResponseEntity.ok("Movie " + id + " archived.");
         }
         return ResponseEntity.ok("Movie not found, or can not be deleted");
     }

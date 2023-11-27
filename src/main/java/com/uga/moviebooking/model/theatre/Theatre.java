@@ -25,9 +25,6 @@ public class Theatre {
     @Column(nullable = false)
     private int numCols;
 
-    @OneToMany(mappedBy = "theatre")
-    List<Showtime> showtime;
-
     public Theatre() {
 
     }

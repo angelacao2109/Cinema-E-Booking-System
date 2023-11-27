@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,5 +43,9 @@ public class Booking {
 
     public Booking() {
 
+    }
+    public BigDecimal getCostInDollars() {
+        BigDecimal payment = new BigDecimal(totalCost).movePointLeft(2);
+        return payment;
     }
 }

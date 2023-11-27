@@ -52,7 +52,7 @@ public class LoginController {
         if (user == null) {
             return ResponseEntity.ok("Password reset unsuccessful because user not found.");
         }
-        userService.resetSetUpUserPassword(user);
+        userService.resetUserPassword(user);
 
 
         return ResponseEntity.ok("Password reset successfully.");

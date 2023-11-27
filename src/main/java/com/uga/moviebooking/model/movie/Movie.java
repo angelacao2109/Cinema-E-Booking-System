@@ -1,9 +1,9 @@
 package com.uga.moviebooking.model.movie;
 
-import com.uga.moviebooking.model.show.Showtime;
-import com.uga.moviebooking.model.user.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -51,6 +51,9 @@ public class Movie {
 
     @Column(nullable = false)
     private String trailerVideoUrl;
+
+    @Column(nullable = false)
+    private boolean archived = false;
      
 
     //maybe for movie home page endpoint

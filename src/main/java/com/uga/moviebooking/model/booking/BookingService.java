@@ -6,6 +6,7 @@ import com.uga.moviebooking.model.booking.ticket.TicketType;
 import com.uga.moviebooking.model.booking.ticket.TicketTypeRepository;
 import com.uga.moviebooking.model.dto.BookingDto;
 import com.uga.moviebooking.model.dto.TicketDto;
+import com.uga.moviebooking.model.email.EmailService;
 import com.uga.moviebooking.model.payment.PaymentCard;
 import com.uga.moviebooking.model.show.Showtime;
 import com.uga.moviebooking.model.show.ShowtimeService;
@@ -14,32 +15,36 @@ import com.uga.moviebooking.model.theatre.TheatreService;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 @Service
 public class BookingService {
 
-    BookingRepository bookingRepository;
-    ShowtimeService showtimeService;
-    UserService userService;
-    TicketTypeRepository ticketTypeRepository;
-    TheatreService theatreService;
+    private final EmailService emailService;
+    private final BookingRepository bookingRepository;
+    private final ShowtimeService showtimeService;
+    private final UserService userService;
+    private final TicketTypeRepository ticketTypeRepository;
+    private final TheatreService theatreService;
 
     @Autowired
     public BookingService(BookingRepository bookingRepository, ShowtimeService showtimeService
-            , UserService userService, TheatreService theatreService, TicketTypeRepository ticketTypeRepository) {
+            , UserService userService, TheatreService theatreService, TicketTypeRepository ticketTypeRepository, EmailService emailService) {
        this.bookingRepository = bookingRepository;
        this.showtimeService = showtimeService;
        this.userService = userService;
        this.theatreService = theatreService;
        this.ticketTypeRepository = ticketTypeRepository;
+       this.emailService = emailService;
     }
 
-    public void createBooking(String userEmail, BookingDto bookingDto) throws AppException {
+    public HashMap<String, Object> createBooking(String userEmail, BookingDto bookingDto) throws AppException {
         Showtime showtime = showtimeService.findById(bookingDto.getShowtimeID());
         User user = userService.findByEmail(userEmail);
         System.out.println("reached");
@@ -60,20 +65,46 @@ public class BookingService {
         List<TicketDto> tickets = bookingDto.getTickets();
         for(TicketDto t : tickets) {
             Ticket ticket = convertTicket(t,showtime);
+
             ticketSet.add(ticket);
         }
         booking.setTickets(ticketSet);
+        long cost = getCost(ticketSet);
+        booking.setTotalCost(cost);
         //generate confirmation code
         String confirmationCode = RandomStringUtils.randomAlphabetic(16);
         booking.setBookingConfirmation(confirmationCode);
-        //TODO: EMAIL RECEIPT TO USER!!!
-        bookingRepository.save(booking);
-
-
-
-
+        //email user
+        sendEmailConfirmation(user,booking);
+        //response map
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("message", "User id " + user.getId() + " successfully created booking id " + booking.getId());
+        response.put("confirmationCode", booking.getBookingConfirmation());
+        response.put("totalCost", booking.getTotalCost());
+        response.put("tickets", tickets);
+        return response;
     }
 
+    private void sendEmailConfirmation(User user,Booking booking) {
+        String content = "Thank you for your purchase %s! <br>"
+                + "Booking Confirmation:<b> %s </b><br>"
+                + "Ticket Count: <b> %d </b><br>"
+                + "Total Cost:<b> %s </b><br>"
+                + "Thank you,<br>"
+                + "Movie Booking Company™.";
+        String firstName = StringUtils.capitalize(user.getFirstname());
+        content = String.format(content, firstName, booking.getBookingConfirmation(),
+                booking.getTickets().size(),booking.getCostInDollars().toString());
+        emailService.sendEmail(user.getEmail(), "Booking Confirmation", content);
+    }
+
+    private long getCost(HashSet<Ticket> ticketSet) {
+        long cost = 0;
+        for(Ticket t : ticketSet) {
+            cost += t.getPrice();
+        }
+        return cost;
+    }
 
     private Ticket convertTicket(TicketDto ticketDto, Showtime showtime) {
         TicketType type = ticketTypeRepository.findByType(ticketDto.getType());
@@ -82,10 +113,10 @@ public class BookingService {
         long price = type.getCost();
         int seatCol = ticketDto.getSeatCol();
         int seatRow = ticketDto.getSeatRow();
-        if(showtimeService.isSeatBooked(showtime.getId(), seatRow, seatCol)) {
+        Seat seat = theatreService.getSeat(showtime.getTheatre().getId(),seatCol,seatRow);
+        if(showtimeService.isSeatBooked(showtime.getId(), seat.getId())) {
             throw new AppException("One or more of the seats is already booked!");
         }
-        Seat seat = theatreService.getSeat(showtime.getTheatre().getId(),seatCol,seatRow);
         Ticket ticket = new Ticket(type, seat, showtime,price);
         return ticket;
     }

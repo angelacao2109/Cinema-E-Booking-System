@@ -1,9 +1,8 @@
 package com.uga.moviebooking.controller;
 
-import com.uga.moviebooking.model.booking.ticket.Ticket;
+import com.uga.moviebooking.model.dto.SeatDto;
 import com.uga.moviebooking.model.show.Showtime;
 import com.uga.moviebooking.model.show.ShowtimeService;
-import com.uga.moviebooking.model.theatre.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +30,10 @@ public class ShowtimeController {
     }
 
     @GetMapping("/seats")
-    public ResponseEntity<?> getTakenSeatsForShowtime(@RequestParam("showtimeID") int showtimeID) {
-        List<Ticket> seats = showtimeService.getTakenSeats(showtimeID);
+    public ResponseEntity<?> getSeatMap(@RequestParam("showtimeID") int showtimeID) {
+        List<SeatDto> seatEntities = showtimeService.getTakenSeats(showtimeID);
         HashMap<String, Object> map = new HashMap<>();
-        map.put("seats taken", seats);
+        map.put("Unavailable Seats",seatEntities);
         return ResponseEntity.ok(map);
     }
 

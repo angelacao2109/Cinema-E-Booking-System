@@ -5,11 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,12 +41,13 @@ public class MovieService {
     }
 
     //for delete movies
-   public String deleteMovie(long id) {
+   public long archiveMovie(long id) {
        Movie movie = movieRepository.findById(id).orElse(null);
        if(movie == null)
-           return null;
-       movieRepository.delete(movie);
-       return movie.getTitle();
+           return 0;
+       movie.setArchived(true);
+       movieRepository.save(movie);
+       return movie.getId();
    }
 
    //Get Movie

@@ -1,9 +1,7 @@
 package com.uga.moviebooking.controller;
 
-import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.model.booking.BookingService;
 import com.uga.moviebooking.model.dto.BookingDto;
-import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserService;
 import com.uga.moviebooking.utils.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
 
 
 @RestController
@@ -36,10 +36,8 @@ public class BookingController {
             return ControllerUtils.validationErrorResponse(bind);
         }
 
-        bookingService.createBooking(userEmail, booking);
-
-
-        return null;
+        HashMap<String, Object> response = bookingService.createBooking(userEmail, booking);
+        return ResponseEntity.ok(response);
     }
 
 }

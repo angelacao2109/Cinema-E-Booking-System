@@ -127,7 +127,7 @@ public class UserService {
     private void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException  {
         String toAddress = user.getEmail();
         String fromAddress = "cinema.ebooking.movies.us@gmail.com";
-        String senderName = "Cinema Ebooking";
+        String senderName = "Cinema E-booking";
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
                 + "Please click the link below to verify your registration:<br>"
@@ -171,7 +171,7 @@ public class UserService {
         }
     }
 
-    public void resetSetUpUserPassword(User user) throws UnsupportedEncodingException, MessagingException {
+    public void resetUserPassword(User user) throws UnsupportedEncodingException, MessagingException {
 
         String resetToken = generateResetToken(); //make the token
         savePasswordResetToken(user,resetToken, Duration.ofHours(1)); //save the token in the database with the user
