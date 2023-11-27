@@ -18,7 +18,6 @@ const ResetPasswordPostLink: React.FC = () => {
 
     setLoading(true);
     try {
-      // Assuming you send the token as a query parameter, for example: /change-password?token=YOUR_TOKEN
       const token = new URLSearchParams(window.location.search).get("token");
 
       const response = await axios.post(

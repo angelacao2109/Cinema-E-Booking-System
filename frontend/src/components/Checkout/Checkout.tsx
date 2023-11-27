@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Checkout.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -8,13 +9,65 @@ const ticketPrices = {
   senior: 7
 };
 
+interface Card {
+  cardID: number;
+  firstname: string;
+  lastname: string;
+  cardNumber: string;
+  expDate: string;
+  CVV: string;
+}
+
+const authToken = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("authToken="))
+  ?.split("=")[1];
+
+const email = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("userEmail="))
+  ?.split("=")[1];
+
 const Checkout: React.FC = () => {
+
+  const [userCards, setUserCards] = useState<Card[]>([]);
+
+  const [newCard, setNewCard] = useState({
+    cardNumber: '',
+    expDate: '',
+    cvv: ''
+  });
+  const [addNewCard, setAddNewCard] = useState(false);
+
+
+  const fetchUserCards = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/user/profile?email=${email}`,
+        {
+          headers: {
+            Authorization: authToken,
+            "Content-Type": "application/json",
+            "Referrer-Policy": "unsafe_url",
+          },
+        }
+      );
+      setUserCards(response.data.paymentCards);
+    } catch (error) {
+      console.error("Error fetching user cards:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserCards();
+  }, []);
+
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
     Email: '',
     Address: '',
-    PromoCode:'',
+    PromoCode: '',
     CreditCardNumber: '',
     ExpiryDate: '',
     CVV: ''
@@ -22,7 +75,7 @@ const Checkout: React.FC = () => {
 
   const location = useLocation();
   const { selectedSeats, ticketCounts } = location.state || { selectedSeats: [], ticketCounts: { kids: 0, adult: 0, senior: 0 } };
-  
+
   // Calculate the total based on ticket counts and their prices
   let total = 0;
   for (let ticketType in ticketCounts) {
@@ -61,17 +114,53 @@ const Checkout: React.FC = () => {
           <InputField label="Address:" name="address" value={userData.Address} onChange={handleChange} />
           <InputField label="Email:" name="email" value={userData.Email} onChange={handleChange} />
         </div>
-        <div className="payment-info">
-          <h2>Payment Information</h2>
-          <InputField label="Promo Code:" name="PromoCode" value={userData.PromoCode} onChange={handleChange} />
-          <InputField label="Credit Card Number:" name="CreditCardNumber" value={userData.CreditCardNumber} onChange={handleChange} />
-          <InputField label="Expiry Date:" name="ExpiryDate" value={userData.ExpiryDate} onChange={handleChange} />
-          <InputField label="CVV:" name="CVV" value={userData.CVV} onChange={handleChange} />
+        <div className="payment-method-selection">
+          <h2>Select Payment Method</h2>
+          {userCards.length > 0 && (
+            userCards.map((card, index) => (
+              <div key={index}>
+                <input
+                  type="radio"
+                  id={`card-${index}`}
+                  name="selectedCard"
+                  value={card.cardID}
+                  onChange={() => setAddNewCard(false)}
+                />
+                <label htmlFor={`card-${index}`}>
+                  {`**** **** **** ${card.cardNumber.slice(0,4)} (Expires: ${card.expDate})`}
+                </label>
+              </div>
+            ))
+          )}
+
+          <div>
+            <input
+              type="radio"
+              id="new-card-option"
+              name="selectedCard"
+              value="newCard"
+              onChange={() => setAddNewCard(true)}
+            />
+
+            <label htmlFor="new-card-option">Use a different card</label>
+          </div>
+          {addNewCard && (
+            <div className="new-card-info">
+              <InputField label="Card Number:" name="cardNumber" value={newCard.cardNumber} onChange={(e) => setNewCard({ ...newCard, cardNumber: e.target.value })} />
+              <InputField label="Expiry Date:" name="expDate" value={newCard.expDate} onChange={(e) => setNewCard({ ...newCard, expDate: e.target.value })} />
+              <InputField label="CVV:" name="cvv" value={newCard.cvv} onChange={(e) => setNewCard({ ...newCard, cvv: e.target.value })} />
+            </div>
+          )}
         </div>
       </div>
+
+
+
+
+
       <div className="button-container">
-  <button type="submit">Submit</button>
-</div>
+        <button type="submit">Submit</button>
+      </div>
     </form>
   );
 };

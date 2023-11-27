@@ -1,0 +1,166 @@
+.movie-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 75px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-right: 75px;
+    font-size: 40px;
+    font-weight: 800;
+    color: red;
+  }
+  
+  .add-movie-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .add-movie-button:hover {
+    background-color: rgb(251, 97, 97);
+  }
+  
+  ul {
+      list-style-type: none;
+      padding: 0;
+  }
+    
+  li {
+      border: 1px solid #ddd;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+  }
+    
+  li img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+  }
+    
+  li strong {
+      margin-right: 5px;
+  }
+    
+  .search-bar {
+      margin-bottom: 20px;
+  }
+    
+  .movie-container {
+      display: flex;
+      overflow: hidden;
+      overflow-x: auto;
+  }
+  
+  .movie-card {
+      min-width: 325px;
+      max-width: 325px;
+      margin: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: rgb(168, 163, 163, 0.35);
+  }
+  
+  .movie-card h3 {
+      display: flex;
+  }
+  
+  .movie-card img {
+      width: 325px;
+      height: 505px;
+      object-fit: cover;
+  }
+  
+  .movie-content {
+      padding: 15px;
+      white-space: normal;
+  }
+  
+  .search-tools {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      margin-left: 75px;
+      margin-right: 40px;
+    }
+    
+    .search-input {
+      width: 200px;
+      padding: 8px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    .search-button,
+    .clear-button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 15px;
+    }
+    
+    .search-button:hover,
+    .clear-button:hover {
+      background-color: rgb(251, 97, 97);
+    }
+    
+    .filter-select {
+      width: 150px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .now-playing-header,
+    .coming-soon-header,
+    .archived-header,
+    .all-movies-header {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin-top: 20px;
+      margin-left: 75px;
+    }
+  
+    .filter-button {
+      padding: 8px;
+      border: none;
+      cursor: pointer;
+      background-color: white;
+      color: black;
+      font-size: 20px;
+      text-decoration: underline;
+  
+  }
+  
+  .filter-button:hover {
+      color: red;
+  }
+  
+  .movie-status{
+      display: flex;
+      justify-content: space-evenly;
+      text-align: center;
+  }
+  
+  .edit-link {
+      text-decoration: none;
+      color: inherit;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .edit-link:hover {
+      text-decoration: underline;
+    }

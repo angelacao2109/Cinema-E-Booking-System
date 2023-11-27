@@ -26,73 +26,44 @@ function Registration() {
     subscribeOffers: false,
     agreeTerms: false,
   });
-  const [showModal, setShowModal] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
-
-  function Modal({ message, onClose }) {
-    console.log("Rendering Modal with message:", message);
-    return (
-      <div className="modal">
-        <div className="modal-content">
-          <span className="close" onClick={onClose}>&times;</span>
-          <p>{message}</p>
-        </div>
-      </div>
-    );
-  }
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setErrorMessage(""); // Reset error message
-  };
-
-  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //setErrorMessage(""); 
-   // setShowModal(false);
-  
+
     let missingFields: string[] = []; 
-  if (!formData.firstName) missingFields.push("First Name");
-  if (!formData.lastName) missingFields.push("Last Name");
-  if (!formData.email) missingFields.push("Email");
-  if (!formData.password) missingFields.push("Password");
-  if (!formData.phone) missingFields.push("Phone Number");
+  if (formData.firstName == "") missingFields.push("First Name");
+  if (formData.lastName == "") missingFields.push("Last Name");
+  if (formData.email == "") missingFields.push("Email");
+  if (formData.password == "") missingFields.push("Password");
+  if (formData.phone == "") missingFields.push("Phone Number");
 
   if (missingFields.length > 0) {
     const missingFieldsMessage = "Please fill in the following required fields: " + missingFields.join(", ");
     console.log("Missing fields:", missingFieldsMessage); // Debugging log
-    setErrorMessage(missingFieldsMessage);
-    setShowModal(true);
-    console.log("States after update:", { errorMessage, showModal }); // Debugging log
-    //return;
-  } else {
+    //setErrorMessage(missingFieldsMessage);
+    alert(missingFieldsMessage);
+    return;
+    } else {
     // If no fields are missing, continue with other validations
     if (formData.password !== formData.confirmPassword) {
-      setErrorMessage("Passwords do not match!");
-      setShowModal(true);
+      alert("Passwords do not match!");
       return;
     }
   }
-  
     
     if (formData.password !== formData.confirmPassword) {
       console.log("Passwords mismatch"); // Debugging log
-      setErrorMessage("Passwords do not match!");
-      setShowModal(true);
+      alert("Passwords do not match!");
       return;
     }
 
     if (formData.cardNumber && formData.cardNumber.length !== 16) {
-      setErrorMessage("Card number must be 16 digits.");
-      setShowModal(true);
+      alert("Card number must be 16 digits.");
       return;
     }
   
     if (formData.cvc && formData.cvc.length !== 3) {
-      setErrorMessage("CVC must be 3 digits.");
-      setShowModal(true);
+      alert("CVC must be 3 digits.");
       return;
     
     }
@@ -137,6 +108,7 @@ function Registration() {
       alert("Error during registration. Please try again.");
     }
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -187,12 +159,9 @@ function Registration() {
       });
     }
   };
-  console.log("Rendering with:", { errorMessage, showModal });
 
   return (
     <div className="registration-container">
-      {errorMessage && <div className="error-message">{errorMessage}</div>} 
-      {showModal && <Modal message={errorMessage} onClose={handleCloseModal} />}
     <form onSubmit={handleSubmit}>
       <div className="form">
         <div className="header">Registration for Club Access!</div>
@@ -208,7 +177,6 @@ function Registration() {
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
-              required
             />
           </div>
           <div className="lastName">
@@ -220,7 +188,6 @@ function Registration() {
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              required
             />
           </div>
           <div className="email">
@@ -232,7 +199,6 @@ function Registration() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              required
             />
           </div>
           <div className="Password">
@@ -244,7 +210,6 @@ function Registration() {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              required
             />
           </div>
           <div className="confirmPassword">
@@ -256,7 +221,6 @@ function Registration() {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              required
             />
           </div>
 

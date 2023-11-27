@@ -54,7 +54,7 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
           "Referrer-Policy":'unsafe_url'
         }}
         );
-        setMovieData(response.data);
+        setMovieData(response.data.comingSoon);
       } catch (error) {
         console.error("Error fetching movies:", error);
       }

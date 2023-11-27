@@ -1,0 +1,83 @@
+.manage-promotions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 25px 75px;
+    font-size: 40px;
+    font-weight: 800;
+    color: red;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .add-promo-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .add-promo-button:hover {
+    background-color: rgb(251, 97, 97);
+  }
+  
+  .promo-list {
+    list-style: none;
+    padding: 0;
+    text-align: left; 
+    display: flex; 
+    flex-wrap: wrap;
+  }
+  
+  .promo-item {
+    border: 1px solid #ddd;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    max-width: 300px;
+    text-align: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex: 0 0 calc(33.33% - 20px);
+  }
+  
+  .promo-item p {
+    margin-bottom: 10px;
+  }
+  
+  .promo-tools {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 75px;
+  }
+  
+  .promo-status {
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+  }
+  
+  .edit-promo-link {
+    text-decoration: none;
+    color: inherit;
+    font-size: 20px;
+    font-weight: 400;
+  }
+  
+  .edit-promo-link:hover {
+    text-decoration: underline;
+  }
+  
+  .promo-name-header {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 20px;
+    margin-left: 75px;
+  }
+  

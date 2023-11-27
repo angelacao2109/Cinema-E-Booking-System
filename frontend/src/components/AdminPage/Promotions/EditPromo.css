@@ -1,0 +1,54 @@
+.edit-promo-header {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 800;
+    color: red;
+}
+
+.link-container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 25px;
+}
+
+.link-styles {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    color: red;
+}
+
+.edit-promo-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.edit-promo-label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.edit-promo-input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.edit-promo-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.edit-promo-btn:hover {
+    background-color: rgb(251, 97, 97);
+}

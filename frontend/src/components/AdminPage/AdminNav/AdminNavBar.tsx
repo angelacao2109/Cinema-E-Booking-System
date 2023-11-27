@@ -1,64 +1,45 @@
 import React from "react";
-import { Outlet, Routes, Route, useNavigate, } from "react-router-dom";
-import { Nav, NavLink, Bars, NavMenu, NavBtn } from "./AdminNavElements";
+import { useNavigate, Link } from "react-router-dom";
+import './AdminNavbar.css';
 
-import EditMovies from "../EditMovies/EditMovies";
-import EditPromo from "../EditPromo/EditPromo";
-import EditUser from "../EditUser/EditUser";
+interface AdminNavBarProps {
+  onLogout: () => void;
+
+}
 
 const navLinks = [
- 
-  { to: "/admin/editmovies", label: "Movies" },
-  { to: "/admin/editpromo", label: "Promotions" },
-  { to: "/admin/edituser", label: "Users" },
+  { to: "/admin/moviespage", label: "Movies" },
+  { to: "/admin/promopage", label: "Promotions" },
+  { to: "/admin/edituser", label: "Users" }, 
 ];
-const AdminNavBar = () => {
-  const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+const AdminNavBar: React.FC<AdminNavBarProps> = ({ onLogout }) => {
 
-  const handleLogout = () => {
-  
-    navigate('/login'); 
-  };
+
+  //const handleBack = () => {
+   // navigate(-1);
+ // };
+
+  //const handleLogout = () => {
+  //  navigate('/login'); 
+ // };
 
   return (
-    <>
-      <Nav>
-        <Bars />
-        <NavMenu>
-          {navLinks.map((link) => (
-            <NavLink key={link.to} to={link.to}>
-              {link.label}
-            </NavLink>
-          ))}
-          
-        </NavMenu>
-        <NavBtn>
-        <button onClick={handleBack}>Back</button>
-          
-          <NavLink to="/admin/profile">Profile</NavLink>
-          <button onClick={handleLogout}>Logout</button>
-        </NavBtn>
-      </Nav>
-      <Outlet />
-    </>
+    <nav className="navbar">
+      <div className="left-section">
+        {navLinks.map((link) => (
+          <Link key={link.to} to={link.to} className="navbar-link">
+            {link.label}
+          </Link>
+        ))}
+      </div>
+      <div className="right-section">
+      {/*   <button onClick={handleBack} className="navbar-button">Back</button> */}
+        <Link to="/admin/profile" className="navbar-link">Profile</Link>
+        <button onClick={onLogout} className="navbar-button">Logout</button>
+      </div>
+    </nav>
   );
 };
 
-const AdminRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/admin" element={<AdminNavBar />}>
-
-        <Route path="editmovies" element={<EditMovies />} />
-        <Route path="editpromo" element={<EditPromo />} />
-        <Route path="edituser" element={<EditUser />} />
-      </Route>
-    </Routes>
-  );
-};
-
-export { AdminNavBar, AdminRoutes };
+export default AdminNavBar;

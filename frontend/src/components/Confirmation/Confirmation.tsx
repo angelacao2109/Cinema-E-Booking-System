@@ -63,7 +63,7 @@ const Confirmation: React.FC = () => {
 
             <footer>
                 
-                <a href="https://www.example.com" className="cancellation-link">Cancel</a>
+                <a href="/checkout" className="cancellation-link">Cancel</a>
                 <button className="confirm-btn">Confirm</button>
             </footer>
         </div>
