@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Embed from "react-embed";
 
 type Movie = {
-  trailerPictureUrl: string;
+  id: string;
   title: string;
   category: string;
   cast: string[];
@@ -15,10 +15,10 @@ type Movie = {
   synopsis: string;
   reviews: string[];
   rating: string;
-  trailerPicture: string;
   trailerVideoUrl: string;
-  trailer: string;
- 
+  trailerPictureUrl: string;
+  releaseDate: string;
+  status: 'CURRENTLY_SHOWING' | 'COMING_SOON' | 'NOT_SHOWING';
 };
 
 type Showtime = {
@@ -50,8 +50,6 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
         const response = await axios({method:"get",url:"http://localhost:8080/api/movie/homepage",
         headers: {
           'Authorization': authToken,
-          'Content-Type':'application/json',		
-          "Referrer-Policy":'unsafe_url'
         }}
         );
         setMovieData(response.data.comingSoon);

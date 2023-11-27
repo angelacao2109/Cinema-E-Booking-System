@@ -23,7 +23,7 @@ import ResetPasswordPostLink from './components/ResetPasswordPostLink/ResetPassw
 import VerifyEmail from './components/VerifyEmail/VerifyEmail';
 
 function App() {
-  console.log(moviesData);
+  //console.log(moviesData);
 
   const logout = () => {
   
@@ -79,14 +79,13 @@ function App() {
     const foundEmail = document.cookie.split("; ").find((row) => row.startsWith("userEmail="))?.split("=")[1];
     setUserEmail(foundEmail ?? null);
 }, [isLoggedIn]);
-  
+
 
 return (
   <Router>
     <div>
     {userEmail === "admin@admin.com" ? (
        <AdminNavBar onLogout={logout} />
-     
         ) : (
 
       <NavBar 
@@ -101,7 +100,6 @@ return (
       />
       )}
       <AppRoutes
-          isAdminPath={location.pathname.startsWith("/admin")}
           searchResults={searchResults}
           handleTicketChange={handleTicketChange}
           ticketCount={ticketCount}
@@ -118,7 +116,6 @@ return (
 }
 
 const AppRoutes = ({
-  isAdminPath,
   searchResults,
   handleTicketChange,
   ticketCount,
@@ -129,7 +126,8 @@ const AppRoutes = ({
   loggedInUserEmail,
   onLogout
 }) => {
-
+  const location = useLocation();
+  const isAdminPath = location.pathname.startsWith("/admin");
   return (
     
           <Routes>
@@ -159,5 +157,6 @@ const AppRoutes = ({
 };
 
 export default App;
+
 
 //<Route path="/tickets" element={<SelectTicket onTicketChange={handleTicketChange} />} />
