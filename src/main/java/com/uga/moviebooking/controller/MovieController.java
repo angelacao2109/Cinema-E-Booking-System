@@ -59,6 +59,12 @@ public class MovieController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping()
+    public ResponseEntity<?> getMovieById(@RequestParam long id) {
+
+
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping()
     public ResponseEntity<String> addMovie(@RequestBody MovieDto mov) {

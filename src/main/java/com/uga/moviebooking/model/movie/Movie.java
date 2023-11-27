@@ -52,10 +52,6 @@ public class Movie {
     @Column(nullable = false)
     private String trailerVideoUrl;
 
-    @Column(nullable = false)
-    private boolean archived = false;
-     
-
     //maybe for movie home page endpoint
     @Column()
     private LocalDate releaseDate;

@@ -45,15 +45,15 @@ public class MovieService {
        Movie movie = movieRepository.findById(id).orElse(null);
        if(movie == null)
            return 0;
-       movie.setArchived(true);
+       movie.setStatus(MovieStatus.ARCHIVED);
        movieRepository.save(movie);
        return movie.getId();
    }
 
    //Get Movie
    public Movie getMovie(Long ID){
-   Optional <Movie> movie = movieRepository.findById(ID);
-   return movie.get();
+    Movie movie = movieRepository.findById(ID).orElse(null);
+    return movie;
    }
 
     public Optional<List<Movie>> getFrontpageMovies() {
