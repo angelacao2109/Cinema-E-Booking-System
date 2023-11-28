@@ -30,6 +30,7 @@ const email = document.cookie
 
 const Checkout: React.FC = () => {
 
+  
   const [userCards, setUserCards] = useState<Card[]>([]);
 
   const [newCard, setNewCard] = useState({
@@ -82,9 +83,8 @@ const Checkout: React.FC = () => {
   const [promoCode, setPromoCode] = useState('');
 
   const location = useLocation();
-  const { selectedSeats, ticketCounts } = location.state || { selectedSeats: [], ticketCounts: { kids: 0, adult: 0, senior: 0 } };
+const { selectedSeats, showtimeID, ticketCounts } = location.state as { selectedSeats: string[], showtimeID: number, ticketCounts: { [key: string]: number } };
 
-  // Calculate the total based on ticket counts and their prices
   let total = 0;
   for (let ticketType in ticketCounts) {
     total += ticketCounts[ticketType] * ticketPrices[ticketType];

@@ -19,11 +19,13 @@ type Movie = {
   trailerPictureUrl: string;
   releaseDate: string;
   status: 'CURRENTLY_SHOWING' | 'COMING_SOON' | 'NOT_SHOWING';
+  showtimes?: Showtime[];
 };
 
 type Showtime = {
-  date: string;
-  times: string[];
+  id: number;
+  startTime: string;
+
 };
 
 type MovieListProps = {
@@ -38,12 +40,11 @@ const authToken = document.cookie
 const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
   const navigate = useNavigate();
   const [movieData, setMovieData] = useState<Movie[]>([]);
-  const [selectedShowtime, setSelectedShowtime] = useState<{
-    movieIndex: number;
-    date: string;
-    time: string;
-  } | null>(null);
-
+  
+  const handleShowtimeSelect = (showtimeID: number) => {
+    navigate("/select-ticket", { state: { showtimeID: showtimeID } });
+  };
+  
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -52,20 +53,33 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
           'Authorization': authToken,
         }}
         );
-        setMovieData(response.data.comingSoon);
+
+   const movies = response.data.comingSoon;
+        const moviesWithShowtimes = await Promise.all(movies.map(async (movie: Movie) => {
+          try {
+          const showtimeResponse = await axios.get(`http://localhost:8080/api/showtimes/movie?movieID=${movie.id}`);
+          return { ...movie, showtimes: showtimeResponse.data.showtimes };
+        } catch (showtimeError) {
+          console.error(`Error fetching showtimes for movie ID ${movie.id}:`, showtimeError);
+          return { ...movie, showtimes: [] }; // or handle the error as appropriate
+        }
+        }));
+        setMovieData(moviesWithShowtimes);
+
       } catch (error) {
         console.error("Error fetching movies:", error);
       }
     };
     fetchMovies();
   }, []);
+
   const moviesToShow = searchResults.length > 0 ? searchResults : movieData;
 
   return (
     <div className="movie-list">
       <h2 style={{ color: "#CF291D" }}>Available Movies</h2>
       <div className="movies-grid">
-        {moviesToShow.map((movie, index) => (
+       {moviesToShow.map((movie, index) => (
           <div key={index} className="movie-item">
             <div className="movie-poster-wrapper">
               <img
@@ -109,18 +123,14 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
                 allowFullScreen
               />
             </div>
-            <button
-              onClick={() => {
-                const win = window.open(
-                  movie.trailerVideoUrl,
-                  movie.trailerVideoUrl
-                );
-                win?.focus();
-              }}
-              className="showtime-btn"
-            >
-              Watch Trailer
-            </button>
+            <div className="showtimes-container">
+              {movie.showtimes && movie.showtimes.map(showtime => (
+                <button key={showtime.id} onClick={() => handleShowtimeSelect(showtime.id)}>
+                  Select Showtime: {new Date(showtime.startTime).toLocaleString()}
+                </button>
+            ))}
+          </div>
+
           </div>
         ))}
       </div>

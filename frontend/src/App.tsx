@@ -23,7 +23,9 @@ import ResetPasswordPostLink from './components/ResetPasswordPostLink/ResetPassw
 import VerifyEmail from './components/VerifyEmail/VerifyEmail';
 
 function App() {
-  //console.log(moviesData);
+
+
+  const [showtimeID, setShowtimeID] = useState<number | null>(null); // added
 
   const logout = () => {
   
@@ -109,6 +111,7 @@ return (
           refetchMovies={refetchMovies}
           loggedInUserEmail={loggedInUserEmail}
           onLogout={logout}
+          showtimeID={showtimeID} // added
         />
       </div>
     </Router>
@@ -124,7 +127,8 @@ const AppRoutes = ({
   setLoggedInUserEmail,
   refetchMovies,
   loggedInUserEmail,
-  onLogout
+  onLogout,
+  showtimeID
 }) => {
   const location = useLocation();
   const isAdminPath = location.pathname.startsWith("/admin");
@@ -137,7 +141,7 @@ const AppRoutes = ({
             <>
           <Route path="/" element={<MovieList searchResults={searchResults} />} />
           <Route path="/select-ticket" element={<SelectTicket onTicketChange={handleTicketChange} />} />
-          <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} />} />
+          <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} showtimeID={showtimeID} />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/register" element={<Registration />} />
