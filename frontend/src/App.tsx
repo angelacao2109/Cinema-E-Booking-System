@@ -13,7 +13,6 @@ import SelectTicket from './components/SelectTicket/SelectTicket';
 import Checkout from './components/Checkout/Checkout';
 import Confirmation from './components/Confirmation/Confirmation';
 import OrderHistory from './components/OrderHistory/OrderHistory';
-import EditMovies from './components/AdminPage/EditMovies/EditMovies';
 import EditPromo from './components/AdminPage/Promotions/EditPromo';
 import EditUser from './components/AdminPage/EditUser/EditUser';
 import AdminNavBar from './components/AdminPage/AdminNav/AdminNavBar';
@@ -86,9 +85,7 @@ function App() {
 return (
   <Router>
     <div>
-    {userEmail === "admin@admin.com" ? (
-       <AdminNavBar onLogout={logout} />
-        ) : (
+  
 
       <NavBar 
   
@@ -100,7 +97,7 @@ return (
         onSearchResultsChange={setSearchResults}
         isAdmin={userEmail === "admin@admin.com"}
       />
-      )}
+     
       <AppRoutes
           searchResults={searchResults}
           handleTicketChange={handleTicketChange}
@@ -132,6 +129,7 @@ const AppRoutes = ({
 }) => {
   const location = useLocation();
   const isAdminPath = location.pathname.startsWith("/admin");
+
   return (
     
           <Routes>

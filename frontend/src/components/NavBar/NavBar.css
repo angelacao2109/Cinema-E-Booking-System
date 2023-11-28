@@ -97,4 +97,51 @@
   
 }
 
-
+/* Admin Utilities Dropdown Styles */
+.admin-utilities-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-button {
+    background-color: #4CAF50; /* Example color, change as needed */
+    color: white;
+    padding: 8px 10px;
+    font-size: 0.85em;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+  }
+  
+  .dropdown-content .dropdown-link {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s;
+  }
+  
+  .dropdown-content .dropdown-link:hover {
+    background-color: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  .admin-utilities-dropdown:hover .dropdown-content {
+    display: block;
+    border-radius: 4px;
+  }
+  
+  .admin-utilities-dropdown:hover .dropdown-button {
+    background-color: #3e8e41; /* Darker shade for hover */
+  }
