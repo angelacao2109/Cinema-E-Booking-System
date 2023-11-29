@@ -99,12 +99,19 @@ public class PromotionService {
     public void sendPromotionEmail(Promotion promotion, List<User> userElement) {
         // 1. Prepare the email content using your email template.
         String emailContent = promotion.getMessage() + " CODE: " + promotion.getPromoCode();
-
+        int counter = 0;
         // 2. Send the email to each user in the list.
         for (int i = 0; i < userElement.size(); i++) {
             String to = userElement.get(i).getUsername();
 
-            emailService.sendEmail(to, "New Promotion Alert", emailContent);
+                if(emailService.sendEmail(to, "New Promotion Alert", emailContent)){
+                    System.out.println("promo email sent to user: " + userElement.get(i).getId());
+                    counter++;
+                }else{
+                    System.out.println("promo email not sent to user: " + userElement.get(i).getId());
+                }
+                System.out.print("Was able to send " + counter + "emails out of " + userElement.size() + " total users");
+
         }
     }
 

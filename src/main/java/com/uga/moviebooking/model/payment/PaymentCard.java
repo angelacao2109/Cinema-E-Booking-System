@@ -13,6 +13,7 @@ public class PaymentCard {
         this.cardNumber = card.getCardNumber();
         this.CVV = card.getCvv();
         this.expDate = card.getExpDate();
+        this.billingAddress = card.getBillingAddress();
     }
     public PaymentCard() {
 
@@ -35,5 +36,8 @@ public class PaymentCard {
 
     @Column(nullable = false)
     private String expDate;
+
+    @Column(nullable = false)
+    private String billingAddress;
 
 }

@@ -334,6 +334,7 @@ public class UserService {
         String lastFour = card.getCardNumber().substring(12);
         card.setCardNumber(lastFour + ":" + passwordEncoder.encode(card.getCardNumber()));
 
+
         user.getPaymentCards().add(card);
         userRepository.save(user);
         return true;
@@ -345,6 +346,28 @@ public class UserService {
         if(card == null || user == null)
             return false;
         if (user.getPaymentCards().remove(card)) {
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+    //sub and unsub promo sevrices
+
+
+    public boolean subscribeToPromotions(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user != null) {
+            user.setPromotionEnrolled(true);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean unsubscribeFromPromotions(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user != null) {
+            user.setPromotionEnrolled(false);
             userRepository.save(user);
             return true;
         }

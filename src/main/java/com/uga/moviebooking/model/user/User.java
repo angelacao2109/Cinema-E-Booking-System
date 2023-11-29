@@ -31,7 +31,7 @@ public class User implements UserDetails {
         this.phoneNumber = user.getPhoneNumber();
         this.password = user.getPassword();
         this.promotionEnrolled = user.isPromotionEnrolled();
-        this.enabled = false;
+        this.enabled = true;
         this.paymentCards = new HashSet<>();
     }
 
@@ -72,9 +72,10 @@ public class User implements UserDetails {
     @Column (name = "reset_token_expiry")
     private LocalDateTime resetTokenExpiry;
 
-
+    @Column(columnDefinition = "boolean default true")
     private boolean enabled;
 
+    @Column(nullable = false)
     private boolean promotionEnrolled;
 
 

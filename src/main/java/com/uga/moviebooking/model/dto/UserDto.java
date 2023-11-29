@@ -22,4 +22,5 @@ public class UserDto {
     private boolean promotionEnrolled;
     private Set<PaymentCard> paymentCards;
     private PaymentAddress paymentAddress;
+    private boolean enabled;
 }

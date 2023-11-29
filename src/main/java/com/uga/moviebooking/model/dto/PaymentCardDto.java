@@ -20,5 +20,8 @@ public class PaymentCardDto {
     @Size(min = 3,max = 3, message = "cvv must be 3 characters!")
     private String cvv;
 
+    @NotBlank(message = "Address cant be blank")
+    @Size(min = 1,max = 180, message = "Address cant be blank")
+    public String billingAddress;
 
 }

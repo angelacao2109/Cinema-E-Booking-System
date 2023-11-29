@@ -81,7 +81,7 @@ public class PromotionController {
     }
 
     //Send promo via email endpoint
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+   /* @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/send-promotion-email")
     public ResponseEntity<String> sendPromotionEmail(@RequestBody long ID) {
         // Validate admin permissions.
@@ -95,5 +95,18 @@ public class PromotionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Permission denied.");
         }
 
+    }*/
+//only send to users who subscribed for promo
+    @PostMapping("/send-promotion-email")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<String> sendPromotionEmail(@RequestBody long promotionId) {
+        Promotion promotion = promotionService.retrievePromotion(promotionId);
+        if (promotion != null) {
+            List<User> subscribedUsers = userRepository.findByPromotionEnrolledIsTrue();
+            promotionService.sendPromotionEmail(promotion, subscribedUsers);
+            return ResponseEntity.ok("Promotion emails sent successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Permission denied.");
+        }
     }
 }

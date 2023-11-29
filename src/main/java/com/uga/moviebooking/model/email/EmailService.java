@@ -7,7 +7,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 
 
 @Service
@@ -16,7 +15,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public void sendEmail(String to, String subject, String content) {
+    public boolean sendEmail(String to, String subject, String content) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
 
@@ -31,11 +30,14 @@ public class EmailService {
 
             // Send the email
             javaMailSender.send(mimeMessage);
+            return true;
         } catch (Exception e ) {
             // Handle the exception or log the error
+            System.out.println("Unable to send to user ");
             e.printStackTrace();
             // You might want to throw a custom exception here or handle errors in your own way
         }
+        return false;
     }
 }
 
