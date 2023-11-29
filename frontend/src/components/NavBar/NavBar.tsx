@@ -6,19 +6,14 @@ import "reactjs-popup/dist/index.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  useLocation,
-} from "react-router-dom";
+  BrowserRouter as Router, Routes, Route, Link, useLocation,} from "react-router-dom";
 import EditProfile from "../EditProfile/EditProfile";
-import EditMovies from "../AdminPage/EditMovies/EditMovies.jsx";
 import EditPromo from "../AdminPage/Promotions/EditPromo";
 import EditUser from "../AdminPage/EditUser/EditUser";
 
 import AdminNavBar from "../AdminPage/AdminNav/AdminNavBar";
 import AdminRoutes from "../AdminPage/AdminNav/AdminRoutes";
+import AdminUtilitiesDropdown from "../NavBar/AdminUtils";
 import { Movie} from "../types";
 type NavBarProps = {
   movieData: any[];
@@ -44,10 +39,10 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
   const handleLogout = () => {
     document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "userEmail=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    console.log("What")
     setIsLoggedIn(false);
     navigate("/signin");
   };
-  
 
   const fetchMovies = (
     endpoint: string,
@@ -62,6 +57,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
         console.error(`Error fetching movies from ${endpoint}:`, error);
       });
   };
+
   useEffect(() => {
     //fetchMovies("http://localhost:8080/api/movies-playing", setMoviesPlaying);
     //fetchMovies(
@@ -107,7 +103,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
   const AdminLinks = () => (
     <>
       <CommonLinks />
-      <Link to="/admin/moviespage" className="link">Admin</Link>
+      <AdminUtilitiesDropdown />
       <div className="welcomeLogoutGroup">
         <div className="welcomeSection">
           <span>Welcome, {userEmail}</span>

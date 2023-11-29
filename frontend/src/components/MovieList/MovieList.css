@@ -9,20 +9,18 @@
   grid-template-columns: repeat(5, 1fr);
   gap: 20px;
 }
-
 .movie-item {
   background-color: #2f2f2f;
-  background-image: linear-gradient(45deg, #2f2f2f, #3a3a3a);
   border: 1px solid #4a4a4a;
   border-radius: 10px;
-  padding: 10px;
   transition: 0.3s;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
-  height: auto; 
-  min-height: 400px; 
+  align-items: center;
+  overflow: hidden;
   color: #ECECEC;
+  min-height: 400px; 
+  position: relative; 
 }
 
 .movie-item:hover {
@@ -30,21 +28,29 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.movie-poster {
-  position: absolute;
-  top: 0;
-  left: 0;
+
+.movie-poster-wrapper {
   width: 100%;
+  height: 300px; 
+  overflow: hidden;
+  border-radius: 10px 10px 0 0;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+}
+
+.list-movie-poster {
+  width: auto;
   height: 100%;
   object-fit: cover;
 }
 
-.movie-poster-wrapper {
-  position: relative;
+.movie-details {
+  
+  padding-top: 10px; 
   width: 100%;
-  padding-top: 150%; 
-  overflow: hidden;
 }
+
 .showtime-btn {
   margin-right: 10px;
   background-color: #CF291D;
@@ -60,14 +66,23 @@
   background-color: #850717;
 }
 
-.movie-item a {
-  z-index: 10;
-  position: relative;
-  pointer-events: auto;
-}
+
 
 .embedded-videos{
   align-items: center;
   display: flex;
   justify-content: center;
+}
+
+.showtimes-container {
+  margin-top: 10px;
+  padding: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+  color: #2f2f2f;
+  font-size: 0.9rem;
+}
+
+.showtimes-container p {
+  margin: 5px 0;
 }

@@ -35,7 +35,7 @@ const AdminNavBar: React.FC<AdminNavBarProps> = ({ onLogout }) => {
       </div>
       <div className="right-section">
       {/*   <button onClick={handleBack} className="navbar-button">Back</button> */}
-        <Link to="/admin/profile" className="navbar-link">Profile</Link>
+    
         <button onClick={onLogout} className="navbar-button">Logout</button>
       </div>
     </nav>

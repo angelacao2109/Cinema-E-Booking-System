@@ -12,27 +12,27 @@ import EditUser from '../EditUser/EditUser';
 
 // Ensure these handler functions are defined or imported
 const handleAddMovie = (movie) => { /* ... */ };
-const handleEditMovie = (movie) => { /* ... */ };
+const handleEditMovie = (movie) => { /* ...*/ };
 const handleEditPromo = (promo) => { /* ... */ };
 
 const AdminRoutes = ({ onLogout }) => {
     return (
         <>
-            <AdminNavBar onLogout={onLogout} />
             <Routes>
-                
+
             <Route path="moviespage" element={<MoviesPage />} />
             <Route path="addmovie" element={<AddMovie onAddMovie={handleAddMovie} />} />
-                <Route path="editmovie/:id" element={<EditMovie onEditMovie={handleEditMovie} />} />
-                <Route path="movieinfo/:id" element={<MovieInfo />} />
-                <Route path="promopage" element={<PromoPage />} />
-                <Route path="addpromo" element={<AddPromo />} />
-                <Route path="editpromo/:id" element={<EditPromo onEditPromo={handleEditPromo} />} />
-                <Route path="edituser" element={<EditUser />} />
-           
+            <Route path="editmovie/:id" element={<EditMovie onEditMovie={handleEditMovie} />} />
+            <Route path="movieinfo/:id" element={<MovieInfo />} />
+            <Route path="promopage" element={<PromoPage />} />
+            <Route path="addpromo" element={<AddPromo />} />
+            <Route path="editpromo/:id" element={<EditPromo onEditPromo={handleEditPromo} />} />
+            <Route path="edituser" element={<EditUser />} />
+
             </Routes>
         </>
     );
 };
 
 export default AdminRoutes;
+// <AdminNavBar onLogout={onLogout} />

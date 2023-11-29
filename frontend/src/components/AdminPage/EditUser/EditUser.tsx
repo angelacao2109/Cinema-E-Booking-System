@@ -1,44 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './EditUser.css';
+import axios from "axios";
+
+interface User {
+    email: string;
+    accountStatus: string;
+    id: number;
+}
 
 function EditUser() {
-    const [admins, setAdmins] = useState([
-        { email: "admin1@example.com", id: 1 },
-        { email: "admin2@example.com", id: 2 },
-        // ... other admins
-    ]);
+    const [users, setUsers] = useState<User[]>([]);
 
-    const [users, setUsers] = useState([
-        { email: "user1@example.com", promoStatus: "Active", id: 3 },
-        { email: "user2@example.com", promoStatus: "Pending", id: 4 },
-        // ... other users
-    ]);
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get<User[]>('/api/admin/getUsers'); // need to figure out get users
+                setUsers(response.data);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
 
-    const [newAdmin, setNewAdmin] = useState({ email: '' });
-
-    const handleNewAdminChange = (e) => {
-        setNewAdmin({ ...newAdmin, [e.target.name]: e.target.value });
-    };
-
-    const handleNewAdminSubmit = (e) => {
-        e.preventDefault();
-        setAdmins([...admins, { ...newAdmin, id: new Date().getTime() }]);
-        setNewAdmin({ email: '' });
-    };
-
-    const handleUpdate = (userId, updatedData) => {
-        // Implement update logic
-        console.log(`Update user with id: ${userId}`);
-    };
+        fetchUsers();
+    }, []);
     
-    const handleSuspend = (userId) => {
-        // Implement suspend logic
-        console.log(`Suspend user with id: ${userId}`);
+    const handleSuspend = async (userId: number) => {
+        try {
+            const response = await axios.post('/api/admin/disableUser', { userId });
+            if (response.status === 200) {
+                setUsers(users.map(user => 
+                    user.id === userId ? { ...user, accountStatus: "Suspended" } : user
+                ));
+            }
+        } catch (error) {
+            console.error('Error suspending user:', error);
+        }
     };
-    
-    const handleDelete = (userId) => {
-        // Implement delete logic
-        console.log(`Delete user with id: ${userId}`);
+
+    const handleEnable = async (userId: number) => {
+        try {
+            const response = await axios.post('/api/admin/enableUser', { userId });
+            if (response.status === 200) {
+                setUsers(users.map(user => 
+                    user.id === userId ? { ...user, accountStatus: "Active" } : user
+                ));
+            }
+        } catch (error) {
+            console.error('Error enabling user:', error);
+        }
     };
 
     return (
@@ -46,35 +55,12 @@ function EditUser() {
             <h1>MANAGE USERS</h1>
             <hr/>
             <div>
-                <h2 className="align-left">Admins</h2>
+                <h2>Registered Users</h2>
                 <table className="right-aligned-table">
                     <thead>
                         <tr>
                             <th>Email</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {admins.map((admin) => (
-                            <tr key={admin.id}>
-                                <td>{admin.email}</td>
-                                <td className="action-cell">
-                                <button style={{ margin: '5px', padding: '5px 10px' }}onClick={() => handleDelete(admin.id)}>Delete</button>
-                                <button style={{ margin: '5px', padding: '5px 10px' }}onClick={() => handleUpdate(admin.id, {/* updatedData */})}>Edit</button>
-                                <button style={{ margin: '5px', padding: '5px 10px' }}onClick={() => handleSuspend(admin.id)}>Suspend</button>
-                            </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <div>
-                <h2 className="align-left">Registered Users</h2>
-                <table className="right-aligned-table">
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Promo Status</th>
+                            <th>Account Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -82,26 +68,15 @@ function EditUser() {
                         {users.map((user) => (
                             <tr key={user.id}>
                                 <td>{user.email}</td>
-                                <td>{user.promoStatus}</td>
-                                <td>
-                                    <button style={{ margin: '5px', padding: '5px 10px' }} onClick={() => handleDelete(user.id)}>Delete</button>
-                                    <button style={{ margin: '5px', padding: '5px 10px' }} onClick={() => handleUpdate(user.id, {/* updatedData */})}>Edit</button>
-                                    <button style={{ margin: '5px', padding: '5px 10px' }} onClick={() => handleSuspend(user.id)}>Suspend</button>
+                                <td>{user.accountStatus}</td>
+                                <td className="action-cell">
+                                    <button onClick={() => handleSuspend(user.id)}>Suspend</button>
+                                    <button onClick={() => handleEnable(user.id)}>Enable</button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-            </div>
-            <div>
-                <h2>Add New Admin</h2>
-                <form onSubmit={handleNewAdminSubmit}>
-                    <label>
-                        Email:
-                        <input type="email" name="email" value={newAdmin.email} onChange={handleNewAdminChange} />
-                    </label>
-                    <button type="submit">Add Admin</button>
-                </form>
             </div>
         </div>
     );

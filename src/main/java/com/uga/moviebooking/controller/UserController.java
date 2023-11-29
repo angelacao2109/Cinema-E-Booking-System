@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @EnableMethodSecurity
 @RequestMapping("/api/user")
@@ -48,7 +49,7 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         List<String> roles = user.getAuthorities().stream()
-                .map(item -> item.getAuthority()).toList();
+                .map(item -> item.getAuthority()).collect(Collectors.toList());
         return ResponseEntity.ok().body(new userResponse(user.getId(), user.getEmail(),roles));
     }
     
@@ -127,6 +128,30 @@ public class UserController {
     }
     public record PasswordDto(String password) {}
 
+
+    //functions for sub and unsub promo
+
+    @PostMapping("/subscribe-promotions")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<String> subscribeToPromotions(@AuthenticationPrincipal String email) {
+        boolean success = userService.subscribeToPromotions(email);
+        if (success) {
+            return ResponseEntity.ok("Subscribed to promotions successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Failed to subscribe to promotions.");
+        }
+    }
+
+    @PostMapping("/unsubscribe-promotions")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<String> unsubscribeFromPromotions(@AuthenticationPrincipal String email) {
+        boolean success = userService.unsubscribeFromPromotions(email);
+        if (success) {
+            return ResponseEntity.ok("Unsubscribed from promotions successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Failed to unsubscribe from promotions.");
+        }
+    }
 }
 
 

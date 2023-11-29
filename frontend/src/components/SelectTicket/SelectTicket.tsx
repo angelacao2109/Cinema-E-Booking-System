@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SelectTicket.css";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   onTicketChange: (count: number) => void;
@@ -13,6 +14,9 @@ const ticketPrices = {
 };
 
 const SelectTicket: React.FC<Props> = ({ onTicketChange }) => {
+  const location = useLocation();
+  const { showtimeID } = location.state as { showtimeID: number };
+  
   const [tickets, setTickets] = useState({
     kids: 0,
     adult: 0,

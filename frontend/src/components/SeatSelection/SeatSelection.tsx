@@ -1,20 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SeatSelection.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   maxSeats: number;
-  occupiedSeats?: string[];
+  showtimeID: number;
 }
 
-function SeatSelection({ maxSeats, occupiedSeats = [] }: Props) {
+interface SeatDto {
+  seatRow: number;
+  seatCol: number;
+  booked: boolean;
+}
+
+function SeatSelection({ maxSeats, showtimeID }: Props) {
   const totalRows = 10;
-  const totalSeatsPerRow = 15;
+  const totalSeatsPerRow = 20;
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const isSeatOccupied = (seatId: string) => occupiedSeats.includes(seatId);
+  const [occupiedSeats, setOccupiedSeats] = useState<string[]>([]);
 
   const navigate = useNavigate(); 
+
+  useEffect(() => {
+    axios.get(`http://localhost:8080/api/showtimes/seats?showtimeID=${showtimeID}`)
+      .then(response => {
+        const occupied = response.data['Unavailable Seats']
+          .filter((seat: SeatDto) => seat.booked)
+          .map((seat: SeatDto) => `${seat.seatRow}-${seat.seatCol}`);
+        setOccupiedSeats(occupied);
+      })
+      .catch(error => {
+        console.error('Error fetching occupied seats:', error);
+      });
+  }, [showtimeID]);
+
+
+  const isSeatOccupied = (seatId: string) => occupiedSeats.includes(seatId);
 
   const toggleSeat = (row: number, seat: number) => {
     const seatId = `${row}-${seat}`;
@@ -34,10 +58,20 @@ function SeatSelection({ maxSeats, occupiedSeats = [] }: Props) {
     }
   };
 
+  const calculateTicketCounts = (selectedSeats) => { // placeholder to tickets backend for later
+    return {
+      adult: selectedSeats.length, 
+      kids: 0,
+      senior: 0
+    };
+  };
+
   const handleConfirm = () => {
     console.log("Seats selected: ", selectedSeats);
-    navigate("/checkout", { state: { selectedSeats: selectedSeats } });
-  };
+    const ticketCounts = calculateTicketCounts(selectedSeats); 
+  navigate("/checkout", { state: { selectedSeats, showtimeID, ticketCounts } });
+};
+  
 
   return (
     <div className="seat-selection">

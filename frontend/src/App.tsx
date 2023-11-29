@@ -13,7 +13,6 @@ import SelectTicket from './components/SelectTicket/SelectTicket';
 import Checkout from './components/Checkout/Checkout';
 import Confirmation from './components/Confirmation/Confirmation';
 import OrderHistory from './components/OrderHistory/OrderHistory';
-import EditMovies from './components/AdminPage/EditMovies/EditMovies';
 import EditPromo from './components/AdminPage/Promotions/EditPromo';
 import EditUser from './components/AdminPage/EditUser/EditUser';
 import AdminNavBar from './components/AdminPage/AdminNav/AdminNavBar';
@@ -23,7 +22,9 @@ import ResetPasswordPostLink from './components/ResetPasswordPostLink/ResetPassw
 import VerifyEmail from './components/VerifyEmail/VerifyEmail';
 
 function App() {
-  console.log(moviesData);
+
+
+  const [showtimeID, setShowtimeID] = useState<number | null>(null); // added
 
   const logout = () => {
   
@@ -79,15 +80,12 @@ function App() {
     const foundEmail = document.cookie.split("; ").find((row) => row.startsWith("userEmail="))?.split("=")[1];
     setUserEmail(foundEmail ?? null);
 }, [isLoggedIn]);
-  
+
 
 return (
   <Router>
     <div>
-    {userEmail === "admin@admin.com" ? (
-       <AdminNavBar onLogout={logout} />
-     
-        ) : (
+  
 
       <NavBar 
   
@@ -99,9 +97,8 @@ return (
         onSearchResultsChange={setSearchResults}
         isAdmin={userEmail === "admin@admin.com"}
       />
-      )}
+     
       <AppRoutes
-          isAdminPath={location.pathname.startsWith("/admin")}
           searchResults={searchResults}
           handleTicketChange={handleTicketChange}
           ticketCount={ticketCount}
@@ -111,6 +108,7 @@ return (
           refetchMovies={refetchMovies}
           loggedInUserEmail={loggedInUserEmail}
           onLogout={logout}
+          showtimeID={showtimeID} // added
         />
       </div>
     </Router>
@@ -118,7 +116,6 @@ return (
 }
 
 const AppRoutes = ({
-  isAdminPath,
   searchResults,
   handleTicketChange,
   ticketCount,
@@ -127,8 +124,11 @@ const AppRoutes = ({
   setLoggedInUserEmail,
   refetchMovies,
   loggedInUserEmail,
-  onLogout
+  onLogout,
+  showtimeID
 }) => {
+  const location = useLocation();
+  const isAdminPath = location.pathname.startsWith("/admin");
 
   return (
     
@@ -139,7 +139,7 @@ const AppRoutes = ({
             <>
           <Route path="/" element={<MovieList searchResults={searchResults} />} />
           <Route path="/select-ticket" element={<SelectTicket onTicketChange={handleTicketChange} />} />
-          <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} />} />
+          <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} showtimeID={showtimeID} />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/register" element={<Registration />} />
@@ -159,5 +159,6 @@ const AppRoutes = ({
 };
 
 export default App;
+
 
 //<Route path="/tickets" element={<SelectTicket onTicketChange={handleTicketChange} />} />
