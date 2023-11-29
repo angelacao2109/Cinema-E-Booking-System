@@ -87,12 +87,11 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
   const renderMovies = (movies: Movie[]) => {
     return movies.map((movie, index) => (
       <div key={index} className="movie-item">
-        <div className="movie-poster">
-          <div className="movie-poster-wrapper">
-            <img src={movie.trailerPictureUrl}></img>
-          </div>
+        <div className="movie-poster-wrapper">
+          <img className="list-movie-poster" src={movie.trailerPictureUrl} alt={movie.title}  />
         </div>
         <div className="movie-details">
+          
           <h3>{movie.title}</h3>
           <p>
             <strong>Category:</strong> {movie.category}
@@ -125,15 +124,7 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
               allowFullScreen
             />
           </div>
-          <button
-            onClick={() => {
-              const win = window.open(movie.trailerVideoUrl, "_blank");
-              win?.focus();
-            }}
-            className="showtime-btn"
-          >
-            Watch Trailer
-          </button>
+          
         </div>
         ));
   };
