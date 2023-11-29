@@ -2,6 +2,8 @@ package com.uga.moviebooking.model.dto;
 
 import com.uga.moviebooking.model.movie.Movie;
 import com.uga.moviebooking.model.movie.MovieStatus;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,8 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class MovieDto {
 
+    @NotEmpty(message = "title is a required field")
     private String title;
 
+    @NotEmpty(message = "category is a required field")
     private String category;
 
     private String cast;
@@ -32,8 +36,10 @@ public class MovieDto {
 
     private String trailerVideoUrl;
 
+    @NotNull(message = "movieStatus is a required field")
     private MovieStatus movieStatus;
 
+    @NotNull(message = "releaseDate is a required field")
     private LocalDate releaseDate;
 
     public MovieDto(Movie movie) {

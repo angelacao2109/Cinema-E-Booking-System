@@ -1,12 +1,16 @@
 package com.uga.moviebooking.controller;
 
+import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.model.dto.MovieDto;
 import com.uga.moviebooking.model.movie.Movie;
 import com.uga.moviebooking.model.movie.MovieService;
+import com.uga.moviebooking.utils.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -83,5 +87,19 @@ public class MovieController {
             return ResponseEntity.ok("Movie " + id + " archived.");
         }
         return ResponseEntity.ok("Movie not found, or can not be deleted");
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateMovie(@Validated  @RequestBody MovieDto updatedMovie, @PathVariable long id, BindingResult bind) {
+        if (bind.hasErrors()) {
+            return ControllerUtils.validationErrorResponse(bind);
+        }
+        long updatedId = movieService.updateMovie(id, updatedMovie);
+        if(updatedId == -1)
+            throw new AppException("Id not found",404);
+        return ResponseEntity.ok("Movie id " + updatedId + " updated successfully!");
+
+
     }
 }

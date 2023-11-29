@@ -24,19 +24,7 @@ public class MovieService {
      
 
     public Movie createMovie(MovieDto mov) {
-        Movie movie = new Movie();
-        movie.setTitle(mov.getTitle());
-        movie.setCategory(mov.getCategory());
-        movie.setCast(mov.getCast());
-        movie.setDirector(mov.getDirector());
-        movie.setProducer(mov.getProducer());
-        movie.setSynopsis(mov.getSynopsis());
-        movie.setReviews(mov.getReviews());
-        movie.setRating(mov.getRating());
-        movie.setTrailerPictureUrl(mov.getTrailerPictureUrl());
-        movie.setTrailerVideoUrl(mov.getTrailerVideoUrl());
-        movie.setStatus(mov.getMovieStatus());
-        movie.setReleaseDate(mov.getReleaseDate());
+        Movie movie = new Movie(mov);
         return movieRepository.save(movie);
     }
 
@@ -51,10 +39,24 @@ public class MovieService {
    }
 
    //Get Movie
-   public Movie getMovie(Long ID){
+   public Movie getMovie(long ID){
     Movie movie = movieRepository.findById(ID).orElse(null);
     return movie;
    }
+
+   public boolean movieExists(long id) {
+        return movieRepository.existsById(id);
+   }
+
+    //Update Movie
+    public long updateMovie(long id, MovieDto updatedMovie) {
+        if(!movieExists(id))
+            return -1;
+        Movie updated = new Movie(updatedMovie);
+        updated.setId(id);
+        updated = movieRepository.save(updated);
+        return updated.getId();
+    }
 
     public Optional<List<Movie>> getFrontpageMovies() {
          Page<Movie> page = movieRepository.findAll(PageRequest.of(0, 50, Sort.by(Sort.Order.asc("id"))));
