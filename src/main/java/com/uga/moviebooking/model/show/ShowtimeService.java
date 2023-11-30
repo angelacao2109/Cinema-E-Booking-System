@@ -6,11 +6,9 @@ import com.uga.moviebooking.model.dto.SeatDto;
 import com.uga.moviebooking.model.dto.ShowtimeDto;
 import com.uga.moviebooking.model.movie.Movie;
 import com.uga.moviebooking.model.movie.MovieRepository;
-import com.uga.moviebooking.model.movie.MovieService;
 import com.uga.moviebooking.model.theatre.Seat;
 import com.uga.moviebooking.model.theatre.Theatre;
 import com.uga.moviebooking.model.theatre.TheatreRepository;
-import com.uga.moviebooking.model.theatre.TheatreService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -30,7 +28,8 @@ public class ShowtimeService {
     private final MovieRepository movieRepository;
 
     @Autowired
-    public ShowtimeService(ShowtimeRepository showtimeRepository, TicketRepository ticketRepository, MovieService movieService, TheatreService theatreService, TheatreRepository theatreRepository, MovieRepository movieRepository) {
+    public ShowtimeService(ShowtimeRepository showtimeRepository, TicketRepository ticketRepository,
+                           TheatreRepository theatreRepository, MovieRepository movieRepository) {
         this.showtimeRepository = showtimeRepository;
         this.ticketRepository = ticketRepository;
         this.theatreRepository = theatreRepository;
@@ -113,7 +112,12 @@ public class ShowtimeService {
     }
 
     public List<SeatDto> getTakenSeats(long showtimeID) {
-        List<Seat> booked = ticketRepository.findAllByShowtimeId(showtimeID);
+        List<Seat> booked;
+        try {
+            booked = ticketRepository.findAllByShowtimeId(showtimeID);
+        } catch(Exception e) {
+            throw new AppException("showtimeID " + showtimeID + " not found", 404);
+        }
         List<SeatDto> seats = new ArrayList<>();
         for(Seat s : booked) {
            seats.add(new SeatDto(s.getSeat_col(),s.getSeat_row(), true));

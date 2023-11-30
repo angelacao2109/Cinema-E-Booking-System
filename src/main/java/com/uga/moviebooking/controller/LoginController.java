@@ -9,12 +9,12 @@ import com.uga.moviebooking.model.user.UserRepository;
 import com.uga.moviebooking.model.user.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -88,12 +88,17 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Validated @RequestBody LoginDto login, BindingResult bindingResult,
-                                        HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> login(@Validated @RequestBody LoginDto login, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             throw new AppException("Invalid request body!");
         }
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(),login.getPassword()));
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
+        } catch(LockedException e) {
+            if(userService.isBanned(login.getEmail()))
+                throw e; //pretend that the account does not exist by throwing usual 401.
+            throw new AppException("User has not completed email verification!", 403);
+        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String token = jwtUtil.generateToken(login.getEmail());
         return ResponseEntity.ok(new loginResponse(token,"Login Successful!"));
@@ -130,7 +135,7 @@ public class LoginController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<String> verifyUser(@Param("code") String code, HttpServletResponse res) {
+    public ResponseEntity<String> verifyUser(@Param("code") String code) {
         if (userService.verify(code)) {
             return new ResponseEntity<>("Verification Success! Redirecting to homepage...", HttpStatus.OK);
         } else {

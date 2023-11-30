@@ -157,14 +157,13 @@ public class UserService {
         User user = userRepository.findByVerificationCode(verificationCode);
         System.out.println(verificationCode);
         if(user == null) {
-            System.out.println("User Not Found");
+            throw new AppException("User not found!", 404);
         }
         if (user.isAccountNonLocked()) {
-            System.out.println("User Not Found");
             return true;
         } else {
             System.out.println("Verified");
-//            user.setVerificationCode(null);
+            user.setVerificationCode(null);
             user.setEnabled(true);
             userRepository.save(user);
             return true;
@@ -374,4 +373,10 @@ public class UserService {
         return false;
     }
 
+    public boolean isBanned(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if(!user.isAccountNonLocked() && user.getVerificationCode() == null)
+            return true;
+        return false;
+    }
 }

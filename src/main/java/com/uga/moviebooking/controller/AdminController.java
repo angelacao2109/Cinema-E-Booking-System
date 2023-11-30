@@ -6,6 +6,7 @@ import com.uga.moviebooking.model.role.RoleRepository;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
 import com.uga.moviebooking.model.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,12 +17,18 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
 
     //add new administrators
-    RoleRepository roleRepository;
-    UserRepository userRepository;
-    UserService userService;
+    private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
+
+    @Autowired
+    public AdminController(RoleRepository roleRepository, UserRepository userRepository, UserService userService) {
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.userService = userService;
+    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/registerAdmin")
@@ -44,11 +51,10 @@ public class AdminController {
         return new ResponseEntity<>("User id " + id + " successfully registered admin user",HttpStatus.OK);
 
     }
-    //TODO:delete memember
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/deleteUser")
-    public ResponseEntity<String> deleteUser(@RequestBody String email) {
-        Optional<User> userBox = userRepository.findByEmail(email);
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity<String> deleteUser(@RequestBody emailDto emailDto) {
+        Optional<User> userBox = userRepository.findByEmail(emailDto.email());
         if (userBox.isPresent()) {
             User user = userBox.get();
             userRepository.delete(user);
@@ -57,57 +63,46 @@ public class AdminController {
         return ResponseEntity.notFound().build();
     }
 
-
-    //TODO:update memember
-
     // Update a user
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/updateUser")
     public ResponseEntity<String> updateUser(@RequestBody UserDto updatedUser) {
-        Optional<User> userBox = userRepository.findByEmail(updatedUser.getEmail());
-        if (userBox.isPresent()) {
-            User existingUser = userBox.get();
-
-            // Update the user's properties
-            existingUser.setFirstname(updatedUser.getFirstName());
-            existingUser.setLastname(updatedUser.getLastName());
-            existingUser.setEmail(updatedUser.getEmail());
-            //should admin update their passwords too?
-
-            // Save the updated user
-            userRepository.save(existingUser);
-
-            return new ResponseEntity<>("User " + existingUser.getId() + " successfully updated", HttpStatus.OK);
-        }
-        return ResponseEntity.notFound().build();
+        User existingUser = userRepository.findByEmail(updatedUser.getEmail()).orElse(null);
+        if(existingUser == null)
+            return ResponseEntity.notFound().build();
+        // Update the user's properties
+        existingUser.setFirstname(updatedUser.getFirstName());
+        existingUser.setLastname(updatedUser.getLastName());
+        existingUser.setEmail(updatedUser.getEmail());
+        //should admin update their passwords too?
+        // Save the updated user
+        userRepository.save(existingUser);
+        return new ResponseEntity<>("User " + existingUser.getId() + " successfully updated", HttpStatus.OK);
     }
 
 
     //suspended member
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/disableUser")
-    public ResponseEntity<String> disableUser(@RequestBody String email) {
-        User user =  userRepository.findByEmail(email).orElse(null);
+    public ResponseEntity<String> disableUser(@RequestBody emailDto emailDto) {
+        User user =  userRepository.findByEmail(emailDto.email()).orElse(null);
         if(user == null)
             return ResponseEntity.notFound().build();
         user.setEnabled(false);
+        user.setVerificationCode(null);
         userRepository.save(user);
-        return new ResponseEntity<>("User" + user.getId() + "  successfully disabled ",HttpStatus.OK);
-
+        return ResponseEntity.ok("User account id " + user.getId() + " disabled.");
     }
-   //enable user
+    //enable user
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/enableUser")
-    public ResponseEntity<String> enableUser(@RequestBody String email) {
-        Optional<User> userBox =  userRepository.findByEmail(email);
-        User user;
-        if(userBox.isPresent()){
-            user = userBox.get();
-            user.setEnabled(true);
-            userRepository.save(user);
-            return new ResponseEntity<>("User" + user.getId() + "  successfully enabled ",HttpStatus.OK);
-        }
-        return ResponseEntity.notFound().build();
-
+    public ResponseEntity<String> enableUser(@RequestBody emailDto emailDto) {
+        User user =  userRepository.findByEmail(emailDto.email()).orElse(null);
+        if(user == null)
+            return ResponseEntity.notFound().build();
+        user.setEnabled(true);
+        userRepository.save(user);
+        return ResponseEntity.ok("User account id " + user.getId() + " enabled.");
     }
+    record emailDto (String email) {}
 }
