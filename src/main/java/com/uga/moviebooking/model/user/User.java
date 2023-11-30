@@ -2,20 +2,22 @@ package com.uga.moviebooking.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uga.moviebooking.model.dto.PaymentAddressDto;
-import com.uga.moviebooking.model.dto.PaymentCardDto;
 import com.uga.moviebooking.model.dto.RegisterDto;
-import com.uga.moviebooking.model.dto.UserDto;
 import com.uga.moviebooking.model.payment.PaymentAddress;
 import com.uga.moviebooking.model.payment.PaymentCard;
 import com.uga.moviebooking.model.role.Role;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -31,7 +33,7 @@ public class User implements UserDetails {
         this.phoneNumber = user.getPhoneNumber();
         this.password = user.getPassword();
         this.promotionEnrolled = user.isPromotionEnrolled();
-        this.enabled = true;
+        this.enabled = false;
         this.paymentCards = new HashSet<>();
     }
 
