@@ -49,7 +49,7 @@ const EditMovie: React.FC<EditMovieProps> = ({ onEditMovie }) => {
         const fetchMovie = async () => {
           // GET MOVIE BY ID NEEDS TO BE IMPLEMENTED
           try {
-            const response = await axios.get(`http://localhost:5173/api/movie/${id}`);
+            const response = await axios.get(`http://localhost:8080/api/movie/${id}`);
             setMovie(response.data);
           } catch (error) {
             console.error('Error fetching movie:', error);
@@ -58,6 +58,7 @@ const EditMovie: React.FC<EditMovieProps> = ({ onEditMovie }) => {
 
         fetchMovie();
     }, [id]);
+
 
     const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -89,52 +90,61 @@ const EditMovie: React.FC<EditMovieProps> = ({ onEditMovie }) => {
 
     return (
         <>
-            <div className='link-container'>
-                <Link to='/moviespage' className='link-styles'>Exit Edit Movie Page</Link>
+            <div className='edit-movie-exit-link-container'>
+                {/* Changed the link to navigate back to /admin/moviespage */}
+                <Link to='/admin/moviespage' className='edit-movie-exit-link-styles'>Exit Edit Movie Page</Link>
             </div>
 
-            <div className='edit-movie-header'>Edit Movie</div>
+            {/* Created new div */}
+            <div className='edit-movie-container'>
 
-            <form className='edit-movie-form' onSubmit={handleEdit}>
-                {/* Title */}
-                <label className='edit-movie-label'>Title:</label>
-                <input type='text' name='title' value={movie.title} onChange={handleChange} />
+                <div className='edit-movie-header'>Edit Movie</div>
 
-                {/* Director */}
-                <label className='edit-movie-label'>Director:</label>
-                <input type='text' name='director' value={movie.director} onChange={handleChange} />
+                <form className='edit-movie-form' onSubmit={handleEdit}>
+                    {/* Title */}
+                    <label className='edit-movie-label'>Title:</label>
+                    <input type='text' name='title' value={movie.title} onChange={handleChange} />
 
-                {/* Producer */}
-                <label className='edit-movie-label'>Producer:</label>
-                <input type='text' name='producer' value={movie.producer} onChange={handleChange} />
+                    {/* Director */}
+                    <label className='edit-movie-label'>Director:</label>
+                    <input type='text' name='director' value={movie.director} onChange={handleChange} />
 
-                {/* Synopsis */}
-                <label className='edit-movie-label'>Synopsis:</label>
-                <textarea name='synopsis' value={movie.synopsis} onChange={handleChange} />
+                    {/* Producer */}
+                    <label className='edit-movie-label'>Producer:</label>
+                    <input type='text' name='producer' value={movie.producer} onChange={handleChange} />
 
-                {/* Movie Poster URL */}
-                <label className='edit-movie-label'>Movie Poster URL:</label>
-                <input type='text' name='trailerPictureUrl' value={movie.trailerPictureUrl} onChange={handleChange} />
+                    {/* Synopsis */}
+                    <label className='edit-movie-label'>Synopsis:</label>
+                    <textarea name='synopsis' value={movie.synopsis} onChange={handleChange} />
 
-                {/* Trailer URL */}
-                <label className='edit-movie-label'>Trailer URL:</label>
-                <input type='text' name='trailerVideoUrl' value={movie.trailerVideoUrl} onChange={handleChange} />
+                    {/* Movie Poster URL */}
+                    <label className='edit-movie-label'>Movie Poster URL:</label>
+                    <input type='text' name='trailerPictureUrl' value={movie.trailerPictureUrl} onChange={handleChange} />
 
-                {/* Rating */}
-                <label className='edit-movie-label'>Rating:</label>
-                <input type='text' name='rating' value={movie.rating} onChange={handleChange} />
+                    {/* Trailer URL */}
+                    <label className='edit-movie-label'>Trailer URL:</label>
+                    <input type='text' name='trailerVideoUrl' value={movie.trailerVideoUrl} onChange={handleChange} />
 
-                {/* Status */}
-                <label className='edit-movie-label'>Status:</label>
-                <select name='status' value={movie.status} onChange={handleChange}>
-                    <option value='CURRENTLY_SHOWING'>Currently Showing</option>
-                    <option value='COMING_SOON'>Coming Soon</option>
-                    <option value='NOT_SHOWING'>Not Showing</option>
-                </select>
+                    {/* Rating */}
+                    <label className='edit-movie-label'>Rating:</label>
+                    <input type='text' name='rating' value={movie.rating} onChange={handleChange} />
 
-                <button className='edit-movie-btn' type='submit'>Save Changes</button>
-                <button className='edit-movie-btn' type='button' onClick={handleDelete}>Delete Movie</button>
-            </form>
+                    {/* Status */}
+                    <label className='edit-movie-label'>Status:</label>
+                    <select name='status' value={movie.status} onChange={handleChange}>
+                        <option value='CURRENTLY_SHOWING'>Currently Showing</option>
+                        <option value='COMING_SOON'>Coming Soon</option>
+                        <option value='NOT_SHOWING'>Not Showing</option>
+                    </select>
+
+                    {/* Created a div container for buttons */}
+                    <div className='edit-movie-button-container'>
+                        <button className='edit-movie-btn' type='submit'>Save Changes</button>
+                        <button className='edit-movie-btn' type='button' onClick={handleDelete}>Delete Movie</button>
+                    </div>
+                </form>
+            </div>
+
         </>
     );
 };

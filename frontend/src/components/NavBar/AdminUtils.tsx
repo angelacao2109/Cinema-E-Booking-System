@@ -4,11 +4,16 @@ import { Link } from 'react-router-dom';
 const AdminUtilitiesDropdown = () => {
   return (
     <div className="admin-utilities-dropdown">
-      <button className="dropdown-button">Admin Utilities</button>
+      {/* Changed button to link and is linked to nothing */}
+      <Link to="" className="admin-dropdown-link">Admin Controls</Link> 
       <div className="dropdown-content">
-        <Link to="/admin/moviespage" className="dropdown-link">Edit Movies</Link>
-        <Link to="/admin/promopage" className="dropdown-link">Edit Promotions</Link>
-        <Link to="/admin/edituser" className="dropdown-link">Edit Users</Link>
+        {/* Changed link titles */}
+        <Link to="/admin/moviespage" className="dropdown-link">Manage Movies</Link>
+        <Link to="/admin/promopage" className="dropdown-link">Manage Promos</Link>
+        <Link to="/admin/edituser" className="dropdown-link">Manage Users</Link>
+
+        {/* Added a manage showtime page */}
+        <Link to="/admin/showtime" className="dropdown-link">Manage Showtimes</Link>
       </div>
     </div>
   );
