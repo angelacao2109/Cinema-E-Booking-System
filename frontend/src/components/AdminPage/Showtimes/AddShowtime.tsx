@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './AddShowtime.css';
 
 type Showtime = {
   id: string;
   movieId: string;
   time: string;
-  theatreId: string; // need to assign movie to a theatre room 
+  theatreId: string; 
 };
 
-type AddShowtimeFormProps = {
-  onAddShowtime: (newShowtime: Showtime) => void;
-};
 
-const AddShowtime: React.FC<AddShowtimeFormProps> = ({ onAddShowtime }) => {
+
+const AddShowtime: React.FC = () => {
   const [newShowtime, setNewShowtime] = useState<Showtime>({
     id: '',
     movieId: '',
@@ -26,7 +25,7 @@ const AddShowtime: React.FC<AddShowtimeFormProps> = ({ onAddShowtime }) => {
     setNewShowtime((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newShowtime.movieId.trim() === '' || newShowtime.time.trim() === ''|| newShowtime.theatreId.trim() === '') {
       alert('Please enter both Movie ID and Showtime.');
@@ -41,10 +40,24 @@ const AddShowtime: React.FC<AddShowtimeFormProps> = ({ onAddShowtime }) => {
       return;
     }
 
-    newShowtime.id = Date.now().toString();
-    onAddShowtime(newShowtime);
-    setNewShowtime({ id: '', movieId: '', time: '',  theatreId: ''  });
+    const postData = {
+      movieId: parseInt(newShowtime.movieId),
+      theatreId: parseInt(newShowtime.theatreId),
+      showDate: newShowtime.time
+   
   };
+
+  try {
+    const response = await axios.post('/api/showtime', postData);
+    console.log(response.data);
+      alert('Showtime successfully added');
+      setNewShowtime({ id: '', movieId: '', time: '', theatreId: '' });
+    } catch (error) {
+      console.error('Error adding showtime:', error);
+      alert('Failed to add showtime');
+    }
+  };
+
 
   return (
     <>
