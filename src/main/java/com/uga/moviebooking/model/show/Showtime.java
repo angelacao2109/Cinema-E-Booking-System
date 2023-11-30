@@ -6,6 +6,7 @@ import com.uga.moviebooking.model.theatre.Theatre;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -16,9 +17,9 @@ public class Showtime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private LocalTime showtime;
+    private LocalDateTime dateTime;
 
     @ManyToOne
     @JoinColumn(name = "theatre_id")
@@ -30,5 +31,9 @@ public class Showtime {
     @ManyToOne
     @JoinColumn(name = "movie_id")
     Movie movie;
+
+    public LocalTime getShowtimeTime() {
+        return dateTime.toLocalTime();
+    }
 
 }

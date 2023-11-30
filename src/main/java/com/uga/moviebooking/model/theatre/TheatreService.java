@@ -3,7 +3,6 @@ package com.uga.moviebooking.model.theatre;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Service
 public class TheatreService {
@@ -26,6 +25,11 @@ public class TheatreService {
         theatreRepository.save(theatre);
         createSeats(theatre);
         return true;
+    }
+
+    public Theatre getTheatre(int theatreNumber){
+        Theatre theatre = theatreRepository.findByNumber(theatreNumber).orElse(null);
+        return theatre;
     }
     private void createSeats(Theatre theatre) {
         ArrayList<Seat> seatList = new ArrayList<>();
