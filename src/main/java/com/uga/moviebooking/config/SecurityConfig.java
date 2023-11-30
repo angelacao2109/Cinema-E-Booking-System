@@ -82,7 +82,7 @@ public class SecurityConfig  {
 //        http.authorizeHttpRequests(request -> request.requestMatchers("/api/**")
 //                .permitAll().anyRequest().authenticated()); // IF APi/** permit all ELSE authorized only
         http.authorizeHttpRequests(req -> req
-            .requestMatchers("/api/auth/*", "/api/movie/homepage", "/api/auth/register", "/api/user/subscribe-promotions", "/api/user/*","/api/user/unsubscribe-promotions" ,"/api/auth/login", "/api/promotion/*", "/api/promotion/send-promotion-email").permitAll()
+            .requestMatchers("/api/auth/*", "/api/movie/homepage", "/api/auth/register", "/api/user/subscribe-promotions", "/api/user/*","/api/user/unsubscribe-promotions" ,"/api/auth/login", "/api/promotion/*", "/api/promotion/send-promotion-email", "/api/movie/getAllMovies","/api/showtime").permitAll()
             .requestMatchers(HttpMethod.GET,"/api/movie/**").permitAll().requestMatchers("/api/**").authenticated());
 
         http.exceptionHandling(auth -> auth.authenticationEntryPoint(unauthorizedAuthEntry))

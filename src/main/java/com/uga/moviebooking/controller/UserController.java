@@ -129,9 +129,11 @@ public class UserController {
     public record PasswordDto(String password) {}
 
 
-    //functions for sub and unsub promo
 
-    @PostMapping("/subscribe-promotions")
+
+    //functions for sub and unsub promo (unnecessary.)
+
+    /*@PostMapping("/subscribe-promotions")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<String> subscribeToPromotions(@AuthenticationPrincipal String email) {
         boolean success = userService.subscribeToPromotions(email);
@@ -151,7 +153,9 @@ public class UserController {
         } else {
             return ResponseEntity.badRequest().body("Failed to unsubscribe from promotions.");
         }
-    }
+    }*/
+
+
 }
 
 

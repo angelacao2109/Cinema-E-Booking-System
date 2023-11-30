@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,6 +23,10 @@ public class AdminController {
     RoleRepository roleRepository;
     UserRepository userRepository;
     UserService userService;
+
+    public AdminController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/registerAdmin")
@@ -109,5 +114,12 @@ public class AdminController {
         }
         return ResponseEntity.notFound().build();
 
+    }
+
+    //Returns all users
+    @GetMapping("/getAllUsers")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
