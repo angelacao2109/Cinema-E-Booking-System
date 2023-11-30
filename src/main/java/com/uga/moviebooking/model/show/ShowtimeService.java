@@ -1,37 +1,69 @@
 package com.uga.moviebooking.model.show;
 
-import com.uga.moviebooking.model.booking.ticket.Ticket;
+import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.model.booking.ticket.TicketRepository;
 import com.uga.moviebooking.model.dto.SeatDto;
+import com.uga.moviebooking.model.dto.ShowtimeDto;
+import com.uga.moviebooking.model.movie.Movie;
+import com.uga.moviebooking.model.movie.MovieRepository;
+import com.uga.moviebooking.model.movie.MovieService;
 import com.uga.moviebooking.model.theatre.Seat;
+import com.uga.moviebooking.model.theatre.Theatre;
+import com.uga.moviebooking.model.theatre.TheatreRepository;
+import com.uga.moviebooking.model.theatre.TheatreService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.uga.moviebooking.model.movie.Movie;
-import com.uga.moviebooking.model.theatre.Theatre;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class ShowtimeService {
 
     private final ShowtimeRepository showtimeRepository;
     private final TicketRepository ticketRepository;
+    private final TheatreRepository theatreRepository;
+    private final MovieRepository movieRepository;
 
     @Autowired
-    public ShowtimeService(ShowtimeRepository showtimeRepository, TicketRepository ticketRepository) {
+    public ShowtimeService(ShowtimeRepository showtimeRepository, TicketRepository ticketRepository, MovieService movieService, TheatreService theatreService, TheatreRepository theatreRepository, MovieRepository movieRepository) {
         this.showtimeRepository = showtimeRepository;
         this.ticketRepository = ticketRepository;
+        this.theatreRepository = theatreRepository;
+        this.movieRepository = movieRepository;
     }
 
-    public Showtime createShowtime(Showtime showtime) {
-
-        List<Showtime> existingShowtimes = showtimeRepository.findByShowtimeAndTheatre(showtime.getShowtime(), showtime.getTheatre());
+    public long createShowtime(Showtime showtime) {
+        List<Showtime> existingShowtimes = showtimeRepository.findByDateTimeAndTheatre(showtime.getDateTime(), showtime.getTheatre());
         if (existingShowtimes.isEmpty()) {
-            return showtimeRepository.save(showtime);
+            return showtimeRepository.save(showtime).getId();
         } else {
-            throw new RuntimeException("A movie is already scheduled at the specified theatre and time.");
+            throw new AppException("A movie is already scheduled at the specified theatre and time.", 409);
         }
+    }
+
+    public long createShowtime(ShowtimeDto showtimeDto) {
+        long theatreId = showtimeDto.getTheatreId();
+        long movieId = showtimeDto.getMovieId();
+        Movie movie;
+        Theatre theatre;
+        try {
+            movie = movieRepository.getReferenceById(movieId);
+            theatre = theatreRepository.getReferenceById(theatreId);
+        } catch(EntityNotFoundException e) {
+            throw new AppException("movieId or theatreId was not found", 404);
+        }
+        Showtime showtime = new Showtime();
+        showtime.setDateTime(showtimeDto.getShowDate());
+        showtime.setMovie(movie);
+        showtime.setTheatre(theatre);
+
+
+        return createShowtime(showtime);
     }
 
      public void generateShowtimesForMovie(Movie movie, Theatre theatre) {
@@ -91,5 +123,14 @@ public class ShowtimeService {
 
     public boolean isSeatBooked(long showtimeId,long seatId) {
         return ticketRepository.isBooked(showtimeId, seatId);
+    }
+
+    public boolean deleteShowtime(long id) {
+        try {
+            showtimeRepository.deleteById(id);
+        } catch(EmptyResultDataAccessException e) {
+            return false;
+        }
+        return true;
     }
 }

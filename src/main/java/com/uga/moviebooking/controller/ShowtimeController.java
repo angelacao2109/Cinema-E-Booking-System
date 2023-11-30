@@ -1,17 +1,21 @@
 package com.uga.moviebooking.controller;
 
+import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.model.dto.SeatDto;
+import com.uga.moviebooking.model.dto.ShowtimeDto;
 import com.uga.moviebooking.model.show.Showtime;
 import com.uga.moviebooking.model.show.ShowtimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/showtimes")
+@RequestMapping("/api/showtime")
 public class ShowtimeController {
 
     private final ShowtimeService showtimeService;
@@ -37,5 +41,22 @@ public class ShowtimeController {
         return ResponseEntity.ok(map);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping()
+    public ResponseEntity<?> addShowtimeToMovie(@RequestBody ShowtimeDto showtimeDto) {
+        long id = showtimeService.createShowtime(showtimeDto);
+        Map<String, Object> res = new HashMap<>();
+        res.put("message", "showtime successfully added");
+        res.put("showtimeId", id);
+        return ResponseEntity.ok(res);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping()
+    public ResponseEntity<?> deleteShowtime(@RequestParam("id") long id) {
+        if(showtimeService.deleteShowtime(id))
+            return ResponseEntity.ok("Showtime " + id + " successfully deleted");
+        throw new AppException("Showtime " + id + " not found",404);
+    }
 
 }

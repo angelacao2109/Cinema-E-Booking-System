@@ -1,5 +1,6 @@
 package com.uga.moviebooking.model.movie;
 
+import com.uga.moviebooking.model.dto.MovieDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -60,6 +61,20 @@ public class Movie {
     @Column(nullable = false)
     private MovieStatus status;
 
+    public Movie(MovieDto movie) {
+        this.title = movie.getTitle();
+        this.category = movie.getCategory();
+        this.cast = movie.getCast();
+        this.director = movie.getDirector();
+        this.producer = movie.getProducer();
+        this.synopsis = movie.getSynopsis();
+        this.reviews = movie.getReviews();
+        this.rating = movie.getRating();
+        this.trailerPictureUrl = movie.getTrailerPictureUrl();
+        this.trailerVideoUrl = movie.getTrailerVideoUrl();
+        this.releaseDate = movie.getReleaseDate();
+        this.status = movie.getMovieStatus();
+    }
 }
 
 
