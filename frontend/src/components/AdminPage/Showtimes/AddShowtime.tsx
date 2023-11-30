@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './AddShowtime.css';
 
@@ -6,6 +6,7 @@ type Showtime = {
   id: string;
   movieId: string;
   time: string;
+  theatreId: string; // need to assign movie to a theatre room 
 };
 
 type AddShowtimeFormProps = {
@@ -17,6 +18,7 @@ const AddShowtime: React.FC<AddShowtimeFormProps> = ({ onAddShowtime }) => {
     id: '',
     movieId: '',
     time: '',
+    theatreId: '',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,13 +28,22 @@ const AddShowtime: React.FC<AddShowtimeFormProps> = ({ onAddShowtime }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newShowtime.movieId.trim() === '' || newShowtime.time.trim() === '') {
+    if (newShowtime.movieId.trim() === '' || newShowtime.time.trim() === ''|| newShowtime.theatreId.trim() === '') {
       alert('Please enter both Movie ID and Showtime.');
       return;
     }
+    const showtimeDate = new Date(newShowtime.time);
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 15); // doing this so you cant schedule a movie 15 mins before current time 
+
+    if (showtimeDate < now) {
+      alert('Showtime must be at least 15 minutes from the current time.');
+      return;
+    }
+
     newShowtime.id = Date.now().toString();
     onAddShowtime(newShowtime);
-    setNewShowtime({ id: '', movieId: '', time: '' });
+    setNewShowtime({ id: '', movieId: '', time: '',  theatreId: ''  });
   };
 
   return (
@@ -67,6 +78,16 @@ const AddShowtime: React.FC<AddShowtimeFormProps> = ({ onAddShowtime }) => {
         required
       />
 
+      <label className='add-showtime-label' htmlFor='theatreId'>Theatre ID:</label>
+          <input
+            className='add-showtime-input'
+            type='text'
+            id='theatreId'
+            name='theatreId'
+            value={newShowtime.theatreId}
+            onChange={handleInputChange}
+            required
+          />  
       <Link to='/admin/showtime'>
         <button className='add-showtime-btn' type='submit'>Add Showtime</button>
       </Link>

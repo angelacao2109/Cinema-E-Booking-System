@@ -6,6 +6,7 @@ type Showtime = {
   id: string;
   movieId: string;
   time: string;
+  theatreId: string;
 };
 
 type EditShowtimeFormProps = {
@@ -19,7 +20,7 @@ const EditShowtime: React.FC<EditShowtimeFormProps> = ({ onEditShowtime, fetchSh
 
   useEffect(() => {
     const fetchData = async () => {
-      const showtimeData = await fetchShowtimeById(``);
+      const showtimeData = await fetchShowtimeById('');
       setEditedShowtime(showtimeData);
     };
 
@@ -37,6 +38,10 @@ const EditShowtime: React.FC<EditShowtimeFormProps> = ({ onEditShowtime, fetchSh
     e.preventDefault();
     if (!editedShowtime) return;
 
+    if (editedShowtime.movieId.trim() === '' || editedShowtime.time.trim() === '' || editedShowtime.theatreId.trim() === '') {
+      alert('Please enter Movie ID, Showtime, and Theatre ID.');
+      return;
+    }
     onEditShowtime(editedShowtime);
     // Add logic to update the showtime in the database 
   };
@@ -77,6 +82,17 @@ const EditShowtime: React.FC<EditShowtimeFormProps> = ({ onEditShowtime, fetchSh
             id='time'
             name='time'
             value={editedShowtime.time}
+            onChange={handleInputChange}
+            required
+          />
+
+<label className='edit-showtime-label' htmlFor='theatreId'>Theatre ID:</label>
+          <input
+            className='edit-showtime-input'
+            type='text'
+            id='theatreId'
+            name='theatreId'
+            value={editedShowtime.theatreId}
             onChange={handleInputChange}
             required
           />

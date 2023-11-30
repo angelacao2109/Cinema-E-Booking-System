@@ -60,7 +60,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
         case 401:
           setFeedbackMessage("Wrong password or email.");
           break;
-          case 409:
+          case 403:
             setFeedbackMessage("Account not verified. Please verify your email before logging in.");
             break;
             case 404:
