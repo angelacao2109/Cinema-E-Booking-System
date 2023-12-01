@@ -5,7 +5,8 @@ entirely sure what other properties are needed.
 
 */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './Showtime.css';
 
@@ -13,6 +14,7 @@ type Showtime = {
   id: string;
   movieId: string;
   time: string;
+  theatreId: string; 
 };
 
 const Showtime: React.FC = () => {
