@@ -14,6 +14,11 @@ const AdminUtilitiesDropdown = () => {
 
         {/* Added a manage showtime page */}
         <Link to="/admin/showtime" className="dropdown-link">Manage Showtimes</Link>
+
+        {/* Added a manage tickets page */}
+        <Link to="/admin/tickets" className="dropdown-link">Manage Tickets</Link>
+
+
       </div>
     </div>
   );

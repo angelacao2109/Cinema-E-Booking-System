@@ -12,6 +12,7 @@ import EditUser from '../EditUser/EditUser';
 import Showtime from '../Showtimes/Showtimes'; // Imported Showtime page
 import AddShowtime from '../Showtimes/AddShowtime'; // Imported AddShowtime page
 import EditShowtime from '../Showtimes/EditShowtime'; // Imported EditShowtime page
+import Tickets from '../Tickets/Tickets';
 
 
 // Ensure these handler functions are defined or imported
@@ -38,7 +39,7 @@ const AdminRoutes = ({ onLogout }) => {
             <Route path="showtime" element={<Showtime />} />
             <Route path="addshowtime" element={<AddShowtime onAddShowtime={handleAddShowtime}/>} />
             {/*<Route path="editshowtime" element={<EditShowtime onEditShowtime={handleEditShowtime}/>} />*/}
-
+            <Route path="tickets" element={<Tickets />} />
             </Routes>
         </>
     );
