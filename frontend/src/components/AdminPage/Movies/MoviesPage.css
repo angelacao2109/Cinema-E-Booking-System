@@ -70,7 +70,7 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      background-color: rgb(168, 163, 163, 0.35);
+      background-color: rgba(37, 37, 37, 0.35);
   }
   
   .movie-card h3 {

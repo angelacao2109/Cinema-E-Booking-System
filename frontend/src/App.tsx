@@ -20,6 +20,7 @@ import AdminRoutes from './components/AdminPage/AdminNav/AdminRoutes';
 import { Movie} from "./components/types";
 import ResetPasswordPostLink from './components/ResetPasswordPostLink/ResetPasswordPostLink';
 import VerifyEmail from './components/VerifyEmail/VerifyEmail';
+import axios from "axios";
 
 function App() {
 
@@ -72,12 +73,32 @@ function App() {
     setShouldRefetch(prevState => !prevState);
   };
 
-  const [isAdmin, setIsAdmin] = useState(false);
+  const getIsAdmin = async () => {
+    try {
+      const admin_response = await axios.get('http://localhost:8080/api/user',          
+      {headers: {
+        'Authorization': getCookie('authToken')
+    }});
+    if (admin_response.status == 200){
+      if (admin_response.data.roles[1] == "ROLE_ADMIN"){
+        console.log("Is Admin")
+        return true
+      }
+    } else {
+      return false
+    }
+    } catch (error: any) {
+      console.log(error)
+    }
+  };
+
+  const [isAdmin, setIsAdmin] = useState(getIsAdmin());
+
 
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    const foundEmail = document.cookie.split("; ").find((row) => row.startsWith("userEmail="))?.split("=")[1];
+    const foundEmail = getCookie('userEmail');
     setUserEmail(foundEmail ?? null);
 }, [isLoggedIn]);
 
@@ -95,7 +116,7 @@ return (
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onSearchResultsChange={setSearchResults}
-        isAdmin={userEmail === "admin@admin.com"}
+        isAdmin
       />
      
       <AppRoutes

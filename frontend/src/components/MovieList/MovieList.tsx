@@ -132,22 +132,15 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
   
     return (
         <div className="movie-list">
-          {/* 
-          Removed Heading 
-          Hopefully the 'Movies Now Playing' and 'Movies Coming Soon' will show their respected movies
-          <h2 style={{ color: "#CF291D" }}>Currently Showing Movies</h2>
-          */}
+        
 
-          <h2 style={{ color: "#CF291D", textAlign: "left" }}>Movies</h2>
+        <h2 style={{ color: "#CF291D" }}>Currently Showing Movies</h2>
 
           <div className="movies-grid">
             {renderMovies(currentlyShowingMovies)}
           </div>
 
-          {/*
-          Removed Heading 
           <h2 style={{ color: "#CF291D" }}>Coming Soon Movies</h2>
-          */}
 
           <div className="movies-grid">
             {renderMovies(comingSoonMovies)}
