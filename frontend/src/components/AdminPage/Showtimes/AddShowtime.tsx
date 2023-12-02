@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AddShowtime.css';
 
 type Showtime = {
-  id: string;
   movieId: string;
-  time: string;
   theatreId: string;
-  showDate?: string; // Optional showDate
+  showDate: string; // Optional showDate
 };
 
 const authToken = document.cookie
@@ -23,28 +21,22 @@ const email = document.cookie
 
 const AddShowtime: React.FC = () => {
   const [newShowtime, setNewShowtime] = useState<Showtime>({
-    id: '',
     movieId: '',
-    time: '',
+    showDate: '',
     theatreId: '',
   });
 
+  const navigate = useNavigate();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    // If the input is for 'time', update the time in newShowtime
-    if (name === 'time') {
-      setNewShowtime((prev) => ({ ...prev, [name]: value }));
-    } else {
-      // If the input is for 'showDate', parse the date and set showDate in newShowtime
-      const showDate = new Date(`${value}T${newShowtime.time}`);
-      setNewShowtime((prev) => ({ ...prev, showDate: showDate.toISOString() }));
-    }
+    setNewShowtime(prevState => ({ ...prevState, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log("ran!")
     e.preventDefault();
-    if (newShowtime.movieId.trim() === '' || newShowtime.time.trim() === '' || newShowtime.theatreId.trim() === '') {
+    if (newShowtime.movieId.trim() === '' || newShowtime.showDate.trim() === '' || newShowtime.theatreId.trim() === '') {
       alert('Please enter both Movie ID and Showtime.');
       return;
     }
@@ -62,10 +54,17 @@ const AddShowtime: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('/api/showtime', postData, {headers: {Authorization: authToken}});
+      const response = await axios.post('http://localhost:8080/api/showtime',
+      {
+        movieId:postData.movieId,
+        theatreId:postData.theatreId,
+        showDate:postData.showDate
+      }
+      , {headers: {Authorization: authToken}});
       console.log(response.data);
       alert('Showtime successfully added');
-      setNewShowtime({ id: '', movieId: '', time: '', theatreId: '' });
+      setNewShowtime({movieId: '', showDate: '', theatreId: '' });
+      navigate('/admin/showtime');  // Navigate to the movies page upon successful addition
     } catch (error) {
       console.error('Error adding showtime:', error);
       alert('Failed to add showtime');
@@ -100,22 +99,9 @@ const AddShowtime: React.FC = () => {
           </label>
           <input
             className='add-showtime-input'
-            type='date'
+            type='datetime-local'
             id='showDate'
             name='showDate'
-            //onChange={handleInputChange}
-            required
-          />
-
-          <label className='add-showtime-label' htmlFor='time'>
-            Showtime:
-          </label>
-          <input
-            className='add-showtime-input'
-            type='time'
-            id='time'
-            name='time'
-            value={newShowtime.time}
             onChange={handleInputChange}
             required
           />
@@ -132,11 +118,9 @@ const AddShowtime: React.FC = () => {
             onChange={handleInputChange}
             required
           />
-          <Link to='/admin/showtime'>
-            <button className='add-showtime-btn' type='submit'>
-              Add Showtime
-            </button>
-          </Link>
+          <button className='add-showtime-btn' type='submit'>
+            Add Showtime
+          </button>
         </form>
       </div>
     </>

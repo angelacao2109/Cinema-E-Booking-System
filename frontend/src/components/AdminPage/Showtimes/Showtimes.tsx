@@ -1,24 +1,48 @@
-/* 
-
-This is just a template for our add showtime page. I'm not too
-entirely sure what other properties are needed. 
-
-*/
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Showtime.css';
 
+type Theatre = {
+  id:number
+}
+
 type Showtime = {
-  id: string;
-  movieId: string;
-  time: string;
-  theatreId: string; 
+  id:number;
+  dateTime: string;
+  bookings: string;
+  theatre: string; 
+  movie: string;
 };
+
+type MovieWithShowtime = {
+  movieId: number;
+  movieTitle: string;
+  showtimes: Showtime[];
+};
+
+const authToken = document.cookie
+.split("; ")
+.find((row) => row.startsWith("authToken="))
+?.split("=")[1];
 
 const Showtime: React.FC = () => {
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
+  const [movieWithShowtimes, setMovieWithShowtimes] = useState<MovieWithShowtime[]>([]);
+
+  useEffect(() => {
+    const fetchShowtimes = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/movie/getAllMovies', {headers: {Authorization: authToken}});
+        if (response.status == 200) {
+          setMovieWithShowtimes(response.data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchShowtimes();
+  }, []);
 
 
   return (
@@ -33,9 +57,16 @@ const Showtime: React.FC = () => {
       </div>
       <div className='showtime-list'>
         <ul>
-          {showtimes.map((showtime) => (
-            <li key={showtime.id}>
-              Movie ID: {showtime.movieId}, Time: {showtime.time}
+          {movieWithShowtimes.map((movieWithShowtimes) => (
+            <li key={movieWithShowtimes.movieId}>
+              Movie ID: {movieWithShowtimes.movieId}, Title: {movieWithShowtimes.movieTitle}
+              <ul>
+                {movieWithShowtimes.showtimes.map((showtimes) => (
+                  <li key={showtimes.id}>
+                    Showtime: {showtimes.dateTime}
+                  </li>
+                ))}
+              </ul>
             </li>
           ))}
         </ul>
