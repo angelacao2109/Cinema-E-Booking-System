@@ -20,6 +20,11 @@ type Movie = {
   status: 'CURRENTLY_SHOWING' | 'COMING_SOON' | 'NOT_SHOWING';
 };
 
+const authToken = document.cookie
+.split("; ")
+.find((row) => row.startsWith("authToken="))
+?.split("=")[1];
+
 // Define a type for the props
 type EditMovieProps = {
     onEditMovie: (movie: Movie) => void;
@@ -49,7 +54,7 @@ const EditMovie: React.FC<EditMovieProps> = ({ onEditMovie }) => {
         const fetchMovie = async () => {
           // GET MOVIE BY ID NEEDS TO BE IMPLEMENTED
           try {
-            const response = await axios.get(`http://localhost:8080/api/movie/${id}`);
+            const response = await axios.get(`http://localhost:8080/api/movie?id=${id}`, {headers: {Authorization: authToken}});
             setMovie(response.data);
           } catch (error) {
             console.error('Error fetching movie:', error);
@@ -64,10 +69,10 @@ const EditMovie: React.FC<EditMovieProps> = ({ onEditMovie }) => {
         e.preventDefault();
         // EDIT MOVIE BY ID NEEDS TO BE IMPLEMENTED
         try {
-            const response = await axios.put(`http://localhost:8080/api/movie/edit/${id}`, movie);
+            const response = await axios.put(`http://localhost:8080/api/movie/${id}`, movie, {headers: {Authorization: authToken}});
             if (response.data) {
                 onEditMovie(response.data);
-                navigate('/moviespage');
+                navigate('/admin/moviespage');
             }
         } catch (error) {
             console.error('Error updating movie:', error);
@@ -76,8 +81,8 @@ const EditMovie: React.FC<EditMovieProps> = ({ onEditMovie }) => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8080/api/movie/${id}`);
-            navigate('/moviespage');
+            await axios.delete(`http://localhost:8080/api/movie/${id}`, {headers: {Authorization: authToken}});
+            navigate('/admin/moviespage');
         } catch (error) {
             console.error('Error deleting movie:', error);
         }
@@ -137,10 +142,13 @@ const EditMovie: React.FC<EditMovieProps> = ({ onEditMovie }) => {
                         <option value='NOT_SHOWING'>Not Showing</option>
                     </select>
 
+                    <label className='edit-movie-label'>Release Date</label>
+                    <input type='datetime-local' name='releaseDate' value={movie.releaseDate} onChange={handleChange}/>
+
                     {/* Created a div container for buttons */}
                     <div className='edit-movie-button-container'>
                         <button className='edit-movie-btn' type='submit'>Save Changes</button>
-                        <button className='edit-movie-btn' type='button' onClick={handleDelete}>Delete Movie</button>
+                        
                     </div>
                 </form>
             </div>

@@ -11,6 +11,16 @@ type Showtime = {
   showDate?: string; // Optional showDate
 };
 
+const authToken = document.cookie
+.split("; ")
+.find((row) => row.startsWith("authToken="))
+?.split("=")[1];
+
+const email = document.cookie
+.split("; ")
+.find((row) => row.startsWith("userEmail="))
+?.split("=")[1];
+
 const AddShowtime: React.FC = () => {
   const [newShowtime, setNewShowtime] = useState<Showtime>({
     id: '',
@@ -52,7 +62,7 @@ const AddShowtime: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('/api/showtime', postData);
+      const response = await axios.post('/api/showtime', postData, {headers: {Authorization: authToken}});
       console.log(response.data);
       alert('Showtime successfully added');
       setNewShowtime({ id: '', movieId: '', time: '', theatreId: '' });
