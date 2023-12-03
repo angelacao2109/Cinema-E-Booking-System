@@ -24,4 +24,6 @@ public class PromotionDto {
     private Date expirationDate;
 
     private String promoCode;
+
+    private Double percentageOff;
 }

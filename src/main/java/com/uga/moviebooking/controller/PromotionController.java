@@ -2,6 +2,8 @@ package com.uga.moviebooking.controller;
 
 import com.uga.moviebooking.model.dto.MovieDto;
 import com.uga.moviebooking.model.dto.PromotionDto;
+import com.uga.moviebooking.model.dto.PromotionRequestDto;
+import com.uga.moviebooking.model.dto.TicketDto;
 import com.uga.moviebooking.model.movie.MovieService;
 import com.uga.moviebooking.model.promotion.Promotion;
 import com.uga.moviebooking.model.promotion.PromotionService;
@@ -32,11 +34,22 @@ public class PromotionController {
         this.userRepository = userRepository;
     }
 
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<String> addPromotion(@RequestBody PromotionDto promo) {
         long id = promotionService.createPromotion(promo).getId();
         return ResponseEntity.ok("Promotion ID " + id + " Created!");
+    }
+
+    @PostMapping("/apply")
+    public ResponseEntity<String> applyPromotion(@RequestBody PromotionRequestDto promotionRequestDto){
+        if(promotionService.modifyPriceAfterPromotion(promotionRequestDto.getPromotionID(), promotionRequestDto.getTicketID())){
+            return ResponseEntity.ok("Promotion applied successfully");
+        }
+        return ResponseEntity.ok("Promotion was unable to be applied");
+
+
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
