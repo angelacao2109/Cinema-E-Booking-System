@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Checkout.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const ticketPrices = {
   kids: 5,
@@ -18,6 +18,7 @@ interface Card {
   CVV: string;
 };
 
+
 const authToken = document.cookie
   .split("; ")
   .find((row) => row.startsWith("authToken="))
@@ -30,6 +31,8 @@ const email = document.cookie
 
 const Checkout: React.FC = () => {
 
+  const params = useParams<{ showtimeID: string }>();
+  const showtimeID = parseInt(params.showtimeID, 10);
   
   const [userCards, setUserCards] = useState<Card[]>([]);
 
@@ -83,7 +86,7 @@ const Checkout: React.FC = () => {
   const [promoCode, setPromoCode] = useState('');
 
   const location = useLocation();
-const { selectedSeats, showtimeID, ticketCounts } = location.state as { selectedSeats: string[], showtimeID: number, ticketCounts: { [key: string]: number } };
+const { selectedSeats, ticketCounts } = location.state as { selectedSeats: string[], ticketCounts: { [key: string]: number } };
 
   let total = 0;
   for (let ticketType in ticketCounts) {
@@ -94,7 +97,7 @@ const { selectedSeats, showtimeID, ticketCounts } = location.state as { selected
   for (let seatID of selectedSeats) {
     const [seatX, seatY] = seatID.split("-");
     const ticket = {
-      type: 'your_ticket_type', // Replace with the actual ticket type
+      type: 'your_ticket_type',
       seatCol: Number(seatY),
       seatRow: Number(seatX),
     };
@@ -147,7 +150,7 @@ const { selectedSeats, showtimeID, ticketCounts } = location.state as { selected
       const response = await axios.post(
         `http://localhost:8080/api/booking?email=${email}`,
         {
-          showtimeID: "showtime", // TODO: change to real showtime
+          showtimeID: showtimeID, // TODO: change to real showtime
           paymentCardID: chosenCardID,
           tickets: tickets,
           promoCode: promoCode, // Include promo code in the request

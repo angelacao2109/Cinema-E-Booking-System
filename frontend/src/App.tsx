@@ -24,17 +24,14 @@ import axios from "axios";
 
 function App() {
 
-
   const [showtimeID, setShowtimeID] = useState<number | null>(null); // added
 
   const logout = () => {
-  
     document.cookie = 'authToken=; Max-Age=0';
     document.cookie = 'userEmail=; Max-Age=0';
     setIsLoggedIn(false);
     setUserEmail(null);
     setUserRole('guest');
-   
   };
 
   const [ticketCount, setTicketCount] = useState<number>(0);
@@ -55,7 +52,6 @@ function App() {
     }
     return null;
 }
-
 
   const [isLoggedIn, setIsLoggedIn] = useState(getCookie('authToken') !== null);
 
@@ -94,7 +90,6 @@ function App() {
 
   const [isAdmin, setIsAdmin] = useState(getIsAdmin());
 
-
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
@@ -109,7 +104,6 @@ return (
   
 
       <NavBar 
-  
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
         movieData={moviesData}
@@ -129,7 +123,7 @@ return (
           refetchMovies={refetchMovies}
           loggedInUserEmail={loggedInUserEmail}
           onLogout={logout}
-          showtimeID={showtimeID} // added
+          showtimeID={showtimeID}
         />
       </div>
     </Router>
@@ -159,9 +153,9 @@ const AppRoutes = ({
           ) : (
             <>
           <Route path="/" element={<MovieList searchResults={searchResults} />} />
-          <Route path="/select-ticket" element={<SelectTicket onTicketChange={handleTicketChange} />} />
-          <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} showtimeID={showtimeID} />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/select-ticket/:showtimeID" element={<SelectTicket onTicketChange={handleTicketChange} />} />
+          <Route path="/seats/:showtimeID" element={<SeatSelection maxSeats={ticketCount} showtimeID={showtimeID} />} />
+          <Route path="/checkout/:showtimeID" element={<Checkout />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/register" element={<Registration />} />
    

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./SelectTicket.css";
-import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 interface Props {
   onTicketChange: (count: number) => void;
@@ -13,9 +13,14 @@ const ticketPrices = {
   senior: 7,
 };
 
+const authToken = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("authToken="))
+  ?.split("=")[1];
+
 const SelectTicket: React.FC<Props> = ({ onTicketChange }) => {
-  const location = useLocation();
-  const { showtimeID } = location.state as { showtimeID: number };
+  const params = useParams<{ showtimeID: string }>();
+  const showtimeID = parseInt(params.showtimeID, 10); // Convert the showtimeID to a number
   
   const [tickets, setTickets] = useState({
     kids: 0,
@@ -35,18 +40,33 @@ const SelectTicket: React.FC<Props> = ({ onTicketChange }) => {
     }));
   };
 
+  const fetchTicketPrices = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/booking/prices', { headers: {'Authorization': authToken } });
+      if (response.status == 200) {
+        ticketPrices.adult = Number(response.data.ADULT)/100;
+        ticketPrices.kids = Number(response.data.CHILD)/100;
+        ticketPrices.senior = Number(response.data.SENIOR)/100;
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  fetchTicketPrices();
+
   useEffect(() => {
-    // Compute the total ticket count here
     const totalCount = Object.values(tickets).reduce(
       (acc, curr) => acc + curr,
       0
     );
+
     onTicketChange(totalCount);
   }, [tickets]);
 
   const handleConfirmClick = () => {
     onTicketChange(Object.values(tickets).reduce((acc, curr) => acc + curr, 0)); // This updates the parent component with total ticket count
-    navigate("/seats"); // Navigating to SeatSelection
+    navigate(`/seats/${showtimeID}`); // Navigating to SeatSelection
   };
 
   return (
@@ -82,7 +102,7 @@ const SelectTicket: React.FC<Props> = ({ onTicketChange }) => {
             >
               +
             </button>
-            <span>${price * tickets[category as keyof typeof tickets]}</span>
+            <span>${(price * tickets[category as keyof typeof tickets]).toFixed(2)}</span>
           </div>
         ))}
         <div className="confirm-container">
