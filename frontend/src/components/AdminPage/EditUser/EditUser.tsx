@@ -15,7 +15,7 @@ function EditUser() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get<User[]>('/api/admin/getAllUsers'); 
+                const response = await axios.get<User[]>('http://localhost:8080/api/admin/getAllUsers'); 
                 setUsers(response.data.map(user => ({
                     ...user,
                     accountStatus: user.enabled ? "Active" : "Suspended" 
@@ -30,7 +30,7 @@ function EditUser() {
     
     const handleSuspend = async (userId: number) => {
         try {
-            const response = await axios.post('/api/admin/disableUser', { email: users.find(u => u.id === userId)?.email });
+            const response = await axios.post('http://localhost:8080/api/admin/disableUser', { email: users.find(u => u.id === userId)?.email });
             if (response.status === 200) {
                 setUsers(users.map(user => 
                     user.id === userId ? { ...user, accountStatus: "Suspended" } : user
@@ -43,7 +43,7 @@ function EditUser() {
 
     const handleEnable = async (userId: number) => {
         try {
-            const response = await axios.post('/api/admin/enableUser', { email: users.find(u => u.id === userId)?.email });
+            const response = await axios.post('http://localhost:8080/api/admin/enableUser', { email: users.find(u => u.id === userId)?.email });
             if (response.status === 200) {
                 setUsers(users.map(user => 
                     user.id === userId ? { ...user, accountStatus: "Active" } : user

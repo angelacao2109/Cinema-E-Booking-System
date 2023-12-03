@@ -78,22 +78,27 @@ function App() {
     if (admin_response.status == 200){
       if (admin_response.data.roles[1] == "ROLE_ADMIN"){
         console.log("Is Admin")
-        return true
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
       }
     } else {
-      return false
+      setIsAdmin(false);
     }
     } catch (error: any) {
-      console.log(error)
+      console.log(error);
+      setIsAdmin(false);
     }
   };
 
-  const [isAdmin, setIsAdmin] = useState(getIsAdmin());
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
     const foundEmail = getCookie('userEmail');
+    getIsAdmin();
+    console.log(isAdmin)
     setUserEmail(foundEmail ?? null);
 }, [isLoggedIn]);
 
@@ -110,7 +115,7 @@ return (
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onSearchResultsChange={setSearchResults}
-        isAdmin
+        isAdmin = {isAdmin}
       />
      
       <AppRoutes

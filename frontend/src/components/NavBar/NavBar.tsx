@@ -37,7 +37,6 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
   const handleLogout = () => {
     document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "userEmail=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    console.log("What")
     setIsLoggedIn(false);
     navigate("/signin");
   };
@@ -62,6 +61,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
     //  "http://localhost:8080/api/movies-coming-soon",
     //  setMoviesComingSoon
     //);
+    console.log(isAdmin)
   }, []);
  
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,11 +76,16 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
 
   const location = useLocation();
 
-
+  const CommonLinks = () => (
+    <>
+      <Link to="/movies-playing" className="link">Movies Now Playing</Link>
+      <Link to="/movies-coming-soon" className="link">Movies Coming Soon</Link>
+    </>
+  );
 
   const UserLinks = () => (
     <>
-     
+      <CommonLinks />
       <Link to="/edit-profile" className="link">Edit Profile</Link>
       <Link to="/orderhistory" className="link">Order History</Link>
       <Link to="/select-ticket" className="link">Select Ticket</Link>
@@ -95,7 +100,6 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
 
   const AdminLinks = () => (
     <>
-    
       <div className="welcomeLogoutGroup">
         <div className="welcomeSection">
           <span>Welcome, {userEmail}</span>
@@ -112,7 +116,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
 
   const GuestLinks = () => (
     <>
-   
+    <CommonLinks />
     <div className="accountSection">
       <span>Account</span>
       <div className="accountLinks">
