@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +29,11 @@ public class ShowtimeController {
     @GetMapping("/movie")
     public ResponseEntity<?> getShowtimesForMovie(@RequestParam("movieID") long movieID) {
         List<Showtime> showtimes = showtimeService.getShowtimesForMovie(movieID);
+        List<ShowtimeDto> showtimeDtos = new ArrayList<>();
+        for(Showtime s : showtimes)
+            showtimeDtos.add(new ShowtimeDto(s));
         HashMap<String, Object> map = new HashMap<>();
-        map.put("showtimes", showtimes);
+        map.put("showtimes", showtimeDtos);
         return ResponseEntity.ok(map);
     }
 

@@ -144,5 +144,5 @@ public class LoginController {
     }
 
     public record loginResponse(String token, String message) {}
-    public record passwordDto(String token, String password) { }
+    public record passwordDto(String token, String password) {}
 }
