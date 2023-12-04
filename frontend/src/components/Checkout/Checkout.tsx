@@ -74,7 +74,7 @@ const Checkout: React.FC = () => {
 
     const assign = (type: string, count: number) => {
       for (let i = 0; i < count && seatIndex < selectedSeats.length; i++) {
-        const [seatRow, seatCol] = selectedSeats[seatIndex].split("-").map(Number);
+        const [seatCol, seatRow] = selectedSeats[seatIndex].split("-").map(Number);
         assignedTickets.push({
           type,
           seatCol,
@@ -212,28 +212,44 @@ const Checkout: React.FC = () => {
     setChosenCardID(cardID); 
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        `http://localhost:8080/api/booking?email=${email}`,
-        {
-          showtimeID: showtimeID, // TODO: change to real showtime
-          paymentCardID: chosenCardID,
-          tickets: assignedTickets,
-          promoCode: promoCode, // Include promo code in the request
-        },
-        {
-          headers: {
-            Authorization: authToken,
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Error creating booking:", error);
-    }
-    navigate("/confirmation");
+
+  interface BookingData {
+    showtimeID: number;
+    paymentCardID: number;
+    tickets: Ticket[];
+    promoCode?: string;
   };
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    // Construct the basic request payload
+    const bookingData: BookingData = {
+      showtimeID: showtimeID,
+      paymentCardID: chosenCardID,
+      tickets: assignedTickets,
+    };
+    // Conditionally add promoCode if it's not an empty string
+    if (promoCode !== "") {
+      bookingData.promoCode = promoCode;
+    }
+
+    const response = await axios.post(
+      `http://localhost:8080/api/booking?email=${email}`,
+      bookingData,
+      {
+        headers: {
+          Authorization: authToken,
+        },
+      }
+    );
+    if (response.data) {
+      navigate("/confirmation", { state: { bookingData: response.data } });
+    }
+  } catch (error) {
+    console.error("Error creating booking:", error);
+  }
+};
 
   const navigate = useNavigate();
 

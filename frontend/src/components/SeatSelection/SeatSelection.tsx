@@ -37,7 +37,7 @@ function SeatSelection({ maxSeats }: Props) {
       .then(response => {
         const occupied = response.data['Unavailable Seats']
           .filter((seat: SeatDto) => seat.booked)
-          .map((seat: SeatDto) => `${seat.seatRow-1}-${seat.seatCol-1}`);
+          .map((seat: SeatDto) => `${seat.seatRow}-${seat.seatCol}`);
         setOccupiedSeats(occupied);
       })
       .catch(error => {
