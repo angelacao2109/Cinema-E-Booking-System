@@ -1,5 +1,6 @@
 package com.uga.moviebooking.model.dto;
 
+import com.uga.moviebooking.model.promotion.Promotion;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -26,4 +27,16 @@ public class PromotionDto {
     private String promoCode;
 
     private Double percentageOff;
+
+
+    public PromotionDto(Promotion promo) {
+        this.id = promo.getId();
+        this.promoTitle = promo.getPromoTitle();
+        this.message = promo.getMessage();
+        this.initializationDate = promo.getInitializationDate();
+        this.expirationDate = promo.getExpirationDate();
+        this.promoCode = promo.getPromoCode();
+        this.percentageOff = promo.getPercentageOff();
+
+    }
 }

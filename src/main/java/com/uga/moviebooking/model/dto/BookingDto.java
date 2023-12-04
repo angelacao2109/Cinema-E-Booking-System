@@ -14,6 +14,8 @@ public class BookingDto {
     @Min(value = 1L, message = "paymentCardID must be a valid number and not 0")
     private long paymentCardID;
 
+    private String promoCode;
+
     @NotEmpty(message = "tickets must not be empty")
     @Valid
     List<TicketDto> tickets;

@@ -3,14 +3,11 @@ package com.uga.moviebooking.model.promotion;
 import com.uga.moviebooking.model.booking.ticket.Ticket;
 import com.uga.moviebooking.model.booking.ticket.TicketRepository;
 import com.uga.moviebooking.model.dto.PromotionDto;
-import com.uga.moviebooking.model.dto.TicketDto;
 import com.uga.moviebooking.model.email.EmailService;
 import com.uga.moviebooking.model.user.User;
-import com.uga.moviebooking.model.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.naming.Context;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -102,6 +99,10 @@ public class PromotionService {
             return null;
         }
 
+    }
+
+    public Promotion getPromotion(String code) {
+        return promotionRepository.findByPromoCode(code).orElse(null);
     }
 
     //update

@@ -1,10 +1,7 @@
 package com.uga.moviebooking.controller;
 
-import com.uga.moviebooking.model.dto.MovieDto;
 import com.uga.moviebooking.model.dto.PromotionDto;
 import com.uga.moviebooking.model.dto.PromotionRequestDto;
-import com.uga.moviebooking.model.dto.TicketDto;
-import com.uga.moviebooking.model.movie.MovieService;
 import com.uga.moviebooking.model.promotion.Promotion;
 import com.uga.moviebooking.model.promotion.PromotionService;
 import com.uga.moviebooking.model.user.User;
@@ -15,10 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RequestMapping("/api/promotion")
 @RestController
@@ -70,26 +66,26 @@ public class PromotionController {
         return ResponseEntity.ok("Promotion could not be updated or does not exist.");
     }
 
-    @GetMapping("/promotion")
-    public ResponseEntity<Promotion> getPromotion(@RequestBody long ID) {
-        Promotion promotion = promotionService.retrievePromotion(ID);
-        if (promotion != null) {
-            return ResponseEntity.ok(promotion);
-        } else {
+    @GetMapping()
+    public ResponseEntity<?> getPromotion(@RequestParam String code) {
+        Promotion promotion = promotionService.getPromotion(code);
+        if (promotion == null)
             return ResponseEntity.notFound().build();
-        }
-
+        return ResponseEntity.ok(new PromotionDto(promotion));
     }
 
 
     @GetMapping("/all")
-    public ResponseEntity<List<Promotion>> activePromotions() {
+    public ResponseEntity<?> activePromotions() {
         Date day = new Date(System.currentTimeMillis());
         List<Promotion> list = promotionService.findActivePromotions(day);
+        List<PromotionDto> dtoList = new ArrayList<>();
         if (list == null || list.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(list);
+        for(Promotion p : list)
+            dtoList.add(new PromotionDto(p));
+        return ResponseEntity.ok(dtoList);
 
     }
 

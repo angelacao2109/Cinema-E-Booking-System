@@ -8,6 +8,8 @@ import com.uga.moviebooking.model.dto.BookingDto;
 import com.uga.moviebooking.model.dto.TicketDto;
 import com.uga.moviebooking.model.email.EmailService;
 import com.uga.moviebooking.model.payment.PaymentCard;
+import com.uga.moviebooking.model.promotion.Promotion;
+import com.uga.moviebooking.model.promotion.PromotionService;
 import com.uga.moviebooking.model.show.Showtime;
 import com.uga.moviebooking.model.show.ShowtimeService;
 import com.uga.moviebooking.model.theatre.Seat;
@@ -19,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,19 +35,29 @@ public class BookingService {
     private final UserService userService;
     private final TicketTypeRepository ticketTypeRepository;
     private final TheatreService theatreService;
+    private final PromotionService promotionService;
 
     @Autowired
     public BookingService(BookingRepository bookingRepository, ShowtimeService showtimeService
-            , UserService userService, TheatreService theatreService, TicketTypeRepository ticketTypeRepository, EmailService emailService) {
+            , UserService userService, TheatreService theatreService, TicketTypeRepository ticketTypeRepository, EmailService emailService, PromotionService promotionService) {
        this.bookingRepository = bookingRepository;
        this.showtimeService = showtimeService;
        this.userService = userService;
        this.theatreService = theatreService;
        this.ticketTypeRepository = ticketTypeRepository;
        this.emailService = emailService;
+        this.promotionService = promotionService;
     }
 
     public HashMap<String, Object> createBooking(String userEmail, BookingDto bookingDto) throws AppException {
+        //validate promo
+        double multiplier = 1.0;
+        if(bookingDto.getPromoCode() != null) {
+            Promotion promo = promotionService.getPromotion(bookingDto.getPromoCode());
+            if(promo == null)
+                throw new AppException("Invalid Promo Code", 404);
+            multiplier -= promo.getPercentageOff();
+        }
         Showtime showtime = showtimeService.findById(bookingDto.getShowtimeID());
         User user = userService.findByEmail(userEmail);
         System.out.println("reached");
@@ -70,15 +83,18 @@ public class BookingService {
         }
         booking.setTickets(ticketSet);
         long cost = getCost(ticketSet);
-        booking.setTotalCost(cost);
+        booking.setTotalCost((long) (cost * multiplier));
         //generate confirmation code
         String confirmationCode = RandomStringUtils.randomAlphabetic(16);
         booking.setBookingConfirmation(confirmationCode);
         //email user
         sendEmailConfirmation(user,booking);
+        booking.setOrderTimestamp(LocalDateTime.now());
+        bookingRepository.save(booking);
         //response map
         HashMap<String, Object> response = new HashMap<>();
         response.put("message", "User id " + user.getId() + " successfully created booking id " + booking.getId());
+        response.put("timestamp", booking.getOrderTimestamp());
         response.put("confirmationCode", booking.getBookingConfirmation());
         response.put("totalCost", booking.getTotalCost());
         response.put("tickets", tickets);

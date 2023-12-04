@@ -7,21 +7,16 @@ import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
 import com.uga.moviebooking.model.user.UserService;
 import com.uga.moviebooking.utils.ControllerUtils;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,13 +25,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/user")
 @RestController
 public class UserController {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public UserController(UserRepository userRepository, UserService userService) {
+        this.userRepository = userRepository;
+        this.userService = userService;
+    }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
@@ -127,35 +123,6 @@ public class UserController {
         }
     }
     public record PasswordDto(String password) {}
-
-
-
-
-    //functions for sub and unsub promo (unnecessary.)
-
-    /*@PostMapping("/subscribe-promotions")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<String> subscribeToPromotions(@AuthenticationPrincipal String email) {
-        boolean success = userService.subscribeToPromotions(email);
-        if (success) {
-            return ResponseEntity.ok("Subscribed to promotions successfully.");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to subscribe to promotions.");
-        }
-    }
-
-    @PostMapping("/unsubscribe-promotions")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<String> unsubscribeFromPromotions(@AuthenticationPrincipal String email) {
-        boolean success = userService.unsubscribeFromPromotions(email);
-        if (success) {
-            return ResponseEntity.ok("Unsubscribed from promotions successfully.");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to unsubscribe from promotions.");
-        }
-    }*/
-
-
 }
 
 

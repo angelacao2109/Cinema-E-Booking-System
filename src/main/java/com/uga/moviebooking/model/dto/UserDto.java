@@ -23,4 +23,17 @@ public class UserDto {
     private Set<PaymentCard> paymentCards;
     private PaymentAddress paymentAddress;
     private boolean enabled;
+
+    public UserDto(String firstName, String lastName, String email, String password, String phoneNumber,
+                   boolean promotionEnrolled, Set<PaymentCard> paymentCards, PaymentAddress paymentAddress, boolean enabled) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.promotionEnrolled = promotionEnrolled;
+        this.paymentCards = paymentCards;
+        this.paymentAddress = paymentAddress;
+        this.enabled = enabled;
+    }
 }

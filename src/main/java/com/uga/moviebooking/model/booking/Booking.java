@@ -5,12 +5,11 @@ import com.uga.moviebooking.model.payment.PaymentCard;
 import com.uga.moviebooking.model.show.Showtime;
 import com.uga.moviebooking.model.user.User;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -20,6 +19,9 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    LocalDateTime orderTimestamp;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
