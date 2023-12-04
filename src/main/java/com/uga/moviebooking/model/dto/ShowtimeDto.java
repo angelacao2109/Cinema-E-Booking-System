@@ -23,4 +23,7 @@ public class ShowtimeDto {
         this.theatreId = s.getTheatre().getId();
         this.showDate = s.getDateTime();
     }
+
+    public ShowtimeDto() {
+    }
 }
