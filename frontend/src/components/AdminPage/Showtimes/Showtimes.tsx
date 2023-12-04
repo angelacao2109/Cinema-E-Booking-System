@@ -33,7 +33,7 @@ const Showtime: React.FC = () => {
   useEffect(() => {
     const fetchShowtimes = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/movie/getAllMovies', {headers: {Authorization: authToken}});
+        const response = await axios.get('http://localhost:8080/api/movie/all', {headers: {Authorization: authToken}});
         if (response.status == 200) {
           setMovieWithShowtimes(response.data)
         }
