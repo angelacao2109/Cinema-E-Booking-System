@@ -50,7 +50,14 @@ function EditUser() {
     
     const handleSuspend = async (userId: number) => {
         try {
-            const response = await axios.post('http://localhost:8080/api/admin/disableUser', { email: users.find(u => u.id === userId)?.email });
+            const response = await axios.post('http://localhost:8080/api/admin/disableUser',{ email: users.find(u => u.id === userId)?.email },
+            {
+                headers: {
+                  Authorization: authToken,
+                  "Content-Type": "application/json",
+                  "Referrer-Policy": "unsafe_url",
+                },
+            });
             if (response.status === 200) {
                 setUsers(users.map(user => 
                     user.id === userId ? { ...user, accountStatus: "Suspended" } : user
@@ -63,7 +70,14 @@ function EditUser() {
 
     const handleEnable = async (userId: number) => {
         try {
-            const response = await axios.post('http://localhost:8080/api/admin/enableUser', { email: users.find(u => u.id === userId)?.email });
+            const response = await axios.post('http://localhost:8080/api/admin/enableUser', { email: users.find(u => u.id === userId)?.email },
+            {
+                headers: {
+                  Authorization: authToken,
+                  "Content-Type": "application/json",
+                  "Referrer-Policy": "unsafe_url",
+                },
+            });
             if (response.status === 200) {
                 setUsers(users.map(user => 
                     user.id === userId ? { ...user, accountStatus: "Active" } : user
