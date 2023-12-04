@@ -31,7 +31,7 @@ type Theatre = {
 }
 
 type Showtime = {
-  id: number;
+  showtimeId: number;
   movieId: number;
   showDate: string;
   theatreId: number;
@@ -136,7 +136,7 @@ const MovieList: React.FC<MovieListProps> = ({ searchResults }) => {
     </p>
     {movie.showtimes && movie.showtimes.length > 0 ? (
       movie.showtimes.map((showtime) => (
-        <button key={showtime.id} onClick={() => navigate(`/select-ticket/${showtime.id}`)} className="showtime-button">
+        <button key={showtime.showtimeId} onClick={() => navigate(`/select-ticket/${showtime.showtimeId}`)} className="showtime-button">
           {new Date(Date.parse(showtime.showDate)).toLocaleString()}
         </button>
       ))
