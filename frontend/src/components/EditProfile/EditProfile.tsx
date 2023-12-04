@@ -11,10 +11,11 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     expDate: string;
     CVV: string;
     cardID: number;
+    address: string;
   }
 
   const [cards, setCards] = useState<Card[]>([
-    { firstname: "", lastname: "", cardNumber: "", expDate: "", CVV: "", cardID: -1 },
+    { firstname: "", lastname: "", cardNumber: "", expDate: "", CVV: "", cardID: -1, address: "" },
   ]);
 
   const [isCardSaved, setIsCardSaved] = useState<boolean[]>([]);
@@ -22,7 +23,7 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
   const addCard = () => {
     setCards([
       ...cards,
-      { firstname: "", lastname: "", cardNumber: "", expDate: "", CVV: "", cardID: -1 },
+      { firstname: "", lastname: "", cardNumber: "", expDate: "", CVV: "", cardID: -1, address: "" },
     ]);
     setIsCardSaved([...isCardSaved, false]);
   };
@@ -77,6 +78,7 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     cardNumber: "",
     expDate: "",
     cvv: "",
+    address: ""
   });
   const [optOutPromo, setOptOutPromo] = useState(false);
 
@@ -221,7 +223,8 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
           firstName: cardInfo.firstName,
           lastName: cardInfo.lastName,
           cardNumber: cardInfo.cardNumber,
-          expDate: cardInfo.expDate
+          expDate: cardInfo.expDate,
+          billingAddress: cardInfo.address
         },
         {
           headers: {
@@ -540,6 +543,10 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
                     value={cardInfo.cvv}
                     onChange={(e) => setCardInfo({ ...cardInfo, cvv: e.target.value })}
                   />
+                </div>
+                <div className="input-group">
+                    <label className="profile-form-label">Address</label>
+                      <input className="profile-form-input" type="text" value={cardInfo.address} onChange={(e) => setCardInfo({ ...cardInfo, address: e.target.value })} />
                 </div>
                 <button onClick={() => saveCardInfo(-1)}>Save New Card</button>
               </div>

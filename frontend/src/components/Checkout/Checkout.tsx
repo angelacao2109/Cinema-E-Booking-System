@@ -158,7 +158,7 @@ const Checkout: React.FC = () => {
           firstName: newCard.firstName,
           lastName: newCard.lastName,
           cardNumber: newCard.cardNumber,
-          expDate: newCard.expDate
+          expDate: newCard.expDate,
         },
         {
           headers: {

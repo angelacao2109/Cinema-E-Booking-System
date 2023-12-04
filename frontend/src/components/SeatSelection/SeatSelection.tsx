@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./SeatSelection.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams} from "react-router-dom";
 
 interface Props {
   maxSeats: number;
@@ -15,12 +15,15 @@ interface SeatDto {
   booked: boolean;
 }
 
-function SeatSelection({ maxSeats, showtimeID }: Props) {
+function SeatSelection({ maxSeats }: Props) {
   const totalRows = 10;
   const totalSeatsPerRow = 20;
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [occupiedSeats, setOccupiedSeats] = useState<string[]>([]);
+
+  const params = useParams<{ showtimeID: string }>();
+  const showtimeID = parseInt(params.showtimeID, 10);
 
   const navigate = useNavigate(); 
 
@@ -64,6 +67,7 @@ function SeatSelection({ maxSeats, showtimeID }: Props) {
       senior: 0
     };
   };
+
   const location = useLocation();
   const { tickets } = location.state as {
     tickets: { kids: number; adult: number; senior: number };

@@ -17,7 +17,7 @@ type Movie = {
   trailerVideoUrl: string;
   trailerPictureUrl: string;
   releaseDate: string;
-  status: 'CURRENTLY_SHOWING' | 'COMING_SOON' | 'NOT_SHOWING';
+  movieStatus: 'CURRENTLY_SHOWING' | 'COMING_SOON' | 'NOT_SHOWING';
 };
 
 const authToken = document.cookie
@@ -136,14 +136,14 @@ const EditMovie: React.FC<EditMovieProps> = ({ onEditMovie }) => {
 
                     {/* Status */}
                     <label className='edit-movie-label'>Status:</label>
-                    <select name='status' value={movie.status} onChange={handleChange}>
+                    <select name='movieStatus' value={movie.movieStatus} onChange={handleChange}>
                         <option value='CURRENTLY_SHOWING'>Currently Showing</option>
                         <option value='COMING_SOON'>Coming Soon</option>
                         <option value='NOT_SHOWING'>Not Showing</option>
                     </select>
 
                     <label className='edit-movie-label'>Release Date</label>
-                    <input type='datetime-local' name='releaseDate' value={movie.releaseDate} onChange={handleChange}/>
+                    <input type='date' name='releaseDate' value={movie.releaseDate} onChange={handleChange}/>
 
                     {/* Created a div container for buttons */}
                     <div className='edit-movie-button-container'>

@@ -5,25 +5,30 @@ import axios from 'axios';
 
 // Define a type for the movie object
 type Movie = {
-    trailerPictureUrl: string;
-    trailerVideoUrl: string;
     title: string;
-    rating: string;
     category: string;
+    cast: string[];
     director: string;
     producer: string;
-    cast: string;
     synopsis: string;
     reviews: string[];
-    // Add other properties if needed
-};
-
+    rating: string;
+    trailerVideoUrl: string;
+    trailerPictureUrl: string;
+    releaseDate: string;
+    movieStatus: 'CURRENTLY_SHOWING' | 'COMING_SOON' | 'NOT_SHOWING';
+  };
 type AddMovieProps = {
     onAddMovie: (movie: Movie) => void;
 };
 
+const authToken = document.cookie
+.split("; ")
+.find((row) => row.startsWith("authToken="))
+?.split("=")[1];
+
 const AddMovie: React.FC<AddMovieProps> = ({ onAddMovie }) => {
-    const [movieForm, setMovieForm] = useState<Movie>({
+    const [movie, setMovie] = useState<Movie>({
         trailerPictureUrl: "",
         trailerVideoUrl: "",
         title: "",
@@ -33,21 +38,21 @@ const AddMovie: React.FC<AddMovieProps> = ({ onAddMovie }) => {
         producer: "",
         cast: "",
         synopsis: "",
-        reviews: [""]
+        reviews: [""],
     });
 
     const navigate = useNavigate();
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setMovieForm(prevState => ({ ...prevState, [name]: value }));
+        setMovie(prevState => ({ ...prevState, [name]: value }));
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:8080/api/movie/add", movieForm);
+            const response = await axios.post("http://localhost:8080/api/movie",movie,{headers: {Authorization: authToken}});
             if (response.status === 200 || response.status === 201) {
                 console.log(response.data);
                 navigate('/admin/moviespage');  // Navigate to the movies page upon successful addition
@@ -71,52 +76,57 @@ const AddMovie: React.FC<AddMovieProps> = ({ onAddMovie }) => {
             </div>
 
             <div className='add-movie-container'>
-                <div className='add-movie-header'>Add New Movie</div>
+
+                <div className='add-movie-header'>Add Movie</div>
 
                 <form className='add-movie-form' onSubmit={handleSubmit}>
+                    {/* Title */}
                     <label className='add-movie-label'>Title:</label>
-                    <input type='text' name='title' value={movieForm.title} onChange={handleInputChange} />
+                    <input type='text' name='title' value={movie.title} onChange={handleChange} />
 
+                    {/* Director */}
                     <label className='add-movie-label'>Director:</label>
-                    <input type='text' name='director' value={movieForm.director} onChange={handleInputChange} />
+                    <input type='text' name='director' value={movie.director} onChange={handleChange} />
 
+                    {/* Producer */}
                     <label className='add-movie-label'>Producer:</label>
-                    <input type='text' name='producer' value={movieForm.producer} onChange={handleInputChange} />
-                    
-                    {/*
-                    WAS GIVING ME SOME ISSUES 
-                    <label className='edit-movie-label'>Synopsis:</label>
-                    <textarea name='synopsis' value={movieForm.synopsis[0]} onChange={handleSynopsisChange} />
-                     */}
+                    <input type='text' name='producer' value={movie.producer} onChange={handleChange} />
 
+                    {/* Category */}
+                    <label className='add-movie-label'> Category:</label>
+                    <input type='text' name='category' value={movie.category} onChange={handleChange} />
+
+                    {/* Synopsis */}
+                    <label className='add-movie-label'>Synopsis:</label>
+                    <textarea name='synopsis' value={movie.synopsis} onChange={handleChange} />
+
+                    {/* Movie Poster URL */}
                     <label className='add-movie-label'>Movie Poster URL:</label>
-                    <input
-                        type='text'
-                        name='trailerPictureUrl'
-                        value={movieForm.trailerPictureUrl}
-                        onChange={handleInputChange}
-                    />
+                    <input type='text' name='trailerPictureUrl' value={movie.trailerPictureUrl} onChange={handleChange} />
 
+                    {/* Trailer URL */}
                     <label className='add-movie-label'>Trailer URL:</label>
-                    <input
-                        type='text'
-                        name='trailerVideoUrl'
-                        value={movieForm.trailerVideoUrl}
-                        onChange={handleInputChange}
-                    />
+                    <input type='text' name='trailerVideoUrl' value={movie.trailerVideoUrl} onChange={handleChange} />
 
+                    {/* Rating */}
                     <label className='add-movie-label'>Rating:</label>
-                    <input type='text' name='rating' value={movieForm.rating} onChange={handleInputChange} />
+                    <input type='text' name='rating' value={movie.rating} onChange={handleChange} />
 
-                    <label className='add-movie-label'>Category:</label>
-                    <input type='text' name='category' value={movieForm.category} onChange={handleInputChange} />
+                    {/* Status */}
+                    <label className='add-movie-label'>Status:</label>
+                    <select name='movieStatus' value={movie.movieStatus} onChange={handleChange}>
+                        <option value='CURRENTLY_SHOWING'>Currently Showing</option>
+                        <option value='COMING_SOON'>Coming Soon</option>
+                        <option value='NOT_SHOWING'>Not Showing</option>
+                    </select>
 
-                    {/* Created a div container for add movie btn */}
+                    <label className='add-movie-label'>Release Date</label>
+                    <input type='date' name='releaseDate' value={movie.releaseDate} onChange={handleChange}/>
 
+                    {/* Created a div container for buttons */}
                     <div className='add-movie-button-container'>
-                        <button className='edit-movie-btn' type='submit'>
-                            Add Movie
-                        </button>
+                        <button className='add-movie-btn' type='submit'>Save Changes</button>
+                        
                     </div>
                 </form>
             </div>
