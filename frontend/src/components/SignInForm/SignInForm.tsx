@@ -47,7 +47,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
         }
         refetchMovies(); 
         if(isAdmin){
-          navigate("/admin");
+          navigate("/");
         } else {
           navigate("/"); 
         }
