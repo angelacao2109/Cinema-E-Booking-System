@@ -53,6 +53,11 @@ const Checkout: React.FC = () => {
 
   const [chosenCardID, setChosenCardID] = useState(-1);
 
+  const [discountPercentage, setDiscountPercentage] = useState<number>(0);
+  
+  const [isPromoValid, setIsPromoValid] = useState<boolean>(true); // Assuming true until promo code is applied
+
+
   const location = useLocation();
   const { selectedSeats, ticketCounts, tickets } = location.state as {
     selectedSeats: string[];
@@ -136,9 +141,32 @@ const Checkout: React.FC = () => {
 
   const [promoCode, setPromoCode] = useState('');
 
+  const applyPromoCode = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/promotion?code=${promoCode}`, {
+        headers: { Authorization: authToken }
+      });
+      if (response.data && response.data.percentageOff) {
+        setDiscountPercentage(response.data.percentageOff);
+        setIsPromoValid(true);
+      } else {
+        setIsPromoValid(false);
+        setDiscountPercentage(0); // Reset if promo code is invalid
+      }
+    } catch (error) {
+      console.error("Error applying promo code:", error);
+      setIsPromoValid(false);
+      setDiscountPercentage(0);
+    }
+  };
+
   let total = 0;
   for (let ticketType in ticketCounts) {
     total += ticketCounts[ticketType] * ticketPrices[ticketType];
+  }
+  // Apply discount if promo code is valid
+  if (isPromoValid && discountPercentage > 0) {
+    total -= total * (discountPercentage / 100);
   }
  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -222,12 +250,17 @@ const Checkout: React.FC = () => {
           <InputField label="Email:" name="email" value={userData.Email} onChange={handleChange} />
         </div>
         <div className="promo-code-section">
-          <InputField 
-            label="Promo Code:" 
-            name="promoCode" 
-            value={promoCode} 
-            onChange={(e) => setPromoCode(e.target.value)} 
-          />
+        <div className="promo-code-section">
+        <InputField 
+          label="Promo Code:" 
+          name="promoCode" 
+          value={promoCode} 
+          onChange={(e) => setPromoCode(e.target.value)} 
+        />
+        <button type="button" onClick={applyPromoCode}>Apply Promo Code</button>
+        {!isPromoValid && <p>Promo code is invalid</p>}
+      </div>
+      <h4>Order Total: ${total.toFixed(2)}</h4>
         </div>
         <div className="payment-method-selection">
           <h2>Select Payment Method</h2>
