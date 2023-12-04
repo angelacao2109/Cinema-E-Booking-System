@@ -18,6 +18,11 @@ interface Card {
   CVV: string;
 };
 
+interface Ticket {
+  type: String;
+  seatCol: number;
+  seatRow: number;
+};
 
 const authToken = document.cookie
   .split("; ")
@@ -48,6 +53,38 @@ const Checkout: React.FC = () => {
 
   const [chosenCardID, setChosenCardID] = useState(-1);
 
+  const location = useLocation();
+  const { selectedSeats, ticketCounts, tickets } = location.state as {
+    selectedSeats: string[];
+    ticketCounts: { [key: string]: number };
+    tickets: { kids: number; adult: number; senior: number };
+  };
+
+  let assignedTickets: Ticket[] = [];
+  
+  const assignTickets = () => {
+    let seatIndex = 0;
+
+    const assign = (type: string, count: number) => {
+      for (let i = 0; i < count && seatIndex < selectedSeats.length; i++) {
+        const [seatRow, seatCol] = selectedSeats[seatIndex].split("-").map(Number);
+        assignedTickets.push({
+          type,
+          seatCol,
+          seatRow,
+        });
+        seatIndex++;
+      }
+    };
+
+    assign("CHILD", tickets.kids);
+    assign("ADULT", tickets.adult);
+    assign("SENIOR", tickets.senior);
+  };
+
+  assignTickets();
+
+
   const fetchUserCards = async () => {
     try {
       const response = await axios.get(
@@ -68,9 +105,23 @@ const Checkout: React.FC = () => {
     }
   };
 
+  const fetchTicketPrices = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/booking/prices', { headers: {'Authorization': authToken } });
+      if (response.status == 200) {
+        ticketPrices.adult = Number(response.data.ADULT)/100;
+        ticketPrices.kids = Number(response.data.CHILD)/100;
+        ticketPrices.senior = Number(response.data.SENIOR)/100;
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   useEffect(() => {
     fetchUserCards();
-  }, []);
+    fetchTicketPrices()
+  }, [selectedSeats, tickets]);
 
   const [userData, setUserData] = useState({
     firstName: '',
@@ -85,25 +136,11 @@ const Checkout: React.FC = () => {
 
   const [promoCode, setPromoCode] = useState('');
 
-  const location = useLocation();
-const { selectedSeats, ticketCounts } = location.state as { selectedSeats: string[], ticketCounts: { [key: string]: number } };
-
   let total = 0;
   for (let ticketType in ticketCounts) {
     total += ticketCounts[ticketType] * ticketPrices[ticketType];
   }
-
-  let tickets: { type: string, seatCol: number, seatRow: number }[] = [];
-  for (let seatID of selectedSeats) {
-    const [seatX, seatY] = seatID.split("-");
-    const ticket = {
-      type: 'your_ticket_type',
-      seatCol: Number(seatY),
-      seatRow: Number(seatX),
-    };
-    tickets.push(ticket);
-  }
-
+ 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData({
@@ -152,7 +189,7 @@ const { selectedSeats, ticketCounts } = location.state as { selectedSeats: strin
         {
           showtimeID: showtimeID, // TODO: change to real showtime
           paymentCardID: chosenCardID,
-          tickets: tickets,
+          tickets: assignedTickets,
           promoCode: promoCode, // Include promo code in the request
         },
         {

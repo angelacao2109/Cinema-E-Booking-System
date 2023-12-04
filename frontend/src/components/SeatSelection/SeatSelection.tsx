@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./SeatSelection.css";
-import { useNavigate, useParams  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-
-const authToken = document.cookie
-  .split("; ")
-  .find((row) => row.startsWith("authToken="))
-  ?.split("=")[1];
 
 interface Props {
   maxSeats: number;
@@ -20,19 +15,17 @@ interface SeatDto {
   booked: boolean;
 }
 
-function SeatSelection({ maxSeats}: Props) {
+function SeatSelection({ maxSeats, showtimeID }: Props) {
   const totalRows = 10;
   const totalSeatsPerRow = 20;
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [occupiedSeats, setOccupiedSeats] = useState<string[]>([]);
-  const params = useParams<{ showtimeID: string }>();
-  const showtimeID = parseInt(params.showtimeID, 10); // Convert the showtimeID to a number
 
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/showtime/seats?showtimeID=${showtimeID}`, { headers: {'Authorization': authToken } })
+    axios.get(`http://localhost:8080/api/showtimes/seats?showtimeID=${showtimeID}`)
       .then(response => {
         const occupied = response.data['Unavailable Seats']
           .filter((seat: SeatDto) => seat.booked)
@@ -43,7 +36,6 @@ function SeatSelection({ maxSeats}: Props) {
         console.error('Error fetching occupied seats:', error);
       });
   }, [showtimeID]);
-
 
   const isSeatOccupied = (seatId: string) => occupiedSeats.includes(seatId);
 
@@ -72,14 +64,19 @@ function SeatSelection({ maxSeats}: Props) {
       senior: 0
     };
   };
+  const location = useLocation();
+  const { tickets } = location.state as {
+    tickets: { kids: number; adult: number; senior: number };
+  };
 
   const handleConfirm = () => {
     console.log("Seats selected: ", selectedSeats);
-    const ticketCounts = calculateTicketCounts(selectedSeats); 
-  navigate(`/checkout/${showtimeID}`, { state: { selectedSeats, showtimeID, ticketCounts } });
-};
+    const ticketCounts = calculateTicketCounts(selectedSeats);
+    navigate(`/checkout/${showtimeID}`, {
+      state: { selectedSeats, showtimeID, ticketCounts, tickets } // Pass the tickets data to Checkout
+    });
+  };
   
-
   return (
     <div className="seat-selection">
       <h2>Select Your Seats</h2>

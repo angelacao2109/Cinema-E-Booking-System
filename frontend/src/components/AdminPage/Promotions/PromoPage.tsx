@@ -84,7 +84,7 @@ const PromoPage: React.FC = () => {
                                     <p><strong>Start Date:</strong> {formatDate(promo.initializationDate)}</p>
                                     <p><strong>End Date:</strong> {formatDate(promo.expirationDate)}</p>
                                     <p><strong>Code:</strong> {promo.promoCode}</p>
-                                    <p><strong>Message:</strong> {promo.message}%</p>
+                                    <p><strong>Message:</strong> {promo.message}</p>
                                     <Link to={`/admin/editpromo/${promo.id}`} className="edit-promo-link">
                                         Edit Promo
                                     </Link>
@@ -101,7 +101,7 @@ const PromoPage: React.FC = () => {
                                     <p><strong>Start Date:</strong> {formatDate(promo.initializationDate)}</p>
                                     <p><strong>End Date:</strong> {formatDate(promo.expirationDate)}</p>
                                     <p><strong>Code:</strong> {promo.promoCode}</p>
-                                    <p><strong>Message:</strong> {promo.message}%</p>
+                                    <p><strong>Message:</strong> {promo.message}</p>
                                     <Link to={`/admin/editpromo/${promo.id}`} className="edit-promo-link">
                                         Edit Promo
                                     </Link>

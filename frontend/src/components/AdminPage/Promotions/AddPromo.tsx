@@ -1,27 +1,38 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './AddPromo.css';
+import axios from "axios";
 
 // Define a type for your state
 type PromoData = {
-    name: string;
-    startDate: string;
-    endDate: string;
-    code: string;
-    discount: number;
-    status: string;
+    promoTitle: string;
+    message: string;
+    initializationDate: string;
+    expirationDate: string;
+    promoCode: string;
+    percentageOff: number;
 };
+
+const authToken = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("authToken="))
+    ?.split("=")[1];
+
+const email = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("userEmail="))
+    ?.split("=")[1];
 
 const AddPromo: React.FC = () => {
     const navigate = useNavigate();
 
     const [promoData, setPromoData] = useState<PromoData>({
-        name: "",
-        startDate: "",
-        endDate: "",
-        code: "",
-        discount: 0,
-        status: "",
+        promoTitle: "",
+        message: "",
+        initializationDate: "",
+        expirationDate: "",
+        promoCode: "",
+        percentageOff: 0,
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -35,18 +46,26 @@ const AddPromo: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:5173/api/promo/", {
-                method: "POST",
+            const response = await axios.post("http://localhost:8080/api/promotion/add",
+            {
+                promoTitle:promoData.promoTitle,
+                message:promoData.message,
+                initializationDate:promoData.initializationDate,
+                expirationDate:promoData.expirationDate,
+                promoCode:promoData.promoCode,
+                percentageOff:promoData.percentageOff
+            },
+            {
                 headers: {
-                    "Content-Type": "application/json",
+                    Authorization: authToken,
                 },
-                body: JSON.stringify(promoData),
             });
 
-            if (response.ok) {
-                const addedPromo = await response.json();
+            if (response.status == 200) {
+                const addedPromo = await response
                 console.log("Promo added successfully:", addedPromo);
-                navigate('/promopage');
+                
+                navigate('/admin/promopage');
             } else {
                 console.error("Failed to add promo");
             }
@@ -68,11 +87,11 @@ const AddPromo: React.FC = () => {
                 <form className="add-promo-form" onSubmit={handleSubmit}>
                     <label className="add-promo-label">
                         Name:
-                        <input 
+                        <input
                             className="add-promo-input"
                             type="text"
-                            name="name"
-                            value={promoData.name}
+                            name="promoTitle"
+                            value={promoData.promoTitle}
                             onChange={handleChange}
                         />
                     </label>
@@ -82,8 +101,8 @@ const AddPromo: React.FC = () => {
                         <input
                             className="add-promo-input"
                             type="date"
-                            name="startDate"
-                            value={promoData.startDate}
+                            name="initializationDate"
+                            value={promoData.initializationDate}
                             onChange={handleChange}
                         />
                     </label>
@@ -93,50 +112,43 @@ const AddPromo: React.FC = () => {
                         <input
                             className="add-promo-input"
                             type="date"
-                            name="endDate"
-                            value={promoData.endDate}
+                            name="expirationDate"
+                            value={promoData.expirationDate}
                             onChange={handleChange}
                         />
                     </label>
                     <br />
                     <label className="add-promo-label">
-                        Code:
+                        Promo Code:
                         <input
-                            className="add-promo-input"   
+                            className="add-promo-input"
                             type="text"
-                            name="code"
-                            value={promoData.code}
+                            name="promoCode"
+                            value={promoData.promoCode}
                             onChange={handleChange}
                         />
                     </label>
-                    <br />
                     <label className="add-promo-label">
-                        Discount:
+                        Percentage Off:
                         <input
                             className="add-promo-input"
-                            type="number"
-                            name="discount"
-                            value={promoData.discount}
+                            type="text"
+                            name="percentageOff"
+                            value={promoData.percentageOff}
                             onChange={handleChange}
                         />
                     </label>
-                    <br />
                     <label className="add-promo-label">
-                        Status:
-                        <select
+                        Message:
+                        <input
                             className="add-promo-input"
-                            name="status"
-                            value={promoData.status}
-                            onChange={handleChange}>
-                                <option value=''>Select Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                        </select>
+                            type="text"
+                            name="message"
+                            value={promoData.message}
+                            onChange={handleChange}
+                        />
                     </label>
-                    {/* Add container for button */}
-                    <div className='add-promo-button-container'>
-                    <button className="add-promo-btn " type="submit">Add Promo</button>
-                    </div>
+                    <button className="add-promo-button" type="submit">Add Promo</button>
                 </form>
             </div>
         </>

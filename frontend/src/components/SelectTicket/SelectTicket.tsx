@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./SelectTicket.css";
 import axios from "axios";
 
@@ -66,7 +66,12 @@ const SelectTicket: React.FC<Props> = ({ onTicketChange }) => {
 
   const handleConfirmClick = () => {
     onTicketChange(Object.values(tickets).reduce((acc, curr) => acc + curr, 0)); // This updates the parent component with total ticket count
-    navigate(`/seats/${showtimeID}`); // Navigating to SeatSelection
+    navigate(`/seats/${showtimeID}`, {
+      state: { 
+        showtimeID, 
+        tickets // Passing the ticket data
+      }
+    });
   };
 
   return (

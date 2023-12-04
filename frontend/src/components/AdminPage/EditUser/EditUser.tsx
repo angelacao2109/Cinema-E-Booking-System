@@ -9,24 +9,44 @@ interface User {
     id: number;
 }
 
+const authToken = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("authToken="))
+  ?.split("=")[1];
+
 function EditUser() {
     const [users, setUsers] = useState<User[]>([]);
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get<User[]>('http://localhost:8080/api/admin/getAllUsers'); 
-                setUsers(response.data.map(user => ({
-                    ...user,
-                    accountStatus: user.enabled ? "Active" : "Suspended" 
+                const response = await axios.get('http://localhost:8080/api/admin/getAllUsers',
+                {
+                    headers: {
+                      Authorization: authToken,
+                      "Content-Type": "application/json",
+                      "Referrer-Policy": "unsafe_url",
+                    },
+                }); 
+    
+                const nonAdminUsers = response.data.filter(user => 
+                    !user.roles.some(role => role.name === 'ROLE_ADMIN')
+                );
+    
+                setUsers(nonAdminUsers.map(user => ({
+                    email: user.email,
+                    accountStatus: user.enabled ? "Active" : "Suspended",
+                    enabled: user.enabled,
+                    id: user.id
                 })));
             } catch (error) {
                 console.error('Error fetching users:', error);
             }
         };
-
+    
         fetchUsers();
     }, []);
+    
     
     const handleSuspend = async (userId: number) => {
         try {

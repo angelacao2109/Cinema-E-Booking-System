@@ -44,8 +44,6 @@ public class PromotionController {
             return ResponseEntity.ok("Promotion applied successfully");
         }
         return ResponseEntity.ok("Promotion was unable to be applied");
-
-
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
