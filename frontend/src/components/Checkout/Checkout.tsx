@@ -16,6 +16,7 @@ interface Card {
   cardNumber: string;
   expDate: string;
   CVV: string;
+  address: string;
 };
 
 interface Ticket {
@@ -46,7 +47,8 @@ const Checkout: React.FC = () => {
     expDate: '',
     cvv: '',
     firstName: '',
-    lastName: ''
+    lastName: '',
+    address: '',
   });
 
   const [addNewCard, setAddNewCard] = useState(false);
@@ -72,7 +74,7 @@ const Checkout: React.FC = () => {
 
     const assign = (type: string, count: number) => {
       for (let i = 0; i < count && seatIndex < selectedSeats.length; i++) {
-        const [seatRow, seatCol] = selectedSeats[seatIndex].split("-").map(Number);
+        const [seatCol, seatRow] = selectedSeats[seatIndex].split("-").map(Number);
         assignedTickets.push({
           type,
           seatCol,
@@ -187,6 +189,7 @@ const Checkout: React.FC = () => {
           lastName: newCard.lastName,
           cardNumber: newCard.cardNumber,
           expDate: newCard.expDate,
+          address: newCard.address
         },
         {
           headers: {
@@ -209,28 +212,44 @@ const Checkout: React.FC = () => {
     setChosenCardID(cardID); 
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        `http://localhost:8080/api/booking?email=${email}`,
-        {
-          showtimeID: showtimeID, // TODO: change to real showtime
-          paymentCardID: chosenCardID,
-          tickets: assignedTickets,
-          promoCode: promoCode, // Include promo code in the request
-        },
-        {
-          headers: {
-            Authorization: authToken,
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Error creating booking:", error);
-    }
-    navigate("/confirmation");
+
+  interface BookingData {
+    showtimeID: number;
+    paymentCardID: number;
+    tickets: Ticket[];
+    promoCode?: string;
   };
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    // Construct the basic request payload
+    const bookingData: BookingData = {
+      showtimeID: showtimeID,
+      paymentCardID: chosenCardID,
+      tickets: assignedTickets,
+    };
+    // Conditionally add promoCode if it's not an empty string
+    if (promoCode !== "") {
+      bookingData.promoCode = promoCode;
+    }
+
+    const response = await axios.post(
+      `http://localhost:8080/api/booking?email=${email}`,
+      bookingData,
+      {
+        headers: {
+          Authorization: authToken,
+        },
+      }
+    );
+    if (response.data) {
+      navigate("/confirmation", { state: { bookingData: response.data } });
+    }
+  } catch (error) {
+    console.error("Error creating booking:", error);
+  }
+};
 
   const navigate = useNavigate();
 
@@ -299,6 +318,7 @@ const Checkout: React.FC = () => {
               <InputField label="Card Number:" name="cardNumber" value={newCard.cardNumber} onChange={(e) => setNewCard({ ...newCard, cardNumber: e.target.value })} />
               <InputField label="Expiry Date:" name="expDate" value={newCard.expDate} onChange={(e) => setNewCard({ ...newCard, expDate: e.target.value })} />
               <InputField label="CVV:" name="cvv" value={newCard.cvv} onChange={(e) => setNewCard({ ...newCard, cvv: e.target.value })} />
+              <InputField label="Address:" name="address" value={newCard.address} onChange={(e) => setNewCard({ ...newCard, address: e.target.value })} />
               <button type='button' onClick={handleAddCard}>Add Card</button>
             </div>
           )}

@@ -15,6 +15,11 @@ interface SeatDto {
   booked: boolean;
 }
 
+const authToken = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("authToken="))
+  ?.split("=")[1];
+
 function SeatSelection({ maxSeats }: Props) {
   const totalRows = 10;
   const totalSeatsPerRow = 20;
@@ -28,7 +33,7 @@ function SeatSelection({ maxSeats }: Props) {
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/showtimes/seats?showtimeID=${showtimeID}`)
+    axios.get(`http://localhost:8080/api/showtime/seats?showtimeID=${showtimeID}`, { headers: {'Authorization': authToken } })
       .then(response => {
         const occupied = response.data['Unavailable Seats']
           .filter((seat: SeatDto) => seat.booked)

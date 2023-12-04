@@ -8,11 +8,11 @@ type Theatre = {
 }
 
 type Showtime = {
-  id:number;
-  dateTime: string;
+  showtimeId:number;
+  showDate: string;
   bookings: string;
-  theatre: string; 
-  movie: string;
+  theatreId: string; 
+  movieId: string;
 };
 
 type MovieWithShowtime = {
@@ -62,8 +62,8 @@ const Showtime: React.FC = () => {
               Movie ID: {movieWithShowtimes.movieId}, Title: {movieWithShowtimes.movieTitle}
               <ul>
                 {movieWithShowtimes.showtimes.map((showtimes) => (
-                  <li key={showtimes.id}>
-                    Showtime: {showtimes.dateTime}
+                  <li key={showtimes.showtimeId}>
+                    Showtime: {showtimes.showDate}
                   </li>
                 ))}
               </ul>
