@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class ShowtimeDto {
+    long showtimeId;
     @Min(1)
     long movieId;
     @Min(1)
@@ -17,6 +18,7 @@ public class ShowtimeDto {
     LocalDateTime showDate;
 
     public ShowtimeDto(Showtime s) {
+        this.showtimeId = s.getId();
         this.movieId = s.getMovie().getId();
         this.theatreId = s.getTheatre().getId();
         this.showDate = s.getDateTime();

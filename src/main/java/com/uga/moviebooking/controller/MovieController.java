@@ -116,7 +116,7 @@ public class MovieController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/getAllMovies")
+    @GetMapping("/all")
     public List<MovieWithShowtimesDto> getAllMoviesWithShowtimes() {
         List<Movie> allMovies = movieRepository.findAll();
 
@@ -127,4 +127,5 @@ public class MovieController {
                 })
                 .collect(Collectors.toList());
     }
+
 }
