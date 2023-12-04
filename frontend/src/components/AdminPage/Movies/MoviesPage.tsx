@@ -53,13 +53,16 @@ const MoviesPage: React.FC = () => {
         <>
             <div className='movie-header'>
                 MANAGE MOVIES
-                <Link to="/addmovie">
+                {/* Changed the route */}
+                <Link to="/admin/addmovie">
                     <button className='add-movie-button'>Add Movie</button>
                 </Link>
             </div>
 
             <div className='search-tools'>
-                <div className='search-container'>
+                {/* Removed this container 
+                <div className='search-container'></div>
+                */}
                     <input
                         className='search-input'
                         type='text'
@@ -69,7 +72,6 @@ const MoviesPage: React.FC = () => {
                     />
                     <button className='search-button' onClick={handleSearch}>Search</button>
                     <button className='clear-button' onClick={handleResetSearch}>Clear</button>
-                </div>
             </div>
 
             <div className='movie-container'>

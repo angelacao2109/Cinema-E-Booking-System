@@ -63,7 +63,8 @@ const MovieInfo: React.FC = () => {
         <p><strong>Genre:</strong> {movie.genre && movie.genre.join(', ')}</p>
         <p><strong>Release Year:</strong> {movie.releaseYear}</p>
         <p><strong>Status:</strong> {movie.status}</p>
-        <Link to='/moviespage' className="link-button">Exit Movie Information Page</Link>
+        {/* FIXED ROUTE */}
+        <Link to='/admin/moviespage' className="link-button">Exit Movie Information Page</Link>
       </div>
     </div>
     </>

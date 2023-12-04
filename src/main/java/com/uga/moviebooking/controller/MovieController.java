@@ -2,8 +2,13 @@ package com.uga.moviebooking.controller;
 
 import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.model.dto.MovieDto;
+import com.uga.moviebooking.model.dto.MovieWithShowtimesDto;
 import com.uga.moviebooking.model.movie.Movie;
+import com.uga.moviebooking.model.movie.MovieRepository;
 import com.uga.moviebooking.model.movie.MovieService;
+import com.uga.moviebooking.model.show.Showtime;
+import com.uga.moviebooking.model.show.ShowtimeRepository;
+import com.uga.moviebooking.model.show.ShowtimeService;
 import com.uga.moviebooking.utils.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @EnableMethodSecurity
 @RequestMapping("/api/movie")
@@ -23,10 +29,16 @@ import java.util.Map;
 public class MovieController {
 
 
+    private final ShowtimeRepository showtimeRepository;
+    private final MovieRepository movieRepository;
     private MovieService movieService;
+    private final ShowtimeService showtimeService;
     @Autowired
-    public MovieController(MovieService movieService) {
+    public MovieController(MovieService movieService, MovieRepository movieRepository, ShowtimeRepository showtimeRepository, ShowtimeService showtimeService) {
         this.movieService = movieService;
+        this.movieRepository = movieRepository;
+        this.showtimeRepository = showtimeRepository;
+        this.showtimeService = showtimeService;
     }
 
     @GetMapping("/search")
@@ -101,5 +113,18 @@ public class MovieController {
         return ResponseEntity.ok("Movie id " + updatedId + " updated successfully!");
 
 
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/getAllMovies")
+    public List<MovieWithShowtimesDto> getAllMoviesWithShowtimes() {
+        List<Movie> allMovies = movieRepository.findAll();
+
+        return allMovies.stream()
+                .map(movie -> {
+                    List<Showtime> showtimes = showtimeService.getShowtimesForMovie(movie.getId());
+                    return new MovieWithShowtimesDto(movie.getId(), movie.getTitle(), showtimes);
+                })
+                .collect(Collectors.toList());
     }
 }

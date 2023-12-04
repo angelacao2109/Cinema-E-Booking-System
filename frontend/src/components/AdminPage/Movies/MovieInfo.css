@@ -1,6 +1,6 @@
 .movie-info-container {
     position: relative;
-    width: 100%;
+    width: 80%;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -8,6 +8,7 @@
     justify-content: center;
     color: white;
     text-align: center;
+    margin: 0 auto;
   }
   
   .movie-poster {

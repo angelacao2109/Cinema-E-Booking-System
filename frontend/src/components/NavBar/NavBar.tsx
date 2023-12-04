@@ -4,9 +4,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import {
-  BrowserRouter as Router, Routes, Route, Link, useLocation,} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate} from "react-router-dom";
 import EditProfile from "../EditProfile/EditProfile";
 import EditPromo from "../AdminPage/Promotions/EditPromo";
 import EditUser from "../AdminPage/EditUser/EditUser";
@@ -39,7 +37,6 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
   const handleLogout = () => {
     document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "userEmail=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    console.log("What")
     setIsLoggedIn(false);
     navigate("/signin");
   };
@@ -64,6 +61,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
     //  "http://localhost:8080/api/movies-coming-soon",
     //  setMoviesComingSoon
     //);
+    console.log(isAdmin)
   }, []);
  
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +78,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
 
   const CommonLinks = () => (
     <>
-      <Link to="/movies-playing" className="link">Movies Playing</Link>
+      <Link to="/movies-playing" className="link">Movies Now Playing</Link>
       <Link to="/movies-coming-soon" className="link">Movies Coming Soon</Link>
     </>
   );
@@ -102,18 +100,23 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
 
   const AdminLinks = () => (
     <>
-      <CommonLinks />
-      <AdminUtilitiesDropdown />
       <div className="welcomeLogoutGroup">
         <div className="welcomeSection">
           <span>Welcome, {userEmail}</span>
         </div>
-        <button className="logoutButton" onClick={handleLogout}>Logout</button>
+        <br/>
+        <AdminUtilitiesDropdown />
+        <br/>
+        <Link to="/" className="logout" onClick={handleLogout}>
+          Logout
+        </Link>
       </div>
     </>
   );
 
   const GuestLinks = () => (
+    <>
+    <CommonLinks />
     <div className="accountSection">
       <span>Account</span>
       <div className="accountLinks">
@@ -121,6 +124,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
         <Link to="/register" className="accountLink">Join Now</Link>
       </div>
     </div>
+    </>
   );
 
 

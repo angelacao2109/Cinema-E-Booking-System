@@ -20,7 +20,7 @@
     gap: 20px;
     justify-content: flex-end;  
     margin-left: auto;
-    
+    padding-right: 15px;
 }
 
 .link {
@@ -30,9 +30,6 @@
     border-radius: 4px;
     transition: background-color 0.2s;
 
-    &:hover {
-        background-color: #BFBFBF;
-    }
 }
 
 .logoutButton {
@@ -87,6 +84,10 @@
     align-items: center;  /* Centers content horizontally */
     justify-content: center; /* Centers content vertically */
     gap: 5px; /* Adjust gap between "Welcome" and email name */
+
+    /* Changed color b/c it blended in with the links */
+    color:#CF291D;
+    font-size: 20px;
 }
 
 .welcomeLogoutGroup {
@@ -103,15 +104,15 @@
     display: inline-block;
   }
   
-  .dropdown-button {
-    background-color: #4CAF50; /* Example color, change as needed */
+  /*-------------------------------------------*/
+  /*Changed admin button to link, more streamlin*/
+  .admin-dropdown-link {
+    text-decoration: none;
     color: white;
-    padding: 8px 10px;
-    font-size: 0.85em;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.2s;
+  }
+
+  .admin-dropdown-link:hover{
+    color: #CF291D;
   }
   
   .dropdown-content {
@@ -119,9 +120,12 @@
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     border-radius: 4px;
+    left: 50%; /*<--------------------------------------- Centers the drop down*/
+    min-width: 200px; /*<-------------------------------- Adjust width */
+    transform: translateX(-50%);
   }
   
   .dropdown-content .dropdown-link {
@@ -133,7 +137,7 @@
   }
   
   .dropdown-content .dropdown-link:hover {
-    background-color: #f1f1f1;
+    background-color: #e9c8c8; /*<--------- Changed the hover color*/
     border-radius: 4px;
   }
   
@@ -143,5 +147,16 @@
   }
   
   .admin-utilities-dropdown:hover .dropdown-button {
-    background-color: #3e8e41; /* Darker shade for hover */
+    background-color: transparent;
   }
+
+/*-------------------------------------------------------------*/
+/*Changed logout button to link and hover color, more streamline*/
+.logout {
+    text-decoration: none;
+    color: white;
+}
+
+.logout:hover {
+    color: #CF291D;
+}

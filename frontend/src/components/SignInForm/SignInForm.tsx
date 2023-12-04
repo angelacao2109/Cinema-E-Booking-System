@@ -30,8 +30,8 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
       });
       if (response.status == 200) {
         const token = response.data.token;
-        document.cookie = `authToken=${token}; max-age=86400; path=/`;
-        document.cookie = `userEmail=${email}; max-age=86400; path=/`;
+        document.cookie = `authToken=${token}; max-age=7200; path=/`;
+        document.cookie = `userEmail=${email}; max-age=7200; path=/`;
         setFeedbackMessage("Successfully signed in.");
         setIsLoggedIn(true);
         onSuccessfulLogin(email); 
@@ -39,10 +39,12 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
           {headers: {
             'Authorization': token
         }});
-        if (response.status == 200){
+        if (admin_response.status == 200){
           if (admin_response.data.roles[1] == "ROLE_ADMIN"){
-            console.log("Is Admin")
-            setIsAdmin(true)
+            console.log("Is Admin");
+            setIsAdmin(true);
+          } else {
+            setIsAdmin(false);
           }
         }
         refetchMovies(); 
@@ -60,7 +62,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
         case 401:
           setFeedbackMessage("Wrong password or email.");
           break;
-          case 409:
+          case 403:
             setFeedbackMessage("Account not verified. Please verify your email before logging in.");
             break;
             case 404:

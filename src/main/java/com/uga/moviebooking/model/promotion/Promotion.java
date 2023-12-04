@@ -31,4 +31,7 @@ public class Promotion {
 
     @Column(nullable = false)
     private String promoCode;
+
+    @Column(nullable = false )
+    private Double percentageOff;
 }

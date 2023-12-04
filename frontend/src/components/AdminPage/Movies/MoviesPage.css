@@ -8,20 +8,25 @@
     margin-right: 75px;
     font-size: 40px;
     font-weight: 800;
-    color: red;
+    color: #CF291D; /* Changed Color */
   }
   
   .add-movie-button {
-    background-color: red;
+    background-color: #CF291D; /* Changed Color */
     color: white;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    
+    /* Added rounded corners and enlarged the button */
+    border-radius: 4px;
+    margin-left: 20px;
+
   }
   
   .add-movie-button:hover {
-    background-color: rgb(251, 97, 97);
+    background-color: #9e261e; /* Changed Color */
   }
   
   ul {
@@ -65,7 +70,7 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      background-color: rgb(168, 163, 163, 0.35);
+      background-color: rgba(37, 37, 37, 0.35);
   }
   
   .movie-card h3 {
@@ -84,37 +89,44 @@
   }
   
   .search-tools {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      margin-left: 75px;
-      margin-right: 40px;
-    }
-    
-    .search-input {
-      width: 200px;
-      padding: 8px;
-      margin-right: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    
-    .search-button,
-    .clear-button {
-      background-color: red;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-right: 15px;
-    }
-    
-    .search-button:hover,
-    .clear-button:hover {
-      background-color: rgb(251, 97, 97);
-    }
+    display: flex;
+    justify-content: flex-start; /* Changed -- used to be space-between */
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 75px;
+    margin-right: 40px;
+  }
+  
+  .search-input {
+
+    /*
+    Removed
+    width: 200px; 
+    */
+
+    flex: 1; /*<-------------------- Added */
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .search-button,
+  .clear-button {
+    background-color: #CF291D; /* Changed Color */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 15px;
+  }
+  
+  .search-button:hover,
+  .clear-button:hover {
+    background-color: #9e261e; /* Changed Color */
+  }
+  
     
     .filter-select {
       width: 150px;
@@ -145,7 +157,7 @@
   }
   
   .filter-button:hover {
-      color: red;
+      color: #9e261e; /* Changed Color */
   }
   
   .movie-status{

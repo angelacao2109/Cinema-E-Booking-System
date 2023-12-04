@@ -1,0 +1,61 @@
+.showtime-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 75px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-right: 75px;
+    font-size: 40px;
+    font-weight: 800;
+    color: #CF291D;
+  }
+
+  .add-showtime-button {
+    background-color: #CF291D; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 20px;
+  }
+
+  .add-showtime-button:hover {
+    background-color: #9e261e; 
+  }
+
+
+.showtime-list {
+    margin: 0 auto;
+    width: 80%;
+  }
+  
+  .showtime-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .showtime-list li {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .showtime-list button {
+    background-color: #CF291D; 
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .showtime-list button:hover {
+    background-color: #9e261e; 
+  }
+  
+

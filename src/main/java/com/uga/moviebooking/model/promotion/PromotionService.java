@@ -1,6 +1,9 @@
 package com.uga.moviebooking.model.promotion;
 
+import com.uga.moviebooking.model.booking.ticket.Ticket;
+import com.uga.moviebooking.model.booking.ticket.TicketRepository;
 import com.uga.moviebooking.model.dto.PromotionDto;
+import com.uga.moviebooking.model.dto.TicketDto;
 import com.uga.moviebooking.model.email.EmailService;
 import com.uga.moviebooking.model.user.User;
 import com.uga.moviebooking.model.user.UserRepository;
@@ -16,10 +19,12 @@ import java.util.Optional;
 public class PromotionService {
     PromotionRepository promotionRepository;
     EmailService emailService;
+    TicketRepository ticketRepository;
     @Autowired
-    public PromotionService(PromotionRepository promotionRepository, EmailService emailService) {
+    public PromotionService(PromotionRepository promotionRepository, EmailService emailService,TicketRepository ticketRepository ) {
         this.promotionRepository = promotionRepository;
         this.emailService = emailService;
+        this.ticketRepository = ticketRepository;
     }
     public Promotion createPromotion(PromotionDto promotionDto){
         Promotion promotion = new Promotion();
@@ -28,9 +33,66 @@ public class PromotionService {
         promotion.setInitializationDate(promotionDto.getInitializationDate());
         promotion.setExpirationDate(promotionDto.getExpirationDate());
         promotion.setPromoCode(promotionDto.getPromoCode());
+        promotion.setPercentageOff(promotionDto.getPercentageOff());
         return promotionRepository.save(promotion);
     }
     //get
+
+    //Possible additions to modify prices
+
+    /*public boolean modifyPriceAfterPromotion(long promotionID, long ticketID){
+        //find ticket and promos by id
+        Optional<Ticket> ticketBox = ticketRepository.findById(ticketID);
+        Optional<Promotion> promotionBox = promotionRepository.findById(promotionID);
+        //verify that ticket is present
+        if(ticketBox.isPresent() && promotionBox.isPresent()) {
+            //take ticket and promo out of the opt box
+            Promotion promotion = promotionBox.get();
+            Ticket ticket = ticketBox.get();
+            //calculate percent off
+            long percentOff =promotion.getPercentageOff();
+            long price = ticket.getPrice();
+            long priceNew = ((price-percentOff)/price)*100;
+            //set the new price
+            ticket.setPrice(priceNew);
+            //save ticket price into repository
+            ticketRepository.save(ticket);
+            return true;
+        }//if
+
+        return false;
+
+    }*/
+
+    public boolean modifyPriceAfterPromotion(long promotionID, long ticketID) {
+        // Find ticket and promotion by ID
+        Optional<Ticket> ticketBox = ticketRepository.findById(ticketID);
+        Optional<Promotion> promotionBox = promotionRepository.findById(promotionID);
+
+        // Verify that ticket is present
+        if (ticketBox.isPresent() && promotionBox.isPresent()) {
+            // Take ticket and promotion out of the Optional box
+            Promotion promotion = promotionBox.get();
+            Ticket ticket = ticketBox.get();
+
+            // Calculate discount
+            double discountPercentage = promotion.getPercentageOff();
+            double originalPrice = (double) ticket.getPrice();
+            double discountAmount = (originalPrice * discountPercentage)/100;
+            double discountedPrice = originalPrice - discountAmount;
+
+            // Set the new price
+            ticket.setPrice((long) discountedPrice);
+
+            // Save ticket price into repository
+            ticketRepository.save(ticket);
+            return true;
+        }
+
+        return false;
+    }
+
+
 
     public Promotion retrievePromotion(Long ID){
         Optional<Promotion> promotionBox = promotionRepository.findById(ID);
@@ -66,6 +128,10 @@ public class PromotionService {
             }
             if(!promotion.getPromoCode().equals(promotionDto.getPromoCode())){
                 promotion.setPromoCode(promotionDto.getPromoCode());
+            }
+
+            if(promotion.getPercentageOff() != promotionDto.getPercentageOff()){
+                promotion.setPercentageOff(promotionDto.getPercentageOff());
             }
 
             promotionRepository.save(promotion);

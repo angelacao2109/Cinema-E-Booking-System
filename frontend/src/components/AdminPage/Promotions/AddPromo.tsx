@@ -57,12 +57,13 @@ const AddPromo: React.FC = () => {
 
     return (
         <>
-            <div className='link-container'>
-                <Link to='/promopage' className='link-styles'>
+            <div className='add-promo-exit-link-container'>
+                {/* Fix route */}
+                <Link to='/admin/promopage' className='add-promo-exit-link-styles'>
                     Exit Add Promo Page
                 </Link>
             </div>
-            <div className="promo-container">
+            <div className="add-promo-container">
                 <div className="add-promo-header">Add Promotion</div>
                 <form className="add-promo-form" onSubmit={handleSubmit}>
                     <label className="add-promo-label">
@@ -132,7 +133,10 @@ const AddPromo: React.FC = () => {
                                 <option value="inactive">Inactive</option>
                         </select>
                     </label>
-                    <button className="add-promo-button " type="submit">Add Promo</button>
+                    {/* Add container for button */}
+                    <div className='add-promo-button-container'>
+                    <button className="add-promo-btn " type="submit">Add Promo</button>
+                    </div>
                 </form>
             </div>
         </>

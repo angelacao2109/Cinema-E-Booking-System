@@ -2,22 +2,41 @@
     text-align: center;
     font-size: 40px;
     font-weight: 800;
-    color: red;
+    color: #CF291D; /* Changed Color */
   }
+
+/*--------------------------------------------------*/
+  /* Changed className, font and hover color*/
   
-  .link-container {
+  .edit-movie-exit-link-container {
     display: flex;
     justify-content: flex-end;
     margin: 25px;
   }
   
-  .link-styles {
+  .edit-movie-exit-link-styles {
     text-decoration: none;
     color: inherit;
     cursor: pointer;
-    color: red;
+    color: #CF291D; 
   }
-  
+
+  .edit-movie-exit-link-styles:hover {
+    color: black;
+  }
+
+  /* Created edit-movie-container for better UX design */
+  .edit-movie-container {
+    background-color: rgb(192, 192, 192);
+    width: 50%; 
+    margin: 0 auto;
+    padding: 20px; 
+    border-radius: 25px;
+    margin-bottom: 25px;
+  }
+
+/*--------------------------------------------------*/
+
   .edit-movie-form {
     display: flex;
     flex-direction: column;
@@ -42,16 +61,27 @@
   }
   
   .edit-movie-btn {
-    background-color: red;
+    background-color: #CF291D; /* Changed Color */
     color: white;
     border: none;
     padding: 10px 15px;
     font-size: 16px;
     cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 4px; /*<---------------- Added border radius */
   }
   
   .edit-movie-btn:hover {
-    background-color: rgb(251, 97, 97);
+    background-color: #9e261e; /* Changed Color */
   }
+
+/*---------------------------------------*/
+  /* Created edit-movie-button-container */
+  .edit-movie-button-container {
+    display: inline-flex;
+    margin-top: 30px;
+  }
+/*---------------------------------------*/
   
   

@@ -20,20 +20,18 @@ import AdminRoutes from './components/AdminPage/AdminNav/AdminRoutes';
 import { Movie} from "./components/types";
 import ResetPasswordPostLink from './components/ResetPasswordPostLink/ResetPasswordPostLink';
 import VerifyEmail from './components/VerifyEmail/VerifyEmail';
+import axios from "axios";
 
 function App() {
-
 
   const [showtimeID, setShowtimeID] = useState<number | null>(null); // added
 
   const logout = () => {
-  
     document.cookie = 'authToken=; Max-Age=0';
     document.cookie = 'userEmail=; Max-Age=0';
     setIsLoggedIn(false);
     setUserEmail(null);
     setUserRole('guest');
-   
   };
 
   const [ticketCount, setTicketCount] = useState<number>(0);
@@ -55,7 +53,6 @@ function App() {
     return null;
 }
 
-
   const [isLoggedIn, setIsLoggedIn] = useState(getCookie('authToken') !== null);
 
   const [userRole, setUserRole] = useState('guest'); 
@@ -72,12 +69,36 @@ function App() {
     setShouldRefetch(prevState => !prevState);
   };
 
+  const getIsAdmin = async () => {
+    try {
+      const admin_response = await axios.get('http://localhost:8080/api/user',          
+      {headers: {
+        'Authorization': getCookie('authToken')
+    }});
+    if (admin_response.status == 200){
+      if (admin_response.data.roles[1] == "ROLE_ADMIN"){
+        console.log("Is Admin")
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    } else {
+      setIsAdmin(false);
+    }
+    } catch (error: any) {
+      console.log(error);
+      setIsAdmin(false);
+    }
+  };
+
   const [isAdmin, setIsAdmin] = useState(false);
 
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    const foundEmail = document.cookie.split("; ").find((row) => row.startsWith("userEmail="))?.split("=")[1];
+    const foundEmail = getCookie('userEmail');
+    getIsAdmin();
+    console.log(isAdmin)
     setUserEmail(foundEmail ?? null);
 }, [isLoggedIn]);
 
@@ -88,14 +109,13 @@ return (
   
 
       <NavBar 
-  
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
         movieData={moviesData}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onSearchResultsChange={setSearchResults}
-        isAdmin={userEmail === "admin@admin.com"}
+        isAdmin = {isAdmin}
       />
      
       <AppRoutes
@@ -108,7 +128,7 @@ return (
           refetchMovies={refetchMovies}
           loggedInUserEmail={loggedInUserEmail}
           onLogout={logout}
-          showtimeID={showtimeID} // added
+          showtimeID={showtimeID}
         />
       </div>
     </Router>
@@ -138,9 +158,9 @@ const AppRoutes = ({
           ) : (
             <>
           <Route path="/" element={<MovieList searchResults={searchResults} />} />
-          <Route path="/select-ticket" element={<SelectTicket onTicketChange={handleTicketChange} />} />
-          <Route path="/seats" element={<SeatSelection maxSeats={ticketCount} showtimeID={showtimeID} />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/select-ticket/:showtimeID" element={<SelectTicket onTicketChange={handleTicketChange} />} />
+          <Route path="/seats/:showtimeID" element={<SeatSelection maxSeats={ticketCount} showtimeID={showtimeID} />} />
+          <Route path="/checkout/:showtimeID" element={<Checkout />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/register" element={<Registration />} />
    

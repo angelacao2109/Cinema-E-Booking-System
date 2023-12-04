@@ -5,13 +5,13 @@
     margin: 25px 75px;
     font-size: 40px;
     font-weight: 800;
-    color: red;
+    color: #CF291D; /* Changed Color */
     text-align: center;
     margin-bottom: 20px;
   }
   
   .add-promo-button {
-    background-color: red;
+    background-color: #CF291D; /* Changed Color */
     color: white;
     border: none;
     padding: 10px 20px;

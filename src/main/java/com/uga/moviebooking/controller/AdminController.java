@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -103,6 +104,13 @@ public class AdminController {
         user.setEnabled(true);
         userRepository.save(user);
         return ResponseEntity.ok("User account id " + user.getId() + " enabled.");
+    }
+
+    //Returns all users
+    @GetMapping("/getAllUsers")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
     record emailDto (String email) {}
 }

@@ -61,26 +61,65 @@ const AddMovie: React.FC<AddMovieProps> = ({ onAddMovie }) => {
 
     return (
         <>
-            <div className='link-container'>
-            <Link to='/admin/moviespage' className='link-styles'>
+
+        {/* Created form for add movies */}
+
+            <div className='add-movie-exit-link-container'>
+                <Link to='/admin/moviespage' className='add-movie-exit-link-styles'>
                     Exit Add Movie Page
                 </Link>
             </div>
 
-            <div className='add-movie-header'>Add New Movie</div>
-            <form className='add-movie-form' onSubmit={handleSubmit}>
-                {/* Add your form fields here */}
-                {/* Example: */}
-                <label className='add-movie-label'>Title:</label>
-                <input 
-                    type="text" 
-                    name="title" 
-                    value={movieForm.title} 
-                    onChange={handleInputChange} 
-                />
-                {/* Add other fields similarly */}
-                <button className='add-movie-btn' type="submit">Add Movie</button>
-            </form>
+            <div className='add-movie-container'>
+                <div className='add-movie-header'>Add New Movie</div>
+
+                <form className='add-movie-form' onSubmit={handleSubmit}>
+                    <label className='add-movie-label'>Title:</label>
+                    <input type='text' name='title' value={movieForm.title} onChange={handleInputChange} />
+
+                    <label className='add-movie-label'>Director:</label>
+                    <input type='text' name='director' value={movieForm.director} onChange={handleInputChange} />
+
+                    <label className='add-movie-label'>Producer:</label>
+                    <input type='text' name='producer' value={movieForm.producer} onChange={handleInputChange} />
+                    
+                    {/*
+                    WAS GIVING ME SOME ISSUES 
+                    <label className='edit-movie-label'>Synopsis:</label>
+                    <textarea name='synopsis' value={movieForm.synopsis[0]} onChange={handleSynopsisChange} />
+                     */}
+
+                    <label className='add-movie-label'>Movie Poster URL:</label>
+                    <input
+                        type='text'
+                        name='trailerPictureUrl'
+                        value={movieForm.trailerPictureUrl}
+                        onChange={handleInputChange}
+                    />
+
+                    <label className='add-movie-label'>Trailer URL:</label>
+                    <input
+                        type='text'
+                        name='trailerVideoUrl'
+                        value={movieForm.trailerVideoUrl}
+                        onChange={handleInputChange}
+                    />
+
+                    <label className='add-movie-label'>Rating:</label>
+                    <input type='text' name='rating' value={movieForm.rating} onChange={handleInputChange} />
+
+                    <label className='add-movie-label'>Category:</label>
+                    <input type='text' name='category' value={movieForm.category} onChange={handleInputChange} />
+
+                    {/* Created a div container for add movie btn */}
+
+                    <div className='add-movie-button-container'>
+                        <button className='edit-movie-btn' type='submit'>
+                            Add Movie
+                        </button>
+                    </div>
+                </form>
+            </div>
         </>
     );
 };
