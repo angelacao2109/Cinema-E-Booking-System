@@ -16,6 +16,7 @@ interface Card {
   cardNumber: string;
   expDate: string;
   CVV: string;
+  address: string;
 };
 
 interface Ticket {
@@ -46,7 +47,8 @@ const Checkout: React.FC = () => {
     expDate: '',
     cvv: '',
     firstName: '',
-    lastName: ''
+    lastName: '',
+    address: '',
   });
 
   const [addNewCard, setAddNewCard] = useState(false);
@@ -187,6 +189,7 @@ const Checkout: React.FC = () => {
           lastName: newCard.lastName,
           cardNumber: newCard.cardNumber,
           expDate: newCard.expDate,
+          address: newCard.address
         },
         {
           headers: {
@@ -299,6 +302,7 @@ const Checkout: React.FC = () => {
               <InputField label="Card Number:" name="cardNumber" value={newCard.cardNumber} onChange={(e) => setNewCard({ ...newCard, cardNumber: e.target.value })} />
               <InputField label="Expiry Date:" name="expDate" value={newCard.expDate} onChange={(e) => setNewCard({ ...newCard, expDate: e.target.value })} />
               <InputField label="CVV:" name="cvv" value={newCard.cvv} onChange={(e) => setNewCard({ ...newCard, cvv: e.target.value })} />
+              <InputField label="Address:" name="address" value={newCard.address} onChange={(e) => setNewCard({ ...newCard, address: e.target.value })} />
               <button type='button' onClick={handleAddCard}>Add Card</button>
             </div>
           )}
