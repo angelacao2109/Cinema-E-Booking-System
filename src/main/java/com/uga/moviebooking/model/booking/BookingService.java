@@ -4,7 +4,8 @@ import com.uga.moviebooking.AppException;
 import com.uga.moviebooking.model.booking.ticket.Ticket;
 import com.uga.moviebooking.model.booking.ticket.TicketType;
 import com.uga.moviebooking.model.booking.ticket.TicketTypeRepository;
-import com.uga.moviebooking.model.dto.BookingDto;
+import com.uga.moviebooking.model.dto.CreateBookingDto;
+import com.uga.moviebooking.model.dto.GetBookingDto;
 import com.uga.moviebooking.model.dto.TicketDto;
 import com.uga.moviebooking.model.email.EmailService;
 import com.uga.moviebooking.model.payment.PaymentCard;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -49,7 +51,7 @@ public class BookingService {
         this.promotionService = promotionService;
     }
 
-    public HashMap<String, Object> createBooking(String userEmail, BookingDto bookingDto) throws AppException {
+    public HashMap<String, Object> createBooking(String userEmail, CreateBookingDto bookingDto) throws AppException {
         //validate promo
         double multiplier = 1.0;
         if(bookingDto.getPromoCode() != null) {
@@ -137,4 +139,13 @@ public class BookingService {
         return ticket;
     }
 
+    public List<GetBookingDto> getHistory(String userEmail) {
+        List<Booking> bookings = bookingRepository.findByUserEmail(userEmail);
+        List<GetBookingDto> bookingDtos = new ArrayList<>();
+        for(Booking b : bookings)
+            bookingDtos.add(new GetBookingDto(b));
+
+        return bookingDtos;
+
+    }
 }

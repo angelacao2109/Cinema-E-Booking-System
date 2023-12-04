@@ -2,7 +2,8 @@ package com.uga.moviebooking.controller;
 
 import com.uga.moviebooking.model.booking.BookingService;
 import com.uga.moviebooking.model.booking.ticket.TicketService;
-import com.uga.moviebooking.model.dto.BookingDto;
+import com.uga.moviebooking.model.dto.CreateBookingDto;
+import com.uga.moviebooking.model.dto.GetBookingDto;
 import com.uga.moviebooking.utils.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -31,7 +33,7 @@ public class BookingController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping()
-    public ResponseEntity<?> makeBooking(@AuthenticationPrincipal String userEmail, @Validated @RequestBody BookingDto booking, BindingResult bind) {
+    public ResponseEntity<?> makeBooking(@AuthenticationPrincipal String userEmail, @Validated @RequestBody CreateBookingDto booking, BindingResult bind) {
         if(bind.hasErrors()) {
             return ControllerUtils.validationErrorResponse(bind);
         }
@@ -40,6 +42,16 @@ public class BookingController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/orders")
+    public ResponseEntity<?> getBookingHistory(@AuthenticationPrincipal String userEmail) {
+        List<GetBookingDto> bookingDtos = bookingService.getHistory(userEmail);
+        Map<String, Object> res = new HashMap<>();
+        res.put("history",bookingDtos);
+
+        return ResponseEntity.ok(res);
+
+    }
     @GetMapping("/prices")
     public ResponseEntity<?> getTicketPrices() {
         Map<String, Object> map = ticketService.getPrices();

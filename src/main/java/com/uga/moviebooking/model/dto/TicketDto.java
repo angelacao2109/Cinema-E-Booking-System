@@ -1,5 +1,6 @@
 package com.uga.moviebooking.model.dto;
 
+import com.uga.moviebooking.model.booking.ticket.Ticket;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -21,4 +22,17 @@ public class TicketDto {
     @Min(value = 1, message = "ticket seatRow must be between 1 and 20")
     @Max(value = 20, message = "ticket seatRow must be between 1 and 20")
     int seatRow;
+
+//    long cost;
+
+    public TicketDto(Ticket t) {
+        this.type = t.getType().getType();
+        this.seatCol = t.getSeat().getSeat_col();
+        this.seatRow = t.getSeat().getSeat_row();
+//        this.cost = t.getPrice();
+    }
+
+    public TicketDto() {
+
+    }
 }
