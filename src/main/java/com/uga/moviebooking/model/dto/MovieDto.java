@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MovieDto {
 
+    private long id;
     @NotEmpty(message = "title is a required field")
     private String title;
 
@@ -43,6 +44,7 @@ public class MovieDto {
     private LocalDate releaseDate;
 
     public MovieDto(Movie movie) {
+        this.id = movie.getId();
         this.title = movie.getTitle();
         this.category = movie.getCategory();
         this.cast = movie.getCast();
