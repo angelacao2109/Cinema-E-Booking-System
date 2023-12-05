@@ -39,12 +39,12 @@ function Registration() {
 
   if (missingFields.length > 0) {
     const missingFieldsMessage = "Please fill in the following required fields: " + missingFields.join(", ");
-    console.log("Missing fields:", missingFieldsMessage); // Debugging log
+    console.log("Missing fields:", missingFieldsMessage); 
     //setErrorMessage(missingFieldsMessage);
     alert(missingFieldsMessage);
     return;
     } else {
-    // If no fields are missing, continue with other validations
+   
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
@@ -52,7 +52,7 @@ function Registration() {
   }
     
     if (formData.password !== formData.confirmPassword) {
-      console.log("Passwords mismatch"); // Debugging log
+      console.log("Passwords mismatch");
       alert("Passwords do not match!");
       return;
     }
@@ -77,13 +77,14 @@ function Registration() {
       promotionEnrolled: formData.subscribeOffers
     };
 
-    if (formData.cardNumber || formData.nameOnCard || formData.expirationDate || formData.cvc) {
+    if (formData.cardNumber || formData.nameOnCard || formData.expirationDate || formData.cvc || formData.address) {
       payload.paymentCard = {
         firstName: formData.nameOnCard,
         lastName: formData.nameOnCard,
         expDate: formData.expirationDate,
         cardNumber: formData.cardNumber,
-        cvv: formData.cvc
+        cvv: formData.cvc,
+        billingAddress: formData.address
       };
     }
 
@@ -333,6 +334,18 @@ function Registration() {
               maxLength={3}
             />
           </div>
+          <div className="address">
+            <label className="form-label">Billing Address</label>
+            <input
+              className="form-input"
+              type="text"
+              placeholder="Billing Address"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+            />
+          </div>
+          {/*
           <hr className="hr" />
           <div className="header2">Billing Address</div>
 
@@ -380,6 +393,7 @@ function Registration() {
               onChange={handleChange}
             />
           </div>
+          */}
           <div>
             <br />
             <div className="checkbox-container">

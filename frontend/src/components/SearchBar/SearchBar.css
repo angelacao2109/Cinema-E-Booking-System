@@ -13,7 +13,7 @@
 
 input {
     flex: 1;
-    border: none; /* Remove the border since the parent has one */
+    border: none; 
     padding: 10px;
     margin: 0;
     border-radius: 20px 0 0 20px; 

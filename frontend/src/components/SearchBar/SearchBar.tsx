@@ -1,62 +1,69 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./SearchBar.css";
 import SearchIcon from "@mui/icons-material/Search";
-import axios from "axios";
-import { Movie} from "../types";
-
+import { Movie } from "../types";
 
 type SearchBarProps = {
-  placeholder: string;
+  onSearchResultsChange: (results: Movie[]) => void;
 };
 
-function SearchBar({
-  placeholder,
-  searchQuery,
-  onSearchChange,
-  onSearchResultsChange,
-}: SearchBarProps & {
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
-  onSearchResultsChange: (results: Movie[]) => void;
-}) {
-  const [error, setError] = useState<string | null>(null);
+function SearchBar({ onSearchResultsChange }: SearchBarProps) {
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [director, setDirector] = useState("");
   const [filteredData, setFilteredData] = useState<Movie[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const performSearch = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/movie/search", {
+        params: { title, category, director },
+      });
+      setFilteredData(response.data); // Update the filtered data with the response
+      onSearchResultsChange(response.data);
+      setError(null); // Clear any previous errors
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+      setError("Failed to fetch movies"); 
+    }
+  };
 
   useEffect(() => {
-    if (searchQuery) {
-      const timerId = setTimeout(async () => {
-        try {
-          const response = await axios.get(
-            "http://localhost:8080/api/movie/search",
-            {
-              params: { title: searchQuery },
-            }
-          );
-          onSearchResultsChange(response.data);
-          setFilteredData(response.data); // Store the movie results
-          setError(null); // Clear any previous errors
-        } catch (error) {
-          console.error("Error fetching movies:", error);
-          setError("Failed to fetch movies"); // Set an error message
-        }
-      }, 500);
+    const delayDebounceFn = setTimeout(() => {
+      if (title || category || director) {
+        performSearch();
+      } else {
+        setFilteredData([]); 
+      }
+    }, 500);
 
-      return () => clearTimeout(timerId);
-    } else {
-      onSearchResultsChange([]);
-    }
-  }, [searchQuery]);
-
+    return () => clearTimeout(delayDebounceFn);
+  }, [title, category, director]);
 
   return (
     <div className="searchbar">
       <div className="searchInputs">
         <input
           type="text"
-          placeholder={placeholder}
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          aria-label="Search for movies"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          aria-label="Search for movies by title"
+        />
+        <input
+          type="text"
+          placeholder="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          aria-label="Search for movies by category"
+        />
+        <input
+          type="text"
+          placeholder="Director"
+          value={director}
+          onChange={(e) => setDirector(e.target.value)}
+          aria-label="Search for movies by director"
         />
         <div className="searchIcon">
           <SearchIcon aria-hidden="true" />
@@ -64,10 +71,9 @@ function SearchBar({
       </div>
       {error && <div className="errorMessage">{error}</div>}
       {filteredData.length > 0 && (
-  <div className="movieResults">
+        <div className="movieResults">
           {filteredData.map((movie, key) => (
-            //would need to change later to find other movie results
-            <div key={movie.title} className="movieResult">
+            <div key={key} className="movieResult">
               <img
                 src={movie.trailerPictureUrl}
                 alt={`${movie.title} poster`}
@@ -75,8 +81,7 @@ function SearchBar({
               />
               <div className="movieDetails">
                 <h4>{movie.title}</h4>
-   {/* <p>{movie.extract}</p> */}
-
+          
               </div>
             </div>
           ))}

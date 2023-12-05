@@ -65,7 +65,7 @@ function SeatSelection({ maxSeats }: Props) {
     }
   };
 
-  const calculateTicketCounts = (selectedSeats) => { // placeholder to tickets backend for later
+  const calculateTicketCounts = (selectedSeats) => { 
     return {
       adult: selectedSeats.length, 
       kids: 0,

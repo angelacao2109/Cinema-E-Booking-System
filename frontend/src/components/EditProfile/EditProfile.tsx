@@ -29,11 +29,11 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
   };
 
   const deleteCard = (index: number) => {
-    // Assuming you want to call the API to delete the card
+    
     const cardToDelete = cards[index];
-    removeCardInfo(cardToDelete); // Make sure this function is properly implemented to call your API
+    removeCardInfo(cardToDelete); 
 
-    // Then update the state to remove the card from the UI
+   
     const newCards = [...cards];
     newCards.splice(index, 1);
     setCards(newCards);
@@ -117,18 +117,18 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
         });
 
         console.log(userData.paymentCards)
-        // Set the cards from the response, only showing the first 4 digits of the card number
+        
         const fetchedCards = userData.paymentCards.map(card => ({
           cardID: card.id,
           firstname: card.firstname,
           lastname: card.lastname,
-          cardNumber: card.cardNumber.slice(0, 4), // only first 4 digits for display
+          cardNumber: card.cardNumber.slice(0, 4), 
           expDate: card.expDate,
-          CVV: '', // For security reasons, we do not display CVV
+          CVV: '', 
         }));
         setCards(fetchedCards);
 
-        // Initialize isCardSaved for the fetched cards
+       
         setIsCardSaved(fetchedCards.map(() => true));
 
 
@@ -139,8 +139,7 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
     };
 
     fetchUserProfile();
-  }, [email, authToken]); // Add email and authToken as dependencies if they are expected to change over time
-
+  }, [email, authToken]); 
 
   const updatePassword = async () => {
     try {
@@ -527,8 +526,8 @@ function EditProfile({ userEmail }: { userEmail: string | null }) {
                     onChange={(e) => {
                       const value = e.target.value;
                       const formattedValue = value
-                        .replace(/[^0-9]/g, '')  // Remove non-numeric characters
-                        .substring(0, 4);       // Limit length to 4 characters
+                        .replace(/[^0-9]/g, '')  
+                        .substring(0, 4);       
                       setCardInfo({ ...cardInfo, expDate: formattedValue });
                     }}
                   />

@@ -9,18 +9,18 @@ import PromoPage from '../Promotions/PromoPage';
 import AddPromo from '../Promotions/AddPromo';
 import EditPromo from '../Promotions/EditPromo';
 import EditUser from '../EditUser/EditUser';
-import Showtime from '../Showtimes/Showtimes'; // Imported Showtime page
-import AddShowtime from '../Showtimes/AddShowtime'; // Imported AddShowtime page
-import EditShowtime from '../Showtimes/EditShowtime'; // Imported EditShowtime page
+import Showtime from '../Showtimes/Showtimes'; 
+import AddShowtime from '../Showtimes/AddShowtime'; 
+import EditShowtime from '../Showtimes/EditShowtime'; 
 import Tickets from '../Tickets/Tickets';
 
 
-// Ensure these handler functions are defined or imported
+
 const handleAddMovie = (movie) => { /* ... */ };
 const handleEditMovie = (movie) => { /* ...*/ };
 const handleEditPromo = (promo) => { /* ... */ };
-const handleAddShowtime = (showtime) => { /* ... */ }; // AddShowtime handler
-const handleEditShowtime = (showtime) => { /* ... */ }; // EditShowtime handler
+const handleAddShowtime = (showtime) => { /* ... */ }; 
+const handleEditShowtime = (showtime) => { /* ... */ }; 
 
 const AdminRoutes = ({ onLogout }) => {
     return (

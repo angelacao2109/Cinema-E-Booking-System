@@ -39,6 +39,7 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
     document.cookie = "userEmail=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setIsLoggedIn(false);
     navigate("/signin");
+    window.location.reload();
   };
 
   const fetchMovies = (
@@ -78,8 +79,6 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
 
   const CommonLinks = () => (
     <>
-      <Link to="/movies-playing" className="link">Movies Now Playing</Link>
-      <Link to="/movies-coming-soon" className="link">Movies Coming Soon</Link>
     </>
   );
 
@@ -88,7 +87,6 @@ function NavBar({ isLoggedIn, setIsLoggedIn, movieData, searchQuery, onSearchCha
       <CommonLinks />
       <Link to="/edit-profile" className="link">Edit Profile</Link>
       <Link to="/orderhistory" className="link">Order History</Link>
-      <Link to="/select-ticket" className="link">Select Ticket</Link>
       <div className="welcomeLogoutGroup">
         <div className="welcomeSection">
           <span>Welcome, {userEmail}</span>
