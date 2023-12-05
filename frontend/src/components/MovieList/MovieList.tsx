@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Embed from "react-embed";
 
 type Movie = {
-  id: string;
+  id: number;
   title: string;
   category: string;
   cast: string[];

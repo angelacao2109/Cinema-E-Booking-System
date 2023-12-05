@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './MoviesPage.css';
+import axios from 'axios';
 
 
 type Movie = {
@@ -25,9 +26,9 @@ const MoviesPage: React.FC = () => {
 
     const searchMovies = async (query: string) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/movie/search?title=${query}`);
-            const data = await response.json();
-            setFilteredMovies(data);
+      const response = await axios.get("http://localhost:8080/api/movie/search", {
+            params: { title:query, category:"", director:"" }});
+            setFilteredMovies(response.data);
         } catch (error) {
             console.error('Error searching movies:', error);
         }
