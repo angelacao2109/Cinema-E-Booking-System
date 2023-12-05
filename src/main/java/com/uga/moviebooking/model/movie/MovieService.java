@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,14 @@ public class MovieService {
     }
     public List<Movie> searchByTitle(String title) {
         return movieRepository.findByTitleLike(title).orElse(null);
+    }
+
+    public List<MovieDto> search(String title, String category, String director) {
+        title = "%" + title + "%";
+        category = "%" + category + "%";
+        director = "%" + director + "%";
+        List<Movie> movies = movieRepository.findByTitleLikeAndCategoryLikeAndDirectorLike(title, category, director);
+        return dto(movies);
     }
      
 
@@ -69,13 +78,28 @@ public class MovieService {
         return Optional.of(page.getContent());
     }
 
-    public Optional<List<Movie>> getCurrentlyShowingMovies() {
-        return Optional.of(movieRepository.findByStatus(MovieStatus.CURRENTLY_SHOWING));
+    public List<MovieDto> getCurrentlyShowingMovies() {
+        List<Movie> movies = movieRepository.findByStatus(MovieStatus.CURRENTLY_SHOWING);
+
+        return dto(movies);
     }
 
-    public Optional<List<Movie>> getComingSoonMovies() {
-        return Optional.of(movieRepository.findByStatus(MovieStatus.COMING_SOON));
+    public List<MovieDto> getComingSoonMovies() {
+        List<Movie> movies = movieRepository.findByStatus(MovieStatus.COMING_SOON);
 
+        return dto(movies);
+    }
+
+    private MovieDto dto(Movie movie) {
+       return new MovieDto(movie);
+    }
+
+    private List<MovieDto> dto(List<Movie> movies) {
+        List<MovieDto> movieDtos = new ArrayList<>();
+        for(Movie m : movies) {
+            movieDtos.add(new MovieDto(m));
+        }
+        return movieDtos;
     }
 
     

@@ -41,9 +41,10 @@ public class MovieController {
         this.showtimeService = showtimeService;
     }
 
+
     @GetMapping("/search")
-    public ResponseEntity<List<Movie>> searchMovie(@RequestParam String title) {
-        List<Movie> movieList = movieService.searchByTitle("%" + title + "%");
+    public ResponseEntity<?> searchMovie(@RequestParam String title, @RequestParam String category, @RequestParam String director) {
+        List<MovieDto> movieList = movieService.search(title, category, director);
         if(movieList == null) {
             return ResponseEntity.notFound().build();
         }
@@ -60,18 +61,17 @@ public class MovieController {
     }*/
 
     @GetMapping("/homepage")
-    public ResponseEntity<Map<String, List<Movie>>> getTopMovies() {
-        List<Movie> currentlyShowingMovies = movieService.getCurrentlyShowingMovies().orElse(null);
-        List<Movie> comingSoonMovies = movieService.getComingSoonMovies().orElse(null);
+    public ResponseEntity<?> getTopMovies() {
+        List<MovieDto> currentlyShowingMovies = movieService.getCurrentlyShowingMovies();
+        List<MovieDto> comingSoonMovies = movieService.getComingSoonMovies();
 
         if (currentlyShowingMovies == null || comingSoonMovies == null) {
             return ResponseEntity.notFound().build();
         }
 
-        Map<String, List<Movie>> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         response.put("currentlyShowing", currentlyShowingMovies);
         response.put("comingSoon", comingSoonMovies);
-
         return ResponseEntity.ok(response);
     }
 
