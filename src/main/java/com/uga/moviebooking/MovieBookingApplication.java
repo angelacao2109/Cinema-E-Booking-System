@@ -55,6 +55,9 @@ public class MovieBookingApplication implements CommandLineRunner{
 			ticketTypeRepository.save(new TicketType("SENIOR",750));
 		//default theatre
 		theatreService.createTheatre(1);
+		theatreService.createTheatre(2);
+		theatreService.createTheatre(3);
+		theatreService.createTheatre(4);
 	}
 }
 
