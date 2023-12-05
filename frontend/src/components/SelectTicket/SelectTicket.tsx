@@ -65,11 +65,11 @@ const SelectTicket: React.FC<Props> = ({ onTicketChange }) => {
   }, [tickets]);
 
   const handleConfirmClick = () => {
-    onTicketChange(Object.values(tickets).reduce((acc, curr) => acc + curr, 0)); // This updates the parent component with total ticket count
+    onTicketChange(Object.values(tickets).reduce((acc, curr) => acc + curr, 0)); 
     navigate(`/seats/${showtimeID}`, {
       state: { 
         showtimeID, 
-        tickets // Passing the ticket data
+        tickets 
       }
     });
   };

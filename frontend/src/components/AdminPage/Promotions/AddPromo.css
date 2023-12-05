@@ -2,11 +2,10 @@
     text-align: center;
     font-size: 40px;
     font-weight: 800;
-    color: #CF291D; /* Changed Color */
+    color: #CF291D; 
 }
 
-/*--------------------------------------------------*/
-  /* Changed className, font and hover color*/
+
 
   .add-promo-exit-link-container {
     display: flex;
@@ -25,7 +24,7 @@
   color: black;
 }
 
-/* Created add-promo-container for better UX design */
+
 .add-promo-container {
   background-color: rgb(192, 192, 192);
   width: 50%; 
@@ -34,7 +33,7 @@
   border-radius: 25px;
   margin-bottom: 25px;
 }
-/*--------------------------------------------------*/
+
 
 .add-promo-form {
     display: flex;
@@ -59,7 +58,7 @@
 }
 
 .add-promo-btn {
-    background-color: #CF291D; /* Changed Color */
+    background-color: #CF291D; 
     color: white;
     border: none;
     padding: 10px 15px;
@@ -68,14 +67,13 @@
 }
 
 .add-promo-btn:hover {
-    background-color: #9e261e; /* Changed Color */
+    background-color: #9e261e; 
 }
 
-  /*---------------------------------------*/
-  /* Created add-promo-button-container */
+
   .add-promo-button-container {
     display: inline-flex;
     margin-top: 30px;
     justify-content: center;
   }
-/*---------------------------------------*/
+

@@ -7,7 +7,7 @@ const Confirmation: React.FC = () => {
     const { bookingData } = location.state as { bookingData: any };
 
     const getRowLetter = (rowNumber: number) => {
-        return String.fromCharCode(65 + rowNumber - 1); // ASCII code for 'A' is 65
+        return String.fromCharCode(65 + rowNumber - 1);
     };
 
     return (
@@ -52,7 +52,7 @@ const Confirmation: React.FC = () => {
 
             <section className='theatre-info'>
                 <h3>Theatre info</h3>
-                {/* Additional information about the theatre can be added here */}
+            
             </section>
 
             <footer>

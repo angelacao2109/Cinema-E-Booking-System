@@ -181,11 +181,11 @@
   
   .modal-content {
     background-color: #1D1D1D;
-    margin: 15% auto; /* Center the modal */
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #CF291D;
     border-radius: 5px;
-    width: 50%; /* You can adjust this based on your preference */
+    width: 50%;
     color: #ECECEC;
   }
   

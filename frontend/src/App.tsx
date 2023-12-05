@@ -24,7 +24,7 @@ import axios from "axios";
 
 function App() {
 
-  const [showtimeID, setShowtimeID] = useState<number | null>(null); // added
+  const [showtimeID, setShowtimeID] = useState<number | null>(null); 
 
   const logout = () => {
     document.cookie = 'authToken=; Max-Age=0';
@@ -181,4 +181,3 @@ const AppRoutes = ({
 export default App;
 
 
-//<Route path="/tickets" element={<SelectTicket onTicketChange={handleTicketChange} />} />

@@ -44,8 +44,11 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsLoggedIn, onSuccessfulLogi
             console.log("Is Admin")
             setIsAdmin(true)
           }
+          setTimeout(() => {
+            window.location.reload(); // Reload the entire page
+          }, 100); // Short delay before reload
         }
-        refetchMovies(); 
+        refetchMovies();
         if(isAdmin){
           navigate("/");
         } else {

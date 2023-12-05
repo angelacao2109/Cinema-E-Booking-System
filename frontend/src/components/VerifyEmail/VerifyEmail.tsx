@@ -10,23 +10,22 @@ function VerifyEmail(props) {
     const location = useLocation();
 
     useEffect(() => {
-        // Extract the token from the URL
+  
         const token = new URLSearchParams(location.search).get("code");
     
-        // Send a request to the backend to verify the token
         axios.get('http://localhost:8080/api/auth/verify?code='+token)
             .then(response => {
-                console.log("Successful response:", response);  // <-- Printing the successful response
+                console.log("Successful response:", response);  
                 if (response.status === 200) {
                     setVerified(true);
                     navigate('/signin');  
                 }
             })
             .catch(error => {
-                console.error("Error response:", error);  // <-- Printing the error response
+                console.error("Error response:", error); 
                 setVerified(false);
             });
-    }, []);  // <-- Removed dependency from here
+    }, []);  
     return (
         <div>
             {verified === null && <p>Verifying your email...</p>}

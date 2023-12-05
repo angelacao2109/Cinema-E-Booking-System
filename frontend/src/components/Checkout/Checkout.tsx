@@ -57,7 +57,7 @@ const Checkout: React.FC = () => {
 
   const [discountPercentage, setDiscountPercentage] = useState<number>(0);
   
-  const [isPromoValid, setIsPromoValid] = useState<boolean>(true); // Assuming true until promo code is applied
+  const [isPromoValid, setIsPromoValid] = useState<boolean>(true); 
 
 
   const location = useLocation();
@@ -153,7 +153,7 @@ const Checkout: React.FC = () => {
         setIsPromoValid(true);
       } else {
         setIsPromoValid(false);
-        setDiscountPercentage(0); // Reset if promo code is invalid
+        setDiscountPercentage(0); 
       }
     } catch (error) {
       console.error("Error applying promo code:", error);
@@ -166,9 +166,9 @@ const Checkout: React.FC = () => {
   for (let ticketType in ticketCounts) {
     total += ticketCounts[ticketType] * ticketPrices[ticketType];
   }
-  // Apply discount if promo code is valid
+  
   if (isPromoValid && discountPercentage > 0) {
-    total -= total * (discountPercentage / 100);
+    total -= total * (discountPercentage);
   }
  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -189,7 +189,7 @@ const Checkout: React.FC = () => {
           lastName: newCard.lastName,
           cardNumber: newCard.cardNumber,
           expDate: newCard.expDate,
-          address: newCard.address
+          billingAddress: newCard.address
         },
         {
           headers: {
@@ -223,13 +223,13 @@ const Checkout: React.FC = () => {
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   try {
-    // Construct the basic request payload
+
     const bookingData: BookingData = {
       showtimeID: showtimeID,
       paymentCardID: chosenCardID,
       tickets: assignedTickets,
     };
-    // Conditionally add promoCode if it's not an empty string
+    
     if (promoCode !== "") {
       bookingData.promoCode = promoCode;
     }

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './AddMovie.css';
 import axios from 'axios'; 
 
-// Define a type for the movie object
+
 type Movie = {
     title: string;
     category: string;
@@ -55,7 +55,7 @@ const AddMovie: React.FC<AddMovieProps> = ({ onAddMovie }) => {
             const response = await axios.post("http://localhost:8080/api/movie",movie,{headers: {Authorization: authToken}});
             if (response.status === 200 || response.status === 201) {
                 console.log(response.data);
-                navigate('/admin/moviespage');  // Navigate to the movies page upon successful addition
+                navigate('/admin/moviespage');  
             } else {
                 console.error('Failed to add movie');
             }

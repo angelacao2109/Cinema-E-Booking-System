@@ -28,7 +28,7 @@ th {
 }
 
 button {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50; 
     border: none;
     color: white;
     padding: 5px 10px;
@@ -64,7 +64,7 @@ button:hover {
 }
 
 .add-admin-form button {
-    background-color: #008CBA; /* Blue */
+    background-color: #008CBA; 
     color: white;
     padding: 10px 15px;
     border: none;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './MoviesPage.css';
 
-// Define a type for the movie object
+
 type Movie = {
     id: string;
     title: string;
@@ -34,7 +34,7 @@ const MoviesPage: React.FC = () => {
     };
 
     useEffect(() => {
-        // If there's a query, search for movies
+     
         if (searchQuery) {
             searchMovies(searchQuery);
         }
@@ -53,16 +53,14 @@ const MoviesPage: React.FC = () => {
         <>
             <div className='movie-header'>
                 MANAGE MOVIES
-                {/* Changed the route */}
+           
                 <Link to="/admin/addmovie">
                     <button className='add-movie-button'>Add Movie</button>
                 </Link>
             </div>
 
             <div className='search-tools'>
-                {/* Removed this container 
-                <div className='search-container'></div>
-                */}
+               
                     <input
                         className='search-input'
                         type='text'
